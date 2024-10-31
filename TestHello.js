@@ -1,6 +1,22 @@
-console.log("Hello World!");
-console.log("testing push to GitHub from VS code file");
-console.log("now attempting to use git directly from vscode");
-console.log("this edit was made from github to test pull directly through vscode");
-console.log("another edit from GitHub");
-console.log("one final github edit???");
+//import {fun, banana} from "./Test2.js";
+//console.log(other.banana);
+//fun();
+//console.log(banana);
+
+/*
+let ans = prompt("Do you like bananas?");
+if (ans == 'yes') {
+    console.log('yayayayayayay');
+} else {
+    console.log('oh. ok.');
+}
+*/
+
+
+
+process.stdin.setEncoding('utf8');
+
+process.stdin.on('data', function (input) {
+    console.log(input);
+})
+
