@@ -129,5 +129,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# JSON files
-.json
+# Jest
+package-lock.json
+package.json
