@@ -4,6 +4,8 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
+const Item = require('./Item');
+
 /**
  * Represents a healing potion item. 
  * @author Boyd Bouck
@@ -20,7 +22,7 @@ class HealingPotion extends Item {
      * Constructs a new healing potion item. 
      */
     constructor() {
-        super(NAME);
+        super(HealingPotion.NAME);
     }
 
     /**
@@ -35,3 +37,5 @@ class HealingPotion extends Item {
     }
 
 }
+
+module.exports = HealingPotion;

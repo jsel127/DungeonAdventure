@@ -4,6 +4,8 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
+const Item = require('./Item');
+
 /**
  * Represents a pillar item. 
  * @author Boyd Bouck
@@ -31,3 +33,5 @@ class Pillar extends Item {
     }
 
 }
+
+module.exports = Pillar;

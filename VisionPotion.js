@@ -4,6 +4,8 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
+const Item = require('./Item');
+
 /**
  * Represents a vision potion item. 
  * @author Boyd Bouck
@@ -17,7 +19,7 @@ class VisionPotion extends Item {
      * Constructs a new vision potion item. 
      */
     constructor() {
-        super(NAME);
+        super(VisionPotion.NAME);
     }
 
     see(/* theDungeon */) {
@@ -25,3 +27,5 @@ class VisionPotion extends Item {
     }
 
 }
+
+module.exports = VisionPotion;

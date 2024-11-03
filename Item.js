@@ -16,8 +16,12 @@ class Item {
     /**
      * Constructs a new Item given the name of the Item. 
      * @param {*} theName of the item
+     * @throws Error if this constructor is directly called (as this class is abstract)
      */
     constructor(theName) {
+        if (this.constructor == Item) {
+            throw new Error('Cannot instantiate Item class');
+        }
         this.#myName = theName;
     }
 
@@ -29,3 +33,5 @@ class Item {
     }
 
 }
+
+module.exports = Item;

@@ -4,6 +4,8 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
+const Item = require('./Item');
+
 /**
  * One of the six item 'slots' that make up the inventory. 
  * Composed of an Item and a quantity. 
@@ -20,19 +22,11 @@ class InventorySlot {
     #myQuantity;
 
     /**
-     * Creates an empty InventorySlot (an InventorySlot that does not contain an Item).
-     */
-    constructor() {
-        this(EMPTY, 0);
-    }
-
-    /**
      * Creates an InventorySlot containing the given Item at the given quantity. 
      * @param {*} theItem in the InventorySlot
      * @param {*} theQuantity of the Item
      */
-    // this constructor may not ever be used
-    constructor(theItem, theQuantity) {
+    constructor(theItem = InventorySlot.EMPTY, theQuantity = 0) {
         this.setItem(theItem);
         this.setQuantity(theQuantity);
     }
@@ -58,7 +52,7 @@ class InventorySlot {
      * @throws TypeError if theItem is not an Item, or the string 'empty'
      */
     setItem(theItem) {
-        if (!(theItem instanceof Item) && theItem != EMPTY) {
+        if (!(theItem instanceof Item) && theItem != InventorySlot.EMPTY) {
             throw new TypeError('theItem must be a subclass of Item, or the string \'empty\'');
         }
         this.#myItem = theItem;
@@ -76,7 +70,7 @@ class InventorySlot {
         }
         this.#myQuantity = theQuantity; 
         if (this.#myQuantity == 0) {
-            this.setItem(EMPTY);
+            this.setItem(InventorySlot.EMPTY);
         }
     }
 
@@ -98,7 +92,9 @@ class InventorySlot {
      * @returns true if this InventorySlot does not contain an Item, false otherwise
      */
     isEmpty() {
-        return this.#myItem == EMPTY;
+        return this.#myItem == InventorySlot.EMPTY;
     }
 
 }
+
+module.exports = InventorySlot;
