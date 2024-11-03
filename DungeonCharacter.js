@@ -93,6 +93,34 @@ export default class DungeonCharacter {
         }
         this.#myHP = theNewHP;
     }
+    
+    /**
+     * This method carries out the attack on the opponent if a hit is landed on the monster.
+     * @param {*} theOpponent the opponent the dungeon character is facing.
+     * @returns true if the attack was successul and false otherwise.
+     */
+    attack(theOpponent) {
+        if (!this.isDead() && Math.random() * 100 < this.#myHitChange) {
+            const rangeDP = this.#myDPMax - this.#myDPMin;
+            const attackDP = Math.round(Math.random() * rangeDP) + this.#myDPMin;
+            if (attackDP < theOpponent.getHP()) {
+                theOpponent.setHP(theOpponent.getHP() - attackDP);
+            } else {
+                // NOTE FOR DEVELOPER: the opponent has died at this point
+                theOpponent.setHP(0);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the dungeon character has died or not. 
+     * @returns true if the dungeon character died and false otherwise.
+     */
+    isDead() {
+        return myHP == 0;
+    }
 
     /**
      * Returns the information of the dungeon character including its name, HP, DPMin, DPMax, AttackSpeed, and HitChange.
