@@ -1,3 +1,14 @@
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
+
+/**
+ * Class containing common methods and data for all monster character. 
+ * @author Jasmine Sellers
+ * @version 1.0
+ */
 import DungeonCharacter from "./DungeonCharacter.js";
 
 export default class Monster extends DungeonCharacter {
