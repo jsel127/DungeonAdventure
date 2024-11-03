@@ -44,7 +44,7 @@ export default class Hero extends DungeonCharacter{
     /**
      * Special attack specific to the Heroes.
      */
-    specialAttack() {
+    specialAttack(theOpponent) {
         throw new Error("specialAttack() Must be implemented by derived class");
     }
 }
