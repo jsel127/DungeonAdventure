@@ -106,7 +106,7 @@ export default class DungeonCharacter {
             if (attackDP < theOpponent.getHP()) {
                 theOpponent.setHP(theOpponent.getHP() - attackDP);
             } else {
-                // NOTE FOR DEVELOPER: the opponent has died at this point
+// NOTE FOR DEVELOPER: the opponent has died at this point
                 theOpponent.setHP(0);
             }
             return true;

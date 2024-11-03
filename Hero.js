@@ -33,7 +33,8 @@ export default class Hero extends DungeonCharacter{
             if (newHP > 0) {
                 this.setHP(newHP);
             } else {
-                // TODO: Implement what happens when the character dies.
+// NOTE FOR DEVELOPER: the opponent has died at this point
+                this.setHP(0);
             }
             return false;
         } 
@@ -44,6 +45,6 @@ export default class Hero extends DungeonCharacter{
      * Special attack specific to the Heroes.
      */
     specialAttack() {
-        throw new Error("Must be implemented by derived class");
+        throw new Error("specialAttack() Must be implemented by derived class");
     }
 }
