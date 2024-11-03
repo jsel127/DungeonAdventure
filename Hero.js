@@ -4,13 +4,14 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
+
+import DungeonCharacter from "./DungeonCharacter.js";
+
 /**
  * Class containing common methods and data for all hero character. 
  * @author Jasmine Sellers
  * @version 1.0
  */
-import DungeonCharacter from "./DungeonCharacter.js";
-
 export default class Hero extends DungeonCharacter{
     /** The chance the hero has to block an attack */
     #myChanceToBlock
