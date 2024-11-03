@@ -9,7 +9,7 @@
  * @author Jasmine Sellers
  * @version 1.0
  */
-class DungeonCharacter {
+export default class DungeonCharacter {
     #myName
     #myHP
     #myDPMin

@@ -1,4 +1,6 @@
-class Monster extends DungeonCharacter {
+import DungeonCharacter from "./DungeonCharacter.js";
+
+export default class Monster extends DungeonCharacter {
     #myHealChance
     #myMinHeal
     #myMaxHeal
