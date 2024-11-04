@@ -1,0 +1,14 @@
+{
+  "name": "dungeonadventure",
+  "version": "1.0.0",
+  "description": "A dungeon adventure game",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
