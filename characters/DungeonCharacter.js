@@ -119,7 +119,7 @@ class DungeonCharacter {
      * @returns true if the dungeon character died and false otherwise.
      */
     isDead() {
-        return myHP == 0;
+        return this.#myHP === 0;
     }
 
     /**
