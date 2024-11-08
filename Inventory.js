@@ -4,6 +4,8 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
+const InventorySlot = require('./InventorySlot');
+
 /**
  * The inventory that holds the Items collected by the player. 
  * HealingPotions and VisionPotions can stack; Pillars cannot. 
@@ -22,8 +24,8 @@ class Inventory {
      * HealingPotions, VisionPotions, and Pillars. 
      */
     constructor() {
-        this.#myInventorySlots = new Array(NUM_SLOTS);
-        for (let i = 0; i < NUM_SLOTS; i++) {
+        this.#myInventorySlots = new Array(Inventory.NUM_SLOTS);
+        for (let i = 0; i < Inventory.NUM_SLOTS; i++) {
             this.#myInventorySlots[i] = new InventorySlot();
         }
     }
@@ -36,7 +38,7 @@ class Inventory {
      * @param {*} theItem the Item to be added to the inventory
      */
     addItem(theItem) {
-        let leftmostEmptySlot = NUM_SLOTS;
+        let leftmostEmptySlot = Inventory.NUM_SLOTS;
         // if an identical item already exists in the inventory, increment its quantity
         for (i in this.#myInventorySlots) {
             if (this.#myInventorySlots[i].getItem() == InventorySlot.EMPTY) {
@@ -115,10 +117,25 @@ class Inventory {
         let str = '';
         for (i in this.#myInventorySlots) {
             str += '[' + i + '] ';
-            str += this.#myInventorySlots[i].getItem().getName();
-            str += ' (' + his.#myInventorySlots[i].getQuantity() + ')\n';
+            str += this.#myInventorySlots[i].toString() + '\n';
         }
         return str;
     }
 
+    /**
+     * @returns the underlying Array of the Inventory (for testing purposes only)
+     */
+    getArray() {
+        return this.#myInventorySlots;
+    }
+
+    /**
+     * @returns the InventorySlot at the given index
+     */
+    getSlot(theIndex) {
+        return this.#myInventorySlots[theIndex];
+    }
+
 }
+
+module.exports = Inventory;

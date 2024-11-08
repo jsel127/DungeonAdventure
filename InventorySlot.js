@@ -68,6 +68,9 @@ class InventorySlot {
         if (theQuantity < 0) {
             throw new RangeError('theQuantity = ' + theQuantity + '; must be nonnegative');
         }
+        if (theQuantity > 0 && this.#myItem == InventorySlot.EMPTY) {
+            throw new Error('InventorySlot must contain an Item to set a positive quantity');
+        }
         this.#myQuantity = theQuantity; 
         if (this.#myQuantity == 0) {
             this.setItem(InventorySlot.EMPTY);
@@ -93,6 +96,16 @@ class InventorySlot {
      */
     isEmpty() {
         return this.#myItem == InventorySlot.EMPTY;
+    }
+
+    /**
+     * @returns a string representation of this InventorySlot
+     */
+    toString() {
+        if (this.isEmpty()) {
+            return InventorySlot.EMPTY;
+        }
+        return this.#myItem.getName() + ' (' + this.#myQuantity + ')';
     }
 
 }
