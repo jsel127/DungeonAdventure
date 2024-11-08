@@ -114,3 +114,5 @@ function createDatabase() {
     insertMonsters();
     insertHeroes();
 }
+
+characterDB.close();
