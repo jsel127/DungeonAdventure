@@ -1,5 +1,8 @@
-
+import Homepage from './Homepage.jsx'
 function App() {
+  return(
+    <Homepage> </Homepage>
+  );
 
 }
 
