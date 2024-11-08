@@ -4,14 +4,14 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-const DungeonCharacter = require("./DungeonCharacter");
+import DungeonCharacter from "./DungeonCharacter.js";
 
 /**
  * Class containing common methods and data for all hero character. 
  * @author Jasmine Sellers
  * @version 1.0
  */
-class Hero extends DungeonCharacter{
+export default class Hero extends DungeonCharacter{
     /** The chance the hero has to block an attack */
     #myChanceToBlock
     constructor(theName, theHP, theDPMin, theDPMax,
@@ -48,4 +48,3 @@ class Hero extends DungeonCharacter{
         throw new Error("specialAttack() Must be implemented by derived class");
     }
 }
-module.exports = Hero;

@@ -9,7 +9,7 @@
  * @author Jasmine Sellers
  * @version 1.0
  */
-class DungeonCharacter {
+export default class DungeonCharacter {
     #myName
     #myHP
     #myDPMin
@@ -130,4 +130,3 @@ class DungeonCharacter {
         return `${this.#myName} ${this.#myHP} ${this.#myDPMin} ${this.#myDPMax} ${this.#myAttackSpeed} ${this.#myHitChange}`;
     }
 }
-module.exports = DungeonCharacter;

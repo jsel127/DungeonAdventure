@@ -5,6 +5,7 @@
  */
 
 import Hero from './Hero.js';
+import sqlite3 from 'sqlite3';
 
 /**
  * Class containing common methods and data for all priestess character. 
@@ -16,6 +17,7 @@ export default class Priestess extends Hero {
     static HEAL_MAX_PERCENT = 20;
     constructor() {
         // TODO: Call super and pass in data from database.
+        const db = new sqlite3.Database('../characters.db');
     }
 
     /**
