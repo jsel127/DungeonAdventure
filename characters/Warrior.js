@@ -19,9 +19,9 @@ export default class Warrior extends Hero {
     }
 
     specialAttack(theOpponent) {
-        if (!this.isDead() && Math.random() * 100 < HIT_RATE_CRUSHING_BLOW) {
+        if (!this.isDead() && Math.random() * 100 < Warrior.HIT_RATE_CRUSHING_BLOW) {
             const rangeDP = this.getDPMax() - this.getDPMin();
-            const attackDP = MULTIPLIER_CRUSHING_BLOW * (Math.round(Math.random() * rangeDP) + this.getDPMin());
+            const attackDP = Warrior.MULTIPLIER_CRUSHING_BLOW * (Math.round(Math.random() * rangeDP) + this.getDPMin());
             if (attackDP < theOpponent.getHP()) {
                 theOpponent.setHP(theOpponent.getHP() - attackDP);
             } else {

@@ -27,12 +27,12 @@ export default class Thief extends Hero {
     specialAttack(theOpponent) {
         const randomInt = Math.round(Math.random() * 100);
         if (!this.isDead()) {
-            if (randomInt < HIT_RATE_SUPRISE_ATTACK) {
-                for (let i = 0; i < NUMBER_SUPRISE_ATTACK; i++) {
+            if (randomInt < Thief.HIT_RATE_SUPRISE_ATTACK) {
+                for (let i = 0; i < Thief.NUMBER_SUPRISE_ATTACK; i++) {
                     this.attack(theOpponent, true);
                 }
                 return true;
-            } else if (randomInt > HIT_RATE_SUPRISE_ATTACK + FAIL_RATE_SUPRISE_ATTACK) {
+            } else if (randomInt > Thief.HIT_RATE_SUPRISE_ATTACK + Thief.FAIL_RATE_SUPRISE_ATTACK) {
                 this.attack(theOpponent, true);
                 return true;
             } else {
