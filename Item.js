@@ -9,7 +9,7 @@
  * @author Boyd Bouck
  * @verison 1.0
  */
-class Item {
+export default class Item {
 
     #myName;
 
@@ -33,5 +33,3 @@ class Item {
     }
 
 }
-
-module.exports = Item;

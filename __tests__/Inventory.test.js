@@ -1,19 +1,23 @@
-const Inventory = require('../Inventory');
-const InventorySlot = require('../InventorySlot');
-const VisionPotion = require('../VisionPotion');
-const Pillar = require('../Pillar');
+import Inventory from '../Inventory.js';
+import InventorySlot from '../InventorySlot.js';
+import VisionPotion from '../VisionPotion.js';
+import Pillar from '../Pillar.js';
 
-describe('Test the Inventory class',  () => {
+describe('Inventory test',  () => {
 
-    const myInventory = new Inventory();
+    let myInventory = new Inventory();
     const myVisionPotion = new VisionPotion();
     const myPillar = new Pillar(Pillar.PillarType.POLYMORPHISM);
 
+    beforeEach(() => {
+        myInventory = new Inventory();
+    });
+
     test('constructor builds an Inventory object', () => {
-        inventoryArray = myInventory.getArray();
-        emptySlot = new InventorySlot();
+        const inventoryArray = myInventory.getArray();
+        const emptySlot = new InventorySlot();
         expect(inventoryArray.length).toBe(Inventory.NUM_SLOTS);
-        for (i in inventoryArray) {
+        for (let i in inventoryArray) {
             expect(inventoryArray[i]).toStrictEqual(emptySlot);
         }
     });
@@ -21,8 +25,8 @@ describe('Test the Inventory class',  () => {
     test('addItem to empty Inventory', () => {
         myInventory.addItem(myPillar);
         //expect(myInventory.getSlot(0)).toStrictEqual('AAAAIIIIIIEEEEEEEEEEYOUWONTMISSTHIS');
-        console.log(new InventorySlot(myPillar, 1));
-        console.log(myInventory.getSlot(0));
+        //console.log(new InventorySlot(myPillar, 1));
+        //console.log(myInventory.getSlot(0));
         expect(myInventory.getSlot(0)).toStrictEqual(new InventorySlot(myPillar, 1));
     });
 
@@ -92,8 +96,10 @@ describe('Test the Inventory class',  () => {
     test('toString for Inventory with contents', () => {
         myInventory.addItem(myVisionPotion);
         myInventory.addItem(myVisionPotion);
+        myInventory.addItem(myVisionPotion);
         myInventory.addItem(myPillar);
-        expect(myInventory.toString()).toBe('[0] Vision Potion (2)\n[1] Pillar of Polymorphism (1)\n[2] empty\n[3] empty\n[4] empty\n[5] empty\n');
+        console.log(myInventory.toString());
+        expect(myInventory.toString()).toBe('[0] Vision Potion (3)\n[1] Pillar of Polymorphism (1)\n[2] empty\n[3] empty\n[4] empty\n[5] empty\n');
     });
 
     test('getSlot for empty slot', () => {

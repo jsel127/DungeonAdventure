@@ -4,14 +4,14 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-const Item = require('./Item');
+import Item from './Item.js';
 
 /**
  * Represents a vision potion item. 
  * @author Boyd Bouck
  * @version 0.1
  */
-class VisionPotion extends Item {
+export default class VisionPotion extends Item {
 
     static NAME = 'Vision Potion';
 
@@ -27,5 +27,3 @@ class VisionPotion extends Item {
     }
 
 }
-
-module.exports = VisionPotion;

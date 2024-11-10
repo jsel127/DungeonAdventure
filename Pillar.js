@@ -4,14 +4,14 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-const Item = require('./Item');
+import Item from './Item.js';
 
 /**
  * Represents a pillar item. 
  * @author Boyd Bouck
  * @version 1.0
  */
-class Pillar extends Item {
+export default class Pillar extends Item {
 
     /**
      * An object that stores the four types of pillars; 
@@ -33,5 +33,3 @@ class Pillar extends Item {
     }
 
 }
-
-module.exports = Pillar;

@@ -1,6 +1,6 @@
-const InventorySlot = require('../InventorySlot');
-const HealingPotion = require('../HealingPotion');
-const Pillar = require('../Pillar');
+import InventorySlot from '../InventorySlot';
+import HealingPotion from '../HealingPotion';
+import Pillar from '../Pillar';
 
 test('constructor (default) to create an empty InventorySlot', () => {
     expect(new InventorySlot().getItem()).toBe(InventorySlot.EMPTY);
@@ -23,13 +23,13 @@ test('constructor passed a non-Item', () => {
 });
 
 test('setItem passed HealingPotion', () => {
-    slot = new InventorySlot();
+    let slot = new InventorySlot();
     slot.setItem(new HealingPotion());
     expect(slot.getItem()).toStrictEqual(new HealingPotion());
 });
 
 test('setItem passed Pillar of Encapsulation', () => {
-    slot = new InventorySlot();
+    let slot = new InventorySlot();
     slot.setItem(new Pillar(Pillar.PillarType.ENCAPSULATION));
     expect(slot.getItem()).toStrictEqual(new Pillar(Pillar.PillarType.ENCAPSULATION));
 });
@@ -39,13 +39,13 @@ test('setItem passed a non-Item', () => {
 });
 
 test('setItem to EMPTY', () => {
-    slot = new InventorySlot(new HealingPotion());
+    let slot = new InventorySlot(new HealingPotion());
     slot.setItem(InventorySlot.EMPTY);
     expect(slot.getItem()).toBe(InventorySlot.EMPTY);
 });
 
 test('setQuantity to 5', () => {
-    slot = new InventorySlot(new HealingPotion(), 12);
+    let slot = new InventorySlot(new HealingPotion(), 12);
     slot.setQuantity(5);
     expect(slot.getQuantity()).toBe(5);
 });
@@ -55,7 +55,7 @@ test('setQuantity passed a negative value', () => {
 });
 
 test('setQuantity to 0', () => {
-    slot = new InventorySlot(new HealingPotion(), 12);
+    let slot = new InventorySlot(new HealingPotion(), 12);
     slot.setQuantity(0);
     expect(slot.getQuantity()).toBe(0);
     expect(slot.getItem()).toBe(InventorySlot.EMPTY);
@@ -67,7 +67,7 @@ test('setQuantity passed a positive value to an EMPTY InventorySlot', () => {
 });
 
 test('incrementQuantity from 12 to 13', () => {
-    slot = new InventorySlot(new HealingPotion(), 12);
+    let slot = new InventorySlot(new HealingPotion(), 12);
     slot.incrementQuantity();
     expect(slot.getQuantity()).toBe(13);
 });
@@ -78,7 +78,7 @@ test('incrementQuantity on EMPTY InventorySlot', () => {
 });
 
 test('decrementQuantity from 12 to 11', () => {
-    slot = new InventorySlot(new HealingPotion(), 12);
+    let slot = new InventorySlot(new HealingPotion(), 12);
     slot.decrementQuantity();
     expect(slot.getQuantity()).toBe(11);
 });
@@ -89,7 +89,7 @@ test('decrementQuantity on EMPTY InventorySlot', () => {
 });
 
 test('decrementQuantity from 1 to 0', () => {
-    slot = new InventorySlot(new HealingPotion(), 1);
+    let slot = new InventorySlot(new HealingPotion(), 1);
     slot.decrementQuantity();
     expect(slot.getQuantity()).toBe(0);
     expect(slot.getItem()).toBe(InventorySlot.EMPTY);

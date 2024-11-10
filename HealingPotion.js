@@ -4,14 +4,14 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-const Item = require('./Item');
+import Item from './Item.js';
 
 /**
  * Represents a healing potion item. 
  * @author Boyd Bouck
  * @version 1.0
  */
-class HealingPotion extends Item {
+export default class HealingPotion extends Item {
 
     static NAME = 'Healing Potion';
 
@@ -37,5 +37,3 @@ class HealingPotion extends Item {
     }
 
 }
-
-module.exports = HealingPotion;

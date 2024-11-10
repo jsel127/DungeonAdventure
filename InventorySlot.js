@@ -3,8 +3,7 @@
  * Fall 2024
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
-
-const Item = require('./Item');
+import Item from './Item.js';
 
 /**
  * One of the six item 'slots' that make up the inventory. 
@@ -13,7 +12,7 @@ const Item = require('./Item');
  * @author Boyd Bouck
  * @version 1.0
  */
-class InventorySlot {
+export default class InventorySlot {
 
     /** Placeholder for when an inventory slot does not contain an Item. */
     static EMPTY = 'empty';
@@ -109,5 +108,3 @@ class InventorySlot {
     }
 
 }
-
-module.exports = InventorySlot;

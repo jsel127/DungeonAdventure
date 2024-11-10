@@ -1,4 +1,4 @@
-const Pillar = require('../Pillar');
+import Pillar from '../Pillar';
 
 test('constructor for pillar of abstraction', () => {
     expect(new Pillar(Pillar.PillarType.ABSTRACTION).getName()).toBe('Pillar of Abstraction');
