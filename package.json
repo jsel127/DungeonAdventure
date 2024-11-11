@@ -10,5 +10,8 @@
     "jest": "^27.5.1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "vite": "^5.4.10"
+  }
 }
