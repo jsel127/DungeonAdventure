@@ -6,7 +6,6 @@ import React, { useEffect } from 'react';
 
 function HowtoPlayPage() {
 
-  
     
         useEffect(() => {
             // Set the background color of the entire page to dark grey
