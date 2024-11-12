@@ -27,12 +27,9 @@ function FAQPage() {
             <ul style={{ fontFamily: 'Arial', fontSize: '18px', color: 'white', padding: '`0 20px' }}>
             <li style={listItemStyle}><span style={redTextStyle}>How Do I Start? </span> To start playing, simply select a hero from the available options. Each hero has unique abilities that will help you on your journey through the dungeon.</li>
             <li style={listItemStyle}><span style={redTextStyle}>What are the Pillars of OOP?</span> The four Pillars of OOP—Abstraction, Encapsulation, Inheritance, and Polymorphism—are key concepts that you will need to capture throughout the dungeon. These pillars are scattered across different rooms, and your goal is to locate and capture them.</li>
-            <li style={listItemStyle}><span style={redTextStyle}>Collect the Pillars:</span> Your main objective is to locate and capture the four Pillars of Object-Oriented Programming—Abstraction, Encapsulation, Inheritance, and Polymorphism. Each pillar is hidden in a different part of the dungeon, so explore thoroughly.</li>
-            <li style={listItemStyle}><span style={redTextStyle}>Battle Monsters:</span> Some rooms contain monsters. When you encounter one, a battle screen will appear. Use your hero’s abilities strategically to defeat the monsters and continue your adventure.</li>
-            <li style={listItemStyle}><span style={redTextStyle}>Gather Helpful Items:</span> Collect items like health potions to restore your health, or special vision potions that reveal what lies ahead. These can be vital in surviving the dungeon's challenges.</li>
-            <li style={listItemStyle}><span style={redTextStyle}>Avoid Deadly Traps:</span> Watch out for pits and other traps hidden in rooms. They can damage or weaken you, so stay alert as you move.</li>
-            <li style={listItemStyle}><span style={redTextStyle}>Save and Resume:</span> At any point, you can pause and save your game. This lets you return to your progress later and pick up where you left off.</li>
-            <li style={listItemStyle}><span style={redTextStyle}>Complete Your Quest:</span> Once you've collected all four pillars, navigate to the exit to complete your journey and emerge victorious!</li>
+            <li style={listItemStyle}><span style={redTextStyle}>How do I navigate the dungeon?</span> You can move through the dungeon using the navigation buttons (North, South, East, West).</li>
+            <li style={listItemStyle}><span style={redTextStyle}>What happens if I encounter a monster?</span> If you encounter a monster, a battle will begin. You’ll need to use your hero’s abilities strategically to defeat the monster. Winning the battle allows you to continue your journey, while losing may require you to start from a previous point</li>
+            <li style={listItemStyle}><span style={redTextStyle}>How do I win the game?</span> To win the game, you need to collect all four Pillars of Object-Oriented Programming and then find your way to the exit. Completing this quest makes you victorious!</li>
             </ul>
         </body>
         <div style={imageContainerStyle}>
