@@ -6,13 +6,13 @@ function HomePage() {
 
   useEffect(() => {
     // Set the background color of the entire page to dark grey
-    document.body.style.backgroundColor = '#333333';
+    document.body.style.backgroundColor = '#000000';
     document.body.style.margin = '0';  // Remove margin
     document.body.style.padding = '0'; // Remove padding
   }, []);
 
   const linkStyle = (isHovered) => ({
-    color: isHovered ? 'white' : 'grey',  // Change color based on hover status
+    color: isHovered ? 'maroon' : 'grey',  // Change color based on hover status
     textDecoration: 'none',
     margin: '0 20px',
     fontSize: '15px',
