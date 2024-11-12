@@ -63,7 +63,7 @@ function HomePage() {
         <h1 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '60px', fontWeight: 'bold' }}>
           Welcome to the Game!
         </h1>
-        <p style={{ color: 'maroon', fontSize: '30px', marginTop: '-50px', fontWeight: 'bold' }}>
+        <p style={{ color: 'maroon', fontSize: '30px', marginTop: '-40px',  }}>
           This is where your Dungeon Adventure begins...
         </p>
         <img src={`${process.env.PUBLIC_URL}/Adventure.jpg`} style={{ width: '1200px', height: 'auto' }} />
