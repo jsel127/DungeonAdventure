@@ -11,11 +11,11 @@ function FAQPage() {
     }, []);
 
     const listItemStyle = {
-        marginBottom: '15px'  // Adds padding between list items
+        marginBottom: '30px'  // Adds padding between list items
     };
 
     const redTextStyle = {
-        color: 'maroon',
+        color: 'pink',
         fontWeight: 'bold'
         
     };
@@ -26,7 +26,7 @@ function FAQPage() {
         <body>
             <ul style={{ fontFamily: 'Arial', fontSize: '18px', color: 'white', padding: '`0 20px' }}>
             <li style={listItemStyle}><span style={redTextStyle}>How Do I Start? </span> To start playing, simply select a hero from the available options. Each hero has unique abilities that will help you on your journey through the dungeon.</li>
-            <li style={listItemStyle}><span style={redTextStyle}>Explore the Dungeon:</span> Move through various rooms in the dungeon, using navigation buttons (North, South, East, West) to choose your direction. Each room might contain items, monsters, or traps, so proceed with caution!</li>
+            <li style={listItemStyle}><span style={redTextStyle}>What are the Pillars of OOP?</span> The four Pillars of OOP—Abstraction, Encapsulation, Inheritance, and Polymorphism—are key concepts that you will need to capture throughout the dungeon. These pillars are scattered across different rooms, and your goal is to locate and capture them.</li>
             <li style={listItemStyle}><span style={redTextStyle}>Collect the Pillars:</span> Your main objective is to locate and capture the four Pillars of Object-Oriented Programming—Abstraction, Encapsulation, Inheritance, and Polymorphism. Each pillar is hidden in a different part of the dungeon, so explore thoroughly.</li>
             <li style={listItemStyle}><span style={redTextStyle}>Battle Monsters:</span> Some rooms contain monsters. When you encounter one, a battle screen will appear. Use your hero’s abilities strategically to defeat the monsters and continue your adventure.</li>
             <li style={listItemStyle}><span style={redTextStyle}>Gather Helpful Items:</span> Collect items like health potions to restore your health, or special vision potions that reveal what lies ahead. These can be vital in surviving the dungeon's challenges.</li>
