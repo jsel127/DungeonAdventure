@@ -8,11 +8,11 @@ class Dungeon {
     /** Probability that a room contains a vision potion */
     static PROB_VISION_POTION = 0.1;
     /** Probability that a room contains a monster */
-    static PROB_MONSTER = 0.15;
+    static PROB_MONSTER = 0.1;
     /** Probability that a monster is an ogre */
-    static PROB_OGRE = 0.6;
+    static PROB_OGRE = 0.4;
     /** Probability that a monster is a gremlin */
-    static PROB_GREMLIN = 0.1;
+    static PROB_GREMLIN = 0.3;
     /** Probability that a monster is a skeleton */
     static PROB_SKELETON = 0.3;
     /** Holds the information for the rooms in the dungeon. */
@@ -60,8 +60,8 @@ class Dungeon {
      * Key:
      * 
      *     Items
-     *     H - Healing Potion
-     *     V - Vision Potion
+     *     # - Healing Potion (# is leet H)
+     *     / - Vision Potion (/ is leet V)
      *     A, E, I, P - Pillars
      * 
      *     Monsters
@@ -88,8 +88,11 @@ class Dungeon {
         let occupiedRooms = [];
         let roomLocation;
 
+        // Place entrance, exit, pillars; surround exit and pillars with monsters
         roomLocation = this.#placeSingleContent('-', occupiedRooms);
+        this.#myEntrance = this.#myRooms[roomLocation[0]][roomLocation[1]];
         roomLocation = this.#placeSingleContent('+', occupiedRooms);
+        this.#myExit = this.#myRooms[roomLocation[0]][roomLocation[1]];
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
         roomLocation = this.#placeSingleContent('A', occupiedRooms);
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
@@ -99,6 +102,24 @@ class Dungeon {
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
         roomLocation = this.#placeSingleContent('P', occupiedRooms);
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
+
+        // Place potions and monsters throughout maze
+        for (let row = 0; row < this.#myDimension; row++) {
+            for (let col = 0; col < this.#myDimension; col++) {
+                if (this.#myRooms[row][col].isEmpty()) {
+                    let rand = Math.random();
+                    if (rand < Dungeon.PROB_HEALING_POTION) {
+                        this.#myRooms[row][col].setContent('#');
+                    }
+                    else if (rand < Dungeon.PROB_VISION_POTION + Dungeon.PROB_HEALING_POTION) {
+                        this.#myRooms[row][col].setContent('/');
+                    }
+                    else if (rand < Dungeon.PROB_MONSTER + Dungeon.PROB_VISION_POTION + Dungeon.PROB_HEALING_POTION) {
+                        this.#placeMonster(this.#myRooms[row][col]);
+                    }
+                }
+            }
+        }
 
     }
 
@@ -132,27 +153,22 @@ class Dungeon {
             //console.log('has north');
             let northRoom = this.#myRooms[theRow - 1][theCol];
             if (northRoom.isEmpty()) {
-                console.log('yeet');
                 this.#placeMonster(northRoom);
-                console.log(northRoom.toString());
             }
         }
         if (theRow + 1 < this.#myDimension && room.hasDoor('S')) {
-            //console.log('has south');
             let southRoom = this.#myRooms[theRow + 1][theCol];
             if (southRoom.isEmpty()) {
                 this.#placeMonster(southRoom);
             }
         }
         if (theCol - 1 >= 0 && room.hasDoor('W')) {
-            //console.log('has west');
             let westRoom = this.#myRooms[theRow][theCol - 1];
             if (westRoom.isEmpty()) {
                 this.#placeMonster(westRoom);
             }
         }
         if (theCol + 1 < this.#myDimension && room.hasDoor('E')) {
-            //console.log('has east');
             let eastRoom = this.#myRooms[theRow][theCol + 1];
             if (eastRoom.isEmpty()) {
                 this.#placeMonster(eastRoom);
@@ -173,25 +189,6 @@ class Dungeon {
             theRoom.setContent('s');
         }
 
-        /*
-        console.log('rand: ' + rand);
-        switch(rand) {
-            case rand < this.PROB_OGRE:
-                theRoom.setContent('o');
-                console.log('boom ogre');
-                break;
-            case rand < this.PROB_GREMLIN + this.PROB_OGRE:
-                theRoom.setContent('g');
-                console.log('boom grem');
-                break;
-            case rand < this.PROB_SKELETON + this.PROB_GREMLIN + this.PROB_OGRE:
-                theRoom.setContent('s');
-                console.log('boom skel');
-                break;
-            default:
-        }
-        console.log(theRoom.toString());
-        */
     }
 
     /**
