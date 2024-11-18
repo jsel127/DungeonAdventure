@@ -18,9 +18,9 @@ export default class Priestess extends Hero {
     static HEAL_MIN_PERCENT = 10;
     static HEAL_MAX_PERCENT = 20;
     constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
-                theHitChange, theChanceToBlock) {
+                theHitChance, theChanceToBlock) {
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
-              theHitChange, theChanceToBlock);
+              theHitChance, theChanceToBlock);
     }
 
     /**

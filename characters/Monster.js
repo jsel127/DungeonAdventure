@@ -16,9 +16,15 @@ export default class Monster extends DungeonCharacter {
     #myMinHeal
     #myMaxHeal
     constructor(theName, theHP, theDPMin, theDPMax,
-                theAttackSpeed, theHitChange,
+                theAttackSpeed, theHitChance,
                 theHealChance, theMinHeal, theMaxHeal) {
-        super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChange);
+        super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance);
+        if (theHealChance < 0 || theHealChance > 100 ) {
+            throw new RangeError("The Heal Chance is not within the valid range [0,100].");
+        }     
+        if (theMinHeal < 0 || theMaxHeal < 0) {
+            throw new RangeError("The MinHeal or MaxHeal is not greater is negative.");
+        }
         this.#myHealChance = theHealChance;
         this.#myMinHeal = theMinHeal;
         this.#myMaxHeal = theMaxHeal;

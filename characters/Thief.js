@@ -16,9 +16,9 @@ export default class Thief extends Hero {
     static FAIL_RATE_SUPRISE_ATTACK = 20;
     static NUMBER_SUPRISE_ATTACK = 2;
     constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
-                theHitChange, theChanceToBlock) {
+                theHitChance, theChanceToBlock) {
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
-              theHitChange, theChanceToBlock);
+              theHitChance, theChanceToBlock);
     }
 
     /**

@@ -23,16 +23,28 @@ export default class DungeonCharacter {
      * @param {*} theDPMin the min damage points of the dungeon character
      * @param {*} theDPMax the max damage points of the dungeon character
      * @param {*} theAttackSpeed the attack speed of the dungeon character
-     * @param {*} theHitChange the hit change of the dungeon character
+     * @param {*} theHitChance the hit change of the dungeon character
      */
     constructor(theName, theHP, theDPMin, theDPMax,
-                theAttackSpeed, theHitChange) {
+                theAttackSpeed, theHitChance) {
+        if (theName === null) {
+            throw new TypeError("The name must be specified.");
+        }
+        if (theHP <= 0 || theDPMax <= 0 || theAttackSpeed <= 0) {
+            throw new RangeError("The HP, DPMax, or AttackSpeed is not greater than 0.");
+        } 
+        if (theDPMin < 0) {
+            throw new RangeError("The DPMin is negative");
+        }
+        if (theHitChance < 0 || theHitChance > 100 ) {
+            throw new RangeError("The Hit Chance is not within the valid range [0,100].");
+        }
         this.#myName = theName;
         this.#myHP = theHP;
         this.#myDPMin = theDPMin;
         this.#myDPMax = theDPMax;
         this.#myAttackSpeed = theAttackSpeed;
-        this.#myHitChance = theHitChange;
+        this.#myHitChance = theHitChance;
     }
     
     /**

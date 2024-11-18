@@ -15,9 +15,9 @@ export default class Warrior extends Hero {
     static HIT_RATE_CRUSHING_BLOW = 40;
     static MULTIPLIER_CRUSHING_BLOW = 2;
     constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
-                theHitChange, theChanceToBlock) {
+                theHitChance, theChanceToBlock) {
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
-              theHitChange, theChanceToBlock);
+              theHitChance, theChanceToBlock);
     }
 
     specialAttack(theOpponent) {
