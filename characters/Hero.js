@@ -15,8 +15,8 @@ export default class Hero extends DungeonCharacter{
     /** The chance the hero has to block an attack */
     #myChanceToBlock
     constructor(theName, theHP, theDPMin, theDPMax,
-                theAttackSpeed, theHitChange, theChanceToBlock) {       
-        super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChange);
+                theAttackSpeed, theHitChance, theChanceToBlock) {       
+        super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance);
         if (theChanceToBlock < 0 || theChanceToBlock > 100 ) {
             throw new RangeError("The Block Chance is not within the valid range [0,100].");
         }     
