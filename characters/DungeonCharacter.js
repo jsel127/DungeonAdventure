@@ -15,7 +15,7 @@ export default class DungeonCharacter {
     #myDPMin
     #myDPMax
     #myAttackSpeed
-    #myHitChange
+    #myHitChance
     /**
      * Class for Dungeon characters containing getter and setter methods for character' statistics.
      * @param {*} theName the name of the dungeon character
@@ -32,7 +32,7 @@ export default class DungeonCharacter {
         this.#myDPMin = theDPMin;
         this.#myDPMax = theDPMax;
         this.#myAttackSpeed = theAttackSpeed;
-        this.#myHitChange = theHitChange;
+        this.#myHitChance = theHitChange;
     }
     
     /**
@@ -79,8 +79,8 @@ export default class DungeonCharacter {
      * Returns the hit chance of the dungeon character
      * @returns the hit chance of the dungeon character 
      */
-    getHitChange() {
-        return this.#myHitChange;
+    getHitChance() {
+        return this.#myHitChance;
     }
 
     /**
@@ -100,7 +100,7 @@ export default class DungeonCharacter {
      * @returns true if the attack was successul and false otherwise.
      */
     attack(theOpponent, autoSuccess=false) {
-        if (!this.isDead() && (autoSuccess || Math.random() * 100 < this.#myHitChange)) {
+        if (!this.isDead() && (autoSuccess || Math.random() * 100 < this.#myHitChance)) {
             const rangeDP = this.#myDPMax - this.#myDPMin;
             const attackDP = Math.round(Math.random() * rangeDP) + this.#myDPMin;
             if (attackDP < theOpponent.getHP()) {
@@ -127,6 +127,6 @@ export default class DungeonCharacter {
      * @returns a string representation of the dungeon character formatted by the information it contains (name, HP, DPMin, DPMax, AttackSpeed, HitChange)
      */
     toString() {
-        return `${this.#myName} ${this.#myHP} ${this.#myDPMin} ${this.#myDPMax} ${this.#myAttackSpeed} ${this.#myHitChange}`;
+        return `${this.#myName} ${this.#myHP} ${this.#myDPMin} ${this.#myDPMax} ${this.#myAttackSpeed} ${this.#myHitChance}`;
     }
 }

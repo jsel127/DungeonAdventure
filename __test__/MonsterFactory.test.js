@@ -1,4 +1,4 @@
-import MonsterFactory from "../characters/MontersFactory";
+import MonsterFactory from "../characters/MonsterFactory";
 
 describe("Tests the monster factory and ensures a Monster object is properly created", () => { 
     const monsterFactory = new MonsterFactory();

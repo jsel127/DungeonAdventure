@@ -1,4 +1,4 @@
-const DungeonCharacter = require('../characters/DungeonCharacter');
+import DungeonCharacter from "../characters/DungeonCharacter.js";
 // TODO: test attack method
 describe('Tests Dungeon Character instanciated to Name: Alice, HP: 20, DPMin: 1, DPMax: 5, AttackSpeed: 1, HitChange: 100', () => {
     const oneHundredHitChance = new DungeonCharacter("Alice", 20, 1, 5, 1, 100);  
@@ -28,7 +28,7 @@ describe('Tests Dungeon Character instanciated to Name: Alice, HP: 20, DPMin: 1,
     });
 
     test('getHitChance', () => {
-        expect(oneHundredHitChance.getHitChange()).toBe(100);
+        expect(oneHundredHitChance.getHitChance()).toBe(100);
     });
 
     // SETTER methods
