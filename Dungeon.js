@@ -80,11 +80,6 @@ class Dungeon {
         // number of rooms) if a rooms already contains an item it should put it somewhere else
         // where a pillar is placed a monster should be placed in one of the adjacent rooms
 
-        // 1. place entrance and exit
-        // 2. place pillars
-        // 2a. place monsters in rooms adjacent to pillars
-        // 3. place remaining monsters and items at designated rates
-
         let occupiedRooms = [];
         let roomLocation;
 
