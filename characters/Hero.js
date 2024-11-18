@@ -40,6 +40,10 @@ export default class Hero extends DungeonCharacter{
         } 
         return true;
     }
+    
+    toString() {
+        return super.toString() + ` ${this.#myChanceToBlock}`
+    }
 
     /**
      * Special attack specific to the Heroes.

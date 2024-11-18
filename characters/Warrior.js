@@ -14,14 +14,17 @@ import Hero from './Hero.js';
 export default class Warrior extends Hero {
     static HIT_RATE_CRUSHING_BLOW = 40;
     static MULTIPLIER_CRUSHING_BLOW = 2;
-    constructor() {
-        // TODO: Call super and pass in data from database.
+    constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
+                theHitChange, theChanceToBlock) {
+        super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
+              theHitChange, theChanceToBlock);
     }
 
     specialAttack(theOpponent) {
         if (!this.isDead() && Math.random() * 100 < Warrior.HIT_RATE_CRUSHING_BLOW) {
             const rangeDP = this.getDPMax() - this.getDPMin();
-            const attackDP = Warrior.MULTIPLIER_CRUSHING_BLOW * (Math.round(Math.random() * rangeDP) + this.getDPMin());
+            const attackDP = Warrior.MULTIPLIER_CRUSHING_BLOW * 
+                             (Math.round(Math.random() * rangeDP) + this.getDPMin());
             if (attackDP < theOpponent.getHP()) {
                 theOpponent.setHP(theOpponent.getHP() - attackDP);
             } else {

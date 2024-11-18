@@ -15,8 +15,10 @@ export default class Thief extends Hero {
     static HIT_RATE_SUPRISE_ATTACK = 40;
     static FAIL_RATE_SUPRISE_ATTACK = 20;
     static NUMBER_SUPRISE_ATTACK = 2;
-    constructor() {
-        // TODO: Call super and pass in data from database.
+    constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
+                theHitChange, theChanceToBlock) {
+        super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
+              theHitChange, theChanceToBlock);
     }
 
     /**

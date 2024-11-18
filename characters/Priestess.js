@@ -7,6 +7,8 @@
 import Hero from './Hero.js';
 import sqlite3 from 'sqlite3';
 
+const characterDB = new sqlite3.Database('../characters.db');
+const row = characterDB.get("SELECT * FROM Heroes WHERE NAME = 'Priestess'");
 /**
  * Class containing common methods and data for all priestess character. 
  * @author Jasmine Sellers
@@ -15,9 +17,10 @@ import sqlite3 from 'sqlite3';
 export default class Priestess extends Hero {
     static HEAL_MIN_PERCENT = 10;
     static HEAL_MAX_PERCENT = 20;
-    constructor() {
-        // TODO: Call super and pass in data from database.
-        const db = new sqlite3.Database('../characters.db');
+    constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
+                theHitChange, theChanceToBlock) {
+        super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
+              theHitChange, theChanceToBlock);
     }
 
     /**
