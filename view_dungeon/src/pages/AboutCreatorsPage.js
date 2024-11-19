@@ -17,7 +17,7 @@ function AboutCreatorsPage() {
         return (
             <div >
                 <h1 style={{ fontFamily: 'Garamond', color: 'maroon', textAlign: 'center', padding: 10, fontSize: '50px' }}>About Creators</h1>
-                <p style={{ fontFamily: 'Arial', color: 'white', maxWidth: '800px', margin: '0 auto', fontSize: '20px' }}>
+                <p style={{ fontFamily: 'Garamond', color: 'white', maxWidth: '800px', margin: '0 auto', fontSize: '20px' }}>
                 Dungeon Adventure is developed by Jasmine, Simran, and Boyd, students at the University of Washington Tacoma (UWT). 
                 This project is a collaborative effort intended to expand their knowledge and strengthen their skills in software development. 
                 By designing and building this immersive game, they aimed to tackle new challenges 
