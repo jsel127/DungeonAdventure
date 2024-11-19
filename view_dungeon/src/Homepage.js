@@ -7,30 +7,30 @@ function HomePage() {
   useEffect(() => {
     // Set the background color of the entire page to dark grey
     document.body.style.backgroundColor = '#000000';
-    document.body.style.margin = '0';  // Remove margin
+    document.body.style.margin = '0'; // Remove margin
     document.body.style.padding = '0'; // Remove padding
   }, []);
 
   const linkStyle = (isHovered) => ({
-    color: isHovered ? 'maroon' : 'grey',  // Change color based on hover status
+    color: isHovered ? 'maroon' : 'grey', // Change color based on hover status
     textDecoration: 'none',
     margin: '0 20px',
     fontSize: '15px',
-    transition: 'color 0.2s ease', 
+    transition: 'color 0.2s ease',
   });
 
   return (
     <div>
       <header style={headerStyle}>
         <div style={navMenuStyle}>
-        <Link
-        to="/AboutGamePage" 
-        style={linkStyle(hoveredLink === 'aboutGame')}
-        onMouseEnter={() => setHoveredLink('aboutGame')}
-        onMouseLeave={() => setHoveredLink(null)}
-        >
-        About Game
-</Link>
+          <Link
+            to="/AboutGamePage"
+            style={linkStyle(hoveredLink === 'aboutGame')}
+            onMouseEnter={() => setHoveredLink('aboutGame')}
+            onMouseLeave={() => setHoveredLink(null)}
+          >
+            About Game
+          </Link>
           <Link
             to="/HowtoPlayPage"
             style={linkStyle(hoveredLink === 'howToPlay')}
@@ -63,10 +63,22 @@ function HomePage() {
         <h1 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '60px', fontWeight: 'bold' }}>
           Welcome to the Game!
         </h1>
-        <p style={{ color: 'maroon', fontSize: '30px', marginTop: '-40px',  }}>
+        <p style={{ color: 'maroon', fontSize: '30px', marginTop: '-40px' }}>
           This is where your Dungeon Adventure begins...
         </p>
-        <img src={`${process.env.PUBLIC_URL}/Adventure.jpg`} style={{ width: '1200px', height: 'auto' }} />
+        <img
+          src={`${process.env.PUBLIC_URL}/Adventure.jpg`}
+          alt="Adventure"
+          style={{ width: '1200px', height: 'auto' }}
+        />
+        {/* Start Button */}
+        <div style={{ marginTop: '30px' }}>
+          <Link to="/CharacterSelection">
+            <button style={startButtonStyle}>
+              Start
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -81,5 +93,7 @@ const navMenuStyle = {
   display: 'flex',
   justifyContent: 'right',
 };
+
+
 
 export default HomePage;
