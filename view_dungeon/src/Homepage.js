@@ -102,7 +102,7 @@ const startButtonStyle = {
   padding: '10px 30px',
   borderRadius: '5px',
   cursor: 'pointer',
-  fontFamily: 'Garamond',
+  fontFamily: 'Arial',
   fontWeight: 'bold',
   transition: 'transform 0.2s ease',
 };
