@@ -5,7 +5,7 @@ function HomePage() {
   const [hoveredLink, setHoveredLink] = useState(null);
 
   useEffect(() => {
-    // Set the background color of the entire page to dark grey
+    // Set the background color of the entire page to black
     document.body.style.backgroundColor = '#000000';
     document.body.style.margin = '0'; // Remove margin
     document.body.style.padding = '0'; // Remove padding
@@ -73,11 +73,10 @@ function HomePage() {
         />
         {/* Start Button */}
         <div style={{ marginTop: '30px' }}>
-          <Link to="/CharacterSelection">
-            <button style={startButtonStyle}>
-              Start
-            </button>
-          </Link>
+        <Link to="/select-character">
+  <button style={startButtonStyle}>Start</button>
+</Link>
+
         </div>
       </div>
     </div>
