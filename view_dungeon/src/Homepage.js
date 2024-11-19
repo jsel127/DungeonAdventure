@@ -94,6 +94,17 @@ const navMenuStyle = {
   justifyContent: 'right',
 };
 
-
+// Start button styling
+const startButtonStyle = {
+  backgroundColor: 'maroon',
+  color: 'white',
+  fontSize: '20px',
+  padding: '10px 30px',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  fontFamily: 'Garamond',
+  fontWeight: 'bold',
+  transition: 'transform 0.2s ease',
+};
 
 export default HomePage;
