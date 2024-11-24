@@ -27,6 +27,9 @@ export default class DungeonCharacter {
      */
     constructor(theName, theHP, theDPMin, theDPMax,
                 theAttackSpeed, theHitChance) {
+        if (this.constructor === DungeonCharacter) {
+            throw new TypeError("DungeonCharacter cannot be instanciated directly.");
+        }
         if (theName === null) {
             throw new TypeError("The name must be specified.");
         }
