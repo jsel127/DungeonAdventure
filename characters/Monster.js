@@ -19,6 +19,9 @@ export default class Monster extends DungeonCharacter {
                 theAttackSpeed, theHitChance,
                 theHealChance, theMinHeal, theMaxHeal) {
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance);
+        if (!(Number.isInteger(theHealChance) && Number.isInteger(theMinHeal) && Number.isInteger(theMaxHeal))) {
+            throw new TypeError("The Heal Chance, MinHeal, and/or MaxHeal is not an integer value. Invalid value.");
+        }
         if (theHealChance < 0 || theHealChance > 100 ) {
             throw new RangeError("The Heal Chance is not within the valid range [0,100].");
         }     

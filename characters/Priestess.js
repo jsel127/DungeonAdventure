@@ -15,8 +15,8 @@ const row = characterDB.get("SELECT * FROM Heroes WHERE NAME = 'Priestess'");
  * @version 1.0
  */
 export default class Priestess extends Hero {
-    static HEAL_MIN_PERCENT = 10;
-    static HEAL_MAX_PERCENT = 20;
+    static #HEAL_MIN_PERCENT = 10;
+    static #HEAL_MAX_PERCENT = 20;
     constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
                 theHitChance, theChanceToBlock) {
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
@@ -30,8 +30,8 @@ export default class Priestess extends Hero {
      * @returns true if they were able to heal themselves (i.e. HP was gained) and false if no HP was gained.
      */
     specialAttack(theOpponent) {
-        const minHeal = Math.round(this.getHP() * Priestess.HEAL_MIN_PERCENT / 100);
-        const maxHeal = Math.round(this.getHP() * Priestess.HEAL_MAX_PERCENT / 100);
+        const minHeal = Math.round(this.getHP() * Priestess.#HEAL_MIN_PERCENT / 100);
+        const maxHeal = Math.round(this.getHP() * Priestess.#HEAL_MAX_PERCENT / 100);
         const rangeHeal = maxHeal - minHeal;
         const gainedHP = Math.round(Math.random() * rangeHeal);
         this.setHP(this.getHP() + gainedHP);

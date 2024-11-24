@@ -20,6 +20,9 @@ export default class Hero extends DungeonCharacter{
         if (this.constructor === Hero) {
             throw new TypeError("Hero cannot be instanciated directly.");
         }
+        if (!Number.isInteger(theChanceToBlock)) {
+            throw new TypeError("The given Block Chance value is not a integer.");
+        }
         if (theChanceToBlock < 0 || theChanceToBlock > 100 ) {
             throw new RangeError("The Block Chance is not within the valid range [0,100].");
         }     
@@ -39,7 +42,6 @@ export default class Hero extends DungeonCharacter{
             if (newHP > 0) {
                 this.setHP(newHP);
             } else {
-// NOTE FOR DEVELOPER: the opponent has died at this point
                 this.setHP(0);
             }
             return false;

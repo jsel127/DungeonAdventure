@@ -33,6 +33,10 @@ export default class DungeonCharacter {
         if (theName === null) {
             throw new TypeError("The name must be specified.");
         }
+        if (!(Number.isInteger(theHP) && Number.isInteger(theDPMax) && Number.isInteger(theAttackSpeed) &&
+            Number.isInteger(theDPMin) && Number.isInteger(theHitChance) && typeof theName === "string")) {
+            throw new TypeError("The argument(s) do not match the expected type of data.");
+        }
         if (theHP <= 0 || theDPMax <= 0 || theAttackSpeed <= 0) {
             throw new RangeError("The HP, DPMax, or AttackSpeed is not greater than 0.");
         } 
@@ -103,6 +107,9 @@ export default class DungeonCharacter {
      * @param {*} theNewHP the new HP of the dungeon character.
      */
     setHP(theNewHP) {
+        if (!Number.isInteger(theNewHP)) {
+            throw new TypeError("The new HP value is not an integer.");
+        }
         if (theNewHP < 0) {
             throw new RangeError("The HP value cannot be negative");
         }

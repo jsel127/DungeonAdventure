@@ -12,9 +12,9 @@ import Hero from './Hero.js';
  * @version 1.0
  */
 export default class Thief extends Hero {
-    static HIT_RATE_SUPRISE_ATTACK = 40;
-    static FAIL_RATE_SUPRISE_ATTACK = 20;
-    static NUMBER_SUPRISE_ATTACK = 2;
+    static #HIT_RATE_SUPRISE_ATTACK = 40;
+    static #FAIL_RATE_SUPRISE_ATTACK = 20;
+    static #NUMBER_SUPRISE_ATTACK = 2;
     constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
                 theHitChance, theChanceToBlock) {
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
@@ -29,12 +29,12 @@ export default class Thief extends Hero {
     specialAttack(theOpponent) {
         const randomInt = Math.round(Math.random() * 100);
         if (!this.isDead()) {
-            if (randomInt < Thief.HIT_RATE_SUPRISE_ATTACK) {
-                for (let i = 0; i < Thief.NUMBER_SUPRISE_ATTACK; i++) {
+            if (randomInt < Thief.#HIT_RATE_SUPRISE_ATTACK) {
+                for (let i = 0; i < Thief.#NUMBER_SUPRISE_ATTACK; i++) {
                     this.attack(theOpponent, true);
                 }
                 return true;
-            } else if (randomInt > Thief.HIT_RATE_SUPRISE_ATTACK + Thief.FAIL_RATE_SUPRISE_ATTACK) {
+            } else if (randomInt > Thief.#HIT_RATE_SUPRISE_ATTACK + Thief.#FAIL_RATE_SUPRISE_ATTACK) {
                 this.attack(theOpponent, true);
                 return true;
             } else {
