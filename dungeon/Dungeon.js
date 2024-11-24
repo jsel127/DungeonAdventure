@@ -1,8 +1,13 @@
-// const Room = require('./Room.js');
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
+
 import Room from './Room.js';
-class Dungeon {
+export default class Dungeon {
     /** Multiplier to determine the size of the room given the difficulty level */
-    static DIFFICULTY_MULTIPLIER = 5;
+    static #DIFFICULTY_MULTIPLIER = 5;
     /** Holds the information for the rooms in the dungeon. */
     #myRooms
     /** The entrance for the dungeon. */
@@ -12,7 +17,7 @@ class Dungeon {
     /** The dimension of the maze. */
     #myDimension
     constructor(theDifficulty) {
-        this.#myDimension = theDifficulty * Dungeon.DIFFICULTY_MULTIPLIER;
+        this.#myDimension = theDifficulty * Dungeon.#DIFFICULTY_MULTIPLIER;
         this.makeDungeon();
     }
 
@@ -65,6 +70,3 @@ class Dungeon {
         return str;
     }
 }
-
-const test = new Dungeon(2);
-console.log(test.toString());
