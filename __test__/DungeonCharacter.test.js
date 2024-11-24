@@ -1,3 +1,8 @@
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
 import DungeonCharacter from "../characters/DungeonCharacter.js";
 // TODO: test attack method
 describe('Tests Dungeon Character instanciated to Name: Alice, HP: 20, DPMin: 1, DPMax: 5, AttackSpeed: 1, HitChange: 100', () => {

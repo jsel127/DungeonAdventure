@@ -1,3 +1,9 @@
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
+
 import Monster from "../characters/Monster";
 // TODO: test attack method
 describe('Tests Monster Character instanciated to Name: Gremlin, HP: 70, DPMin: 15, DPMax: 30, AttackSpeed: 5, HitChange: 80, HealChance: 40, MinHeal: 20, MaxHeal: 40', () => {

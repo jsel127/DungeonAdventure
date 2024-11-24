@@ -1,3 +1,9 @@
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
+
 import Warrior from "../characters/Warrior";
 import Thief from "../characters/Thief";
 import Priestess from "../characters/Priestess";
