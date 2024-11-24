@@ -10,20 +10,28 @@
  * @version 1.0
  */
 export default class DungeonCharacter {
+    /** The name of the dungeon character. */
     #myName
+    /** The HP of the dungeon character. */
     #myHP
+    /** The DP Min of the dungeon character. */
     #myDPMin
+    /** The DP Max of the dungeon character. */
     #myDPMax
+    /** The Attack Speed of the dungeon character. */
     #myAttackSpeed
+    /** The Hit Chance (0-100) of the dungeon character. */
     #myHitChance
     /**
-     * Class for Dungeon characters containing getter and setter methods for character' statistics.
+     * Constructor that will store the given arguments in the corresponding 
+     * instance fields.
+     * A DungeonCharacter cannot be directly instanciated.
      * @param {*} theName the name of the dungeon character
      * @param {*} theHP the health points of the dungeon character
      * @param {*} theDPMin the min damage points of the dungeon character
      * @param {*} theDPMax the max damage points of the dungeon character
      * @param {*} theAttackSpeed the attack speed of the dungeon character
-     * @param {*} theHitChance the hit change of the dungeon character
+     * @param {*} theHitChance the hit chance of the dungeon character
      */
     constructor(theName, theHP, theDPMin, theDPMax,
                 theAttackSpeed, theHitChance) {
@@ -128,7 +136,6 @@ export default class DungeonCharacter {
             if (attackDP < theOpponent.getHP()) {
                 theOpponent.setHP(theOpponent.getHP() - attackDP);
             } else {
-// NOTE FOR DEVELOPER: the opponent has died at this point
                 theOpponent.setHP(0);
             }
             return true;

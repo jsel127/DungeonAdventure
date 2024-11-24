@@ -12,9 +12,23 @@ import Hero from './Hero.js';
  * @version 1.0
  */
 export default class Thief extends Hero {
+    /** The hit rate of the suprise attack. */
     static #HIT_RATE_SUPRISE_ATTACK = 40;
+    /** The fail rate of the suprise attack. */    
     static #FAIL_RATE_SUPRISE_ATTACK = 20;
+    /** The max number of suprise attacks the thief can get in. */
     static #NUMBER_SUPRISE_ATTACK = 2;
+    /**
+     * Constructor that will store the given arguments in the corresponding 
+     * instance fields and create a Thief. 
+     * @param {*} theName the name of the Thief.
+     * @param {*} theHP the health points of the Thief.
+     * @param {*} theDPMin the min damage points of the Thief.
+     * @param {*} theDPMax the max damage points of the Thief.
+     * @param {*} theAttackSpeed the attack speed of the Thief.
+     * @param {*} theHitChance the hit chance of the Thief.
+     * @param {*} theChanceToBlock the block chance of the Thief.
+     */
     constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
                 theHitChance, theChanceToBlock) {
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 

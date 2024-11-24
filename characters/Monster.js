@@ -12,9 +12,25 @@
 import DungeonCharacter from "./DungeonCharacter.js";
 
 export default class Monster extends DungeonCharacter {
+    /** The heal chance (0-100) of the monster. */
     #myHealChance
+    /** The min heal points the monster can get. */
     #myMinHeal
+    /** The max heal points the monster can get. */
     #myMaxHeal
+    /**
+     * Constructor that will store the given arguments in the corresponding 
+     * instance fields.
+     * @param {*} theName the name of the monster.
+     * @param {*} theHP the health points of the monster.
+     * @param {*} theDPMin the min damage points of the monster.
+     * @param {*} theDPMax the max damage points of the monster.
+     * @param {*} theAttackSpeed the attack speed of the monster.
+     * @param {*} theHitChance the hit chance of the monster.
+     * @param {*} theHealChance the heal chance (0-100) success rate when healing.
+     * @param {*} theMinHeal the min heal points the monster can get during a heal.
+     * @param {*} theMaxHeal the max heal points the monster can get during a heal.
+     */
     constructor(theName, theHP, theDPMin, theDPMax,
                 theAttackSpeed, theHitChance,
                 theHealChance, theMinHeal, theMaxHeal) {
