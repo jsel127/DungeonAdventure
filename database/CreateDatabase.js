@@ -1,9 +1,14 @@
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
 import sqlite3 from 'sqlite3';
 
 // Creates the database
 const characterDB = new sqlite3.Database('./characters.db', (err) => {
     if (err) {
-        console.log("Database creation/connection failed \n");
+        console.error("Database creation/connection failed \n");
     } else {
         console.log("Created database successfuly \n");
     }
@@ -30,14 +35,14 @@ function createTables() {
                                  "BLOCK_CHANCE INTEGER NOT NULL)";
     characterDB.run(createMonsterTableQuery, (err) => {
         if (err) {
-            console.log("Error creating Monsters table \n");
+            console.error("Error creating Monsters table \n");
         } else {
             console.log("Created Monster table successfully \n");
         }
     });
     characterDB.run(createHeroTableQuery, (err) => {
         if (err) {
-            console.log("Error creating Heroes table \n");
+            console.error("Error creating Heroes table \n");
         } else {
             console.log("Created Heroes table successfully \n");
         }
@@ -100,7 +105,7 @@ function runStatements(theStatements) {
         for (let i = 0; i < theStatements.length; i++) {
             characterDB.run(theStatements[i], (err) => {
                 if (err) {
-                    console.log("Failed runStatements on " + theStatements[i]);
+                    console.error("Failed runStatements on " + theStatements[i]);
                 } else {
                     console.log("Successfully inserted: " + theStatements[i]);
                 }
