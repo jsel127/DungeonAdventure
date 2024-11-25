@@ -24,7 +24,7 @@ function HomePage() {
       <header style={headerStyle}>
         <div style={navMenuStyle}>
           <Link
-            to="/AboutGamePage"
+            to="/about-game" // Make sure this matches your route path
             style={linkStyle(hoveredLink === 'aboutGame')}
             onMouseEnter={() => setHoveredLink('aboutGame')}
             onMouseLeave={() => setHoveredLink(null)}
@@ -32,7 +32,7 @@ function HomePage() {
             About Game
           </Link>
           <Link
-            to="/HowtoPlayPage"
+            to="/how-to-play" // Make sure this matches your route path
             style={linkStyle(hoveredLink === 'howToPlay')}
             onMouseEnter={() => setHoveredLink('howToPlay')}
             onMouseLeave={() => setHoveredLink(null)}
@@ -40,7 +40,7 @@ function HomePage() {
             How to Play
           </Link>
           <Link
-            to="/FAQPage"
+            to="/faq" // Make sure this matches your route path
             style={linkStyle(hoveredLink === 'faq')}
             onMouseEnter={() => setHoveredLink('faq')}
             onMouseLeave={() => setHoveredLink(null)}
@@ -48,7 +48,7 @@ function HomePage() {
             FAQ
           </Link>
           <Link
-            to="/AboutCreatorsPage"
+            to="/about-creators" // Make sure this matches your route path
             style={linkStyle(hoveredLink === 'aboutCreators')}
             onMouseEnter={() => setHoveredLink('aboutCreators')}
             onMouseLeave={() => setHoveredLink(null)}
@@ -73,10 +73,9 @@ function HomePage() {
         />
         {/* Start Button */}
         <div style={{ marginTop: '30px' }}>
-        <Link to="/select-character">
-  <button style={startButtonStyle}>Start</button>
-</Link>
-
+          <Link to="/select-character"> {/* Match route */}
+            <button style={startButtonStyle}>Start</button>
+          </Link>
         </div>
       </div>
     </div>
