@@ -6,8 +6,12 @@
 
 export default class Door {
     #myStatus;
-    constructor(theStatus) {
+    constructor(theStatus = false) {
         this.#myStatus = theStatus;
+    }
+
+    isOpen() {
+        return this.#myStatus;
     }
 
     open() {
