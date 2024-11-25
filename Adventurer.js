@@ -1,4 +1,5 @@
-import Pillar from "./Pillar";
+import Pillar from "./Pillar.js";
+import Hero from "./characters/Hero.js"
 export default class Adventurer {
     #myQuantityHealingPotion
     #myQuantityVisionPotion
@@ -9,8 +10,15 @@ export default class Adventurer {
         if (typeof theName !== "string" || !(theHero instanceof Hero)) {
             throw new TypeError("Invalid name or hero provided");
         }
+        this.#myQuantityHealingPotion = 0;
+        this.#myQuantityVisionPotion = 0;
+        this.#myPillars = [];
         this.#myName = theName;
         this.#myHero = theHero;
+    }
+
+    getName() {
+        return this.#myName;
     }
 
     getQuantityHealingPotion() {
@@ -22,14 +30,18 @@ export default class Adventurer {
     }
 
     getPillars() {
-        return this.#myPillars.toString();
+        let str = '';
+        for (let i = 0; i < this.#myPillars.length; i++) {
+            str += this.#myPillars[i].getName() + '\n';
+        }
+        return str;
     }
 
     addPillar(thePillar) {
         if (!thePillar instanceof Pillar) {
             throw new TypeError("This is not a valid pillar.");
         }
-        myPillars.push(thePillar);
+        this.#myPillars.push(thePillar);
     }
 
     incrementQuantityHealingPotion() {
@@ -37,10 +49,10 @@ export default class Adventurer {
     }
 
     decrementQuantityHealingPotion() {
-        if (this.#myQuantityHealingPotion < 0) {
+        if (this.#myQuantityHealingPotion <= 0) {
             throw new EvalError("There are no more healing potions to use.");
         }
-        this.#myQuantityVisionPotion -= 1;
+        this.#myQuantityHealingPotion -= 1;
     }
 
     incrementQuantityVisionPotion() {
@@ -48,7 +60,7 @@ export default class Adventurer {
     }
 
     decrementQuantityVisionPotion() {
-        if (this.#myQuantityVisionPotion < 0) {
+        if (this.#myQuantityVisionPotion <= 0) {
             throw new EvalError("There are no more vision potions to use.");
         }
         this.#myQuantityVisionPotion -= 1;
