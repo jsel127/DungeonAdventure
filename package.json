@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "dungeonadventure",
   "version": "1.0.0",
   "description": "A dungeon adventure game",
@@ -13,15 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.21.1",
     "vite": "^5.4.10"
-  }
-=======
-  "type":"module",
-  "scripts": {"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"},
-
+  },
+  "type": "module",
   "jest": {
     "transform": {}
   }
-
->>>>>>> sellersj
 }
