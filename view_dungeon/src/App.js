@@ -1,17 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './Homepage';
+import HomePage from './pages/Homepage';
 import AboutGamePage from './pages/AboutGamePage';
 import HowToPlayPage from './pages/HowtoPlayPage';
-import FAQPage from './FAQPage';
-import AboutCreatorsPage from './AboutCreatorsPage';
-import CharacterSelection from './CharacterSelection'; // Correct import
+import FAQPage from './pages/FAQPage';
+import AboutCreatorsPage from './pages/AboutCreatorsPage';
+import CharacterSelection from './pages/CharacterSelection.js'; // Correct import
 
 function App() {
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
         <Route path="/about-game" element={<AboutGamePage />} />
         <Route path="/how-to-play" element={<HowToPlayPage />} />
         <Route path="/faq" element={<FAQPage />} />
@@ -19,9 +19,11 @@ function App() {
         
         {/* Correct route for character selection */}
         <Route path="/select-character" element={<CharacterSelection />} />
+        <Route path="/" element={<HomePage />} />
       </Routes>
     </Router>
   );
+  
 }
 
 export default App;
