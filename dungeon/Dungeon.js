@@ -1,6 +1,7 @@
 import Coordinate from './Coordinate.js';
+import Door from './Door.js'
 import Room from '../Room.js';
-class Dungeon {
+export default class Dungeon {
     /** Multiplier to determine the size of the room given the difficulty level */
     static DIFFICULTY_MULTIPLIER = 5;
     /** Probability that a room contains a healing potion */
@@ -29,15 +30,15 @@ class Dungeon {
     }
 
     makeDungeon() {
-        Doors = this.createDoors();
+        let Doors = this.#createDoors();
         this.generateTraversableMaze(Doors);
-        this.createRooms(Doors);
-        this.fillRooms();
+        //this.createRooms(Doors);
+        //this.fillRooms();
     }
 
     #createDoors() {
-        EastDoors = [];
-        SouthDoors = [];
+        let EastDoors = [];
+        let SouthDoors = [];
         for (let row = 0; row < this.#myDimension; row++) {
             EastDoors[row] = [];
             SouthDoors[row] = [];
@@ -59,9 +60,10 @@ class Dungeon {
     /**
      * Creates the rooms of the dungeon (excluding the entrance and exit)
      */
+    /*
     createRooms(Doors) {
-        EastDoors = Doors.eastdoors;
-        SouthDoors = Doors.southdoors;
+        let EastDoors = Doors.eastdoors;
+        let SouthDoors = Doors.southdoors;
         this.#myRooms = [];
         for (let row = 0; row < this.#myDimension; row++) {
             this.#myRooms[row] = [];
@@ -74,6 +76,7 @@ class Dungeon {
             }
         }
     }
+        */
 
     /**
      * Key:
@@ -219,6 +222,7 @@ class Dungeon {
      * A string of the current state of the dungeon.
      * @returns a string of the contents of the rooms in the dungeon.
      */
+    /*
     toString() {
         // TODO: make the string also print the state of the doors (open/closed) and the walls.
         let str = '';
@@ -230,6 +234,7 @@ class Dungeon {
         }
         return str;
     }
+        */
 }
 
 const test = new Dungeon(2);

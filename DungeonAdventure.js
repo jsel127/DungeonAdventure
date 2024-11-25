@@ -4,7 +4,7 @@ import Dungeon from "./dungeon/Dungeon.js";
 export default class DungeonAdventure {
     static #HARDEST_DIFFICULTY = 3;
     #myDungeon
-    #myAdventurer
+    static #myAdventurer
     #myCurrentRoom
     #myDifficulty
     constructor() {
@@ -14,7 +14,7 @@ export default class DungeonAdventure {
         return "Welcome to the Dungeon Adventure Game. There are three major heroes in the worlds of Dungeon Adventure, the Warrior, the Priestess, and the Thief. Your goal is to find the missing pillars of OOP which are currently somewhere in the dungeon. Once you find all pillars find the exit to save the world of OOP."
     }
 
-    setAdventurer(theName, theHeroType) {
+    static setAdventurer(theName, theHeroType) {
         if (typeof theName !== "string") {
             throw new TypeError("Invalid name provided");
         }
@@ -90,6 +90,10 @@ export default class DungeonAdventure {
 
     #hasWon() {
 
+    }
+
+    static getAdventurer() {
+        return this.#myAdventurer;
     }
 
     

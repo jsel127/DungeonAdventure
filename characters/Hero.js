@@ -17,7 +17,7 @@ export default class Hero extends DungeonCharacter{
     /**
      * Constructor that will store the given arguments in the corresponding 
      * instance fields.
-     * A Hero cannot be directly instanciated.
+     * A Hero cannot be directly instanciated. 
      * @param {*} theName the name of the hero.
      * @param {*} theHP the health points of the hero.
      * @param {*} theDPMin the min damage points of the hero.
