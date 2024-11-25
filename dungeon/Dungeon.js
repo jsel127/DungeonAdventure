@@ -1,5 +1,5 @@
-// const Room = require('./Room.js');
-import Room from './Room.js';
+import Coordinate from './Coordinate.js';
+import Room from '../Room.js';
 class Dungeon {
     /** Multiplier to determine the size of the room given the difficulty level */
     static DIFFICULTY_MULTIPLIER = 5;
@@ -29,9 +29,24 @@ class Dungeon {
     }
 
     makeDungeon() {
-        this.createRooms();
-        // this.generateTraversableMaze();
+        Doors = this.createDoors();
+        this.generateTraversableMaze(Doors);
+        this.createRooms(Doors);
         this.fillRooms();
+    }
+
+    #createDoors() {
+        EastDoors = [];
+        SouthDoors = [];
+        for (let row = 0; row < this.#myDimension; row++) {
+            EastDoors[row] = [];
+            SouthDoors[row] = [];
+            for (let col = 0; col < this.#myDimension; col++) {
+                EastDoors[row][col] = new Door();
+                SouthDoors[row][col] = new Door();
+            }
+        }
+        return {eastdoors: EastDoors, southdoors: SouthDoors};
     }
 
     /** 
@@ -44,14 +59,18 @@ class Dungeon {
     /**
      * Creates the rooms of the dungeon (excluding the entrance and exit)
      */
-    createRooms() {
-        // Rooms structure
-        // door (N, S, E, W), entrance exit pillar, has Potion
+    createRooms(Doors) {
+        EastDoors = Doors.eastdoors;
+        SouthDoors = Doors.southdoors;
         this.#myRooms = [];
         for (let row = 0; row < this.#myDimension; row++) {
             this.#myRooms[row] = [];
             for (let col = 0; col < this.#myDimension; col++) {
-                this.#myRooms[row][col] = new Room();
+                this.#myRooms[row][col] = new Room(new Coordinate(row, col),
+                                                   SouthDoors[row][col + 1], 
+                                                   EastDoors[row + 1][col + 1], 
+                                                   SouthDoors[row + 1][col + 1], 
+                                                   EastDoors[row + 1][col]);
             }
         }
     }
@@ -183,7 +202,17 @@ class Dungeon {
         else { // skeleton
             theRoom.setContent('s');
         }
+    }
 
+    getEntrance() {
+        return this.#myEntrance;
+    }
+
+    getRoom(theCoordinate) {
+        if (!theCoordinate instanceof Coordinate) {
+            throw TypeError("The given coordinate was not a Coordinate type.");
+        }
+        return this.#myRooms[theCoordinate.getX()][theCoordinate.getY()];
     }
 
     /**

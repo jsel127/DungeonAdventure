@@ -4,19 +4,40 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-const DungeonCharacter = require("./DungeonCharacter");
+import DungeonCharacter from "./DungeonCharacter.js";
 
 /**
  * Class containing common methods and data for all hero character. 
  * @author Jasmine Sellers
  * @version 1.0
  */
-class Hero extends DungeonCharacter{
+export default class Hero extends DungeonCharacter{
     /** The chance the hero has to block an attack */
     #myChanceToBlock
+    /**
+     * Constructor that will store the given arguments in the corresponding 
+     * instance fields.
+     * A Hero cannot be directly instanciated.
+     * @param {*} theName the name of the hero.
+     * @param {*} theHP the health points of the hero.
+     * @param {*} theDPMin the min damage points of the hero.
+     * @param {*} theDPMax the max damage points of the hero.
+     * @param {*} theAttackSpeed the attack speed of the hero.
+     * @param {*} theHitChance the hit chance of the hero.
+     * @param {*} theChanceToBlock the block chance of the hero.
+     */
     constructor(theName, theHP, theDPMin, theDPMax,
-                theAttackSpeed, theHitChange, theChanceToBlock) {
-        super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChange);
+                theAttackSpeed, theHitChance, theChanceToBlock) {       
+        super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance);
+        if (this.constructor === Hero) {
+            throw new TypeError("Hero cannot be instanciated directly.");
+        }
+        if (!Number.isInteger(theChanceToBlock)) {
+            throw new TypeError("The given Block Chance value is not a integer.");
+        }
+        if (theChanceToBlock < 0 || theChanceToBlock > 100 ) {
+            throw new RangeError("The Block Chance is not within the valid range [0,100].");
+        }     
         this.#myChanceToBlock = theChanceToBlock;
     }
 
@@ -33,7 +54,6 @@ class Hero extends DungeonCharacter{
             if (newHP > 0) {
                 this.setHP(newHP);
             } else {
-// NOTE FOR DEVELOPER: the opponent has died at this point
                 this.setHP(0);
             }
             return false;
@@ -42,10 +62,17 @@ class Hero extends DungeonCharacter{
     }
 
     /**
-     * Special attack specific to the Heroes.
+     * Carries out the special attack specific to the Heroes. This is an abstract method.
      */
     specialAttack(theOpponent) {
         throw new Error("specialAttack() Must be implemented by derived class");
     }
+
+    /**
+     * Returns the information of the hero including its name, HP, DPMin, DPMax, AttackSpeed, HitChange, and BlockChance.
+     * @returns a string representation of the hero formatted by the information it contains (name, HP, DPMin, DPMax, AttackSpeed, HitChange, BlockChance)
+     */
+    toString() {
+        return super.toString() + ` ${this.#myChanceToBlock}`
+    }
 }
-module.exports = Hero;

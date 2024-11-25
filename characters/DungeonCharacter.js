@@ -9,30 +9,57 @@
  * @author Jasmine Sellers
  * @version 1.0
  */
-class DungeonCharacter {
+export default class DungeonCharacter {
+    /** The name of the dungeon character. */
     #myName
+    /** The HP of the dungeon character. */
     #myHP
+    /** The DP Min of the dungeon character. */
     #myDPMin
+    /** The DP Max of the dungeon character. */
     #myDPMax
+    /** The Attack Speed of the dungeon character. */
     #myAttackSpeed
-    #myHitChange
+    /** The Hit Chance (0-100) of the dungeon character. */
+    #myHitChance
     /**
-     * Class for Dungeon characters containing getter and setter methods for character' statistics.
+     * Constructor that will store the given arguments in the corresponding 
+     * instance fields.
+     * A DungeonCharacter cannot be directly instanciated.
      * @param {*} theName the name of the dungeon character
      * @param {*} theHP the health points of the dungeon character
      * @param {*} theDPMin the min damage points of the dungeon character
      * @param {*} theDPMax the max damage points of the dungeon character
      * @param {*} theAttackSpeed the attack speed of the dungeon character
-     * @param {*} theHitChange the hit change of the dungeon character
+     * @param {*} theHitChance the hit chance of the dungeon character
      */
     constructor(theName, theHP, theDPMin, theDPMax,
-                theAttackSpeed, theHitChange) {
+                theAttackSpeed, theHitChance) {
+        if (this.constructor === DungeonCharacter) {
+            throw new TypeError("DungeonCharacter cannot be instanciated directly.");
+        }
+        if (theName === null) {
+            throw new TypeError("The name must be specified.");
+        }
+        if (!(Number.isInteger(theHP) && Number.isInteger(theDPMax) && Number.isInteger(theAttackSpeed) &&
+            Number.isInteger(theDPMin) && Number.isInteger(theHitChance) && typeof theName === "string")) {
+            throw new TypeError("The argument(s) do not match the expected type of data.");
+        }
+        if (theHP <= 0 || theDPMax <= 0 || theAttackSpeed <= 0) {
+            throw new RangeError("The HP, DPMax, or AttackSpeed is not greater than 0.");
+        } 
+        if (theDPMin < 0) {
+            throw new RangeError("The DPMin is negative");
+        }
+        if (theHitChance < 0 || theHitChance > 100 ) {
+            throw new RangeError("The Hit Chance is not within the valid range [0,100].");
+        }
         this.#myName = theName;
         this.#myHP = theHP;
         this.#myDPMin = theDPMin;
         this.#myDPMax = theDPMax;
         this.#myAttackSpeed = theAttackSpeed;
-        this.#myHitChange = theHitChange;
+        this.#myHitChance = theHitChance;
     }
     
     /**
@@ -79,8 +106,8 @@ class DungeonCharacter {
      * Returns the hit chance of the dungeon character
      * @returns the hit chance of the dungeon character 
      */
-    getHitChange() {
-        return this.#myHitChange;
+    getHitChance() {
+        return this.#myHitChance;
     }
 
     /**
@@ -88,6 +115,9 @@ class DungeonCharacter {
      * @param {*} theNewHP the new HP of the dungeon character.
      */
     setHP(theNewHP) {
+        if (!Number.isInteger(theNewHP)) {
+            throw new TypeError("The new HP value is not an integer.");
+        }
         if (theNewHP < 0) {
             throw new RangeError("The HP value cannot be negative");
         }
@@ -100,13 +130,12 @@ class DungeonCharacter {
      * @returns true if the attack was successul and false otherwise.
      */
     attack(theOpponent, autoSuccess=false) {
-        if (!this.isDead() && (autoSuccess || Math.random() * 100 < this.#myHitChange)) {
+        if (!this.isDead() && (autoSuccess || Math.random() * 100 < this.#myHitChance)) {
             const rangeDP = this.#myDPMax - this.#myDPMin;
             const attackDP = Math.round(Math.random() * rangeDP) + this.#myDPMin;
             if (attackDP < theOpponent.getHP()) {
                 theOpponent.setHP(theOpponent.getHP() - attackDP);
             } else {
-// NOTE FOR DEVELOPER: the opponent has died at this point
                 theOpponent.setHP(0);
             }
             return true;
@@ -127,7 +156,6 @@ class DungeonCharacter {
      * @returns a string representation of the dungeon character formatted by the information it contains (name, HP, DPMin, DPMax, AttackSpeed, HitChange)
      */
     toString() {
-        return `${this.#myName} ${this.#myHP} ${this.#myDPMin} ${this.#myDPMax} ${this.#myAttackSpeed} ${this.#myHitChange}`;
+        return `${this.#myName} ${this.#myHP} ${this.#myDPMin} ${this.#myDPMax} ${this.#myAttackSpeed} ${this.#myHitChance}`;
     }
 }
-module.exports = DungeonCharacter;
