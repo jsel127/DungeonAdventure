@@ -15,19 +15,17 @@ export default class MonsterFactory {
     /**
      * Creates and returns a Monster.
      * @param {*} theName the name of the monster.
-     * @param {*} theHP the health points of the monster.
-     * @param {*} theDPMin the min damage points of the monster.
-     * @param {*} theDPMax the max damage points of the monster.
-     * @param {*} theAttackSpeed the attack speed of the monster.
-     * @param {*} theHitChance the hit chance of the monster.
-     * @param {*} theHealChance the heal chance (0-100) success rate when healing.
-     * @param {*} theMinHeal the min heal points the monster can get during a heal.
-     * @param {*} theMaxHeal the max heal points the monster can get during a heal.
      * @returns a Monster instanciated with the given values.
      */
-    static createMonster(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance,
-                  theHealChance, theMinHeal, theMaxHeal) {
-        return new Monster(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance,
-                           theHealChance, theMinHeal, theMaxHeal);
+    static createMonster(theName) {
+        if (theName === "Gremlin") {
+            return new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);
+        } else if (theName === "Ogre") {
+            return new Monster("Ogre", 200, 30, 60, 2, 60, 10, 30, 60);
+        } else if (theName === "Skeleton") {
+            return new Monster("Skeleton", 100, 30, 50, 3, 80, 30, 30, 50);
+        } else {
+            throw new UndefinedValueError("The given monster type does not exist.");
+        }
     }
 }
