@@ -1,22 +1,27 @@
 {
-  "type":"module",
-  "scripts": {"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"},
-
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
+  },
   "jest": {
     "transform": {}
   },
-
   "name": "dungeonadventure",
   "version": "1.0.0",
   "description": "A dungeon adventure game",
   "main": "index.js",
-  
   "devDependencies": {
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "nodemon": "^3.1.7"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.21.1",
     "vite": "^5.4.10"
-  }
+  },
+  "keywords": [],
+  "proxy": "http://localhost:3000"
 }
