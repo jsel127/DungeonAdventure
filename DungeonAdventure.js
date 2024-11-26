@@ -66,7 +66,7 @@ export default class DungeonAdventure {
     }
 
     startGame() {
-        this.#createDungeon();
+        this.#createDungeon(this.#myDifficulty);
     }
 
     #createDungeon() {
@@ -87,7 +87,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() - 1);
-            processMove();
+            processContent();
         }
     }
 
@@ -95,7 +95,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() + 1, location.getY());
-            processMove();
+            processContent();
         }
     }
 
@@ -103,7 +103,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() + 1);
-            processMove();
+            processContent();
         }
     }
 
@@ -111,7 +111,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() - 1, location.getY());
-            processMove();
+            processContent();
         }
     }
 
@@ -135,25 +135,48 @@ export default class DungeonAdventure {
     #processMonster() {
         const monster = this.#myCurrentRoom.spawnMonster();
         if (monster) {
-            const deathStatus = this.#fightMonster(monster);
-            if (deathStatus) {
-                this.#gameOver();
-            }
+            this.#setMonsterFight(monster);
         }
+    }
+
+    attackOpponent() {
+        if (this.#myAdventurer.attack(this.#myCurrentOpponent)) {
+            return "Successful Attack";
+        } else {
+            return "Failed to Attack";
+        };
+    }
+
+    specialAttackOpponent() {
+        if (this.#myAdventurer.specialAttack(this.#myCurrentOpponent)) {
+            return "Successful Special Attack";
+        } else {
+            return "Failed to Special Attack";
+        }; 
+    }
+
+    blockOpponent() {   
+        if (this.#myAdventurer.block(this.#myCurrentOpponent)) {
+            return "Successful Block";
+        } else {
+            return "Failed to Block";
+        };    
     }
 
     /**
      * Fights the given monster. The method will return true if the hero won and false if the hero died. 
      * @param {*} theMonster 
      */
-    #fightMonster(theMonster) {
+    #setMonsterFight(theMonster) {
         const adventurerHeroChar = this.#myAdventurer.getHero();
         this.#myFightingStatus = true;
         this.#myCurrentOpponent = monster;
     }
 
     #gameOver() {
-
+        if (this.#myCurrentRoom.isExit()) {
+            return true;
+        }
     }
 
     #hasWon() {
