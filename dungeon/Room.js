@@ -6,6 +6,7 @@
 
 import MonsterFactory from "../characters/MonsterFactory.js";
 import HealingPotion from "../HealingPotion.js";
+import VisionPotion from '../VisionPotion.js';
 import Pillar from "../Pillar.js";
 import Coordinate from "./Coordinate.js";
 import Door from "./Door.js";
@@ -86,24 +87,38 @@ export default class Room {
 
     collectItem() {
         if (this.#myContent === Room.CONTENT.abstractionPillar ) {
+            this.#clearContent();
             return new Pillar(Pillar.PillarType.ABSTRACTION);
         } else if (this.#myContent === Room.CONTENT.encapsulationPillar) {
+            this.#clearContent();
             return new Pillar(Pillar.PillarType.ENCAPSULATION);
         } else if (this.#myContent === Room.CONTENT.inheritancePillar) {
+            this.#clearContent();
             return new Pillar(Pillar.PillarType.INHERITANCE);
         } else if (this.#myContent === Room.CONTENT.polymorphismPillar) {
+            this.#clearContent();
             return new Pillar(Pillar.PillarType.POLYMORPHISM);
         } else if (this.#myContent === Room.CONTENT.visionPotion) {
+            this.#clearContent();
             return new VisionPotion();
         } else if (this.#myContent === Room.CONTENT.healingPotion) {
+            this.#clearContent();
             return new HealingPotion();
         }
         return false;
     }
 
     spawnMonster() {
-        if (this.#hasMonster()) {
-            return MonsterFactory.createMonster(this.#myContent);
+        const content = this.#myContent;
+        if (content === 'o') {
+            this.#clearContent();
+            return MonsterFactory.createMonster("Ogre");
+        } else if (content === 'g') {
+            this.#clearContent();
+            return MonsterFactory.createMonster("Gremlin");
+        } else if (content === 's') {
+            this.#clearContent();
+            return MonsterFactory.createMonster("Skeleton");
         }
         return false;
     }
@@ -131,10 +146,12 @@ export default class Room {
     }
     
     setContent(theContent) {
-        this.#myContent = theContent;
+        if (theContent.isEmpty()) {
+            this.#myContent = theContent;
+        }
     }
 
-    clearContent() { 
+    #clearContent() { 
         this.#myContent = ' ';
     }
 
