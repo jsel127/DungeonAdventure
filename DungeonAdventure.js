@@ -52,7 +52,7 @@ export default class DungeonAdventure {
     moveNorth() {
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY());
+            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() - 1);
             processMove();
         }
     }
@@ -60,7 +60,7 @@ export default class DungeonAdventure {
     moveEast() {
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY());
+            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() + 1, location.getY());
             processMove();
         }
     }
@@ -68,7 +68,7 @@ export default class DungeonAdventure {
     moveSouth() {
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY());
+            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() + 1);
             processMove();
         }
     }
@@ -76,7 +76,7 @@ export default class DungeonAdventure {
     moveWest() {
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY());
+            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() - 1, location.getY());
             processMove();
         }
     }
@@ -85,12 +85,29 @@ export default class DungeonAdventure {
      * This method will check what is in the room and call the appropriate methods.
      */
     #processMove() {
-        
+        const content = this.#myCurrentRoom.getContent();
+    }
+    #fightMonster(theMonster) {
+        // const adventurerHeroChar = this.#myAdventurer.getHero();
+        // let time = 0;
+        // while (!adventurerHeroChar.isDead() && !theMonster.isDead()) {
+            
+        // }
+    }
+
+    #gameOver() {
+
     }
 
     #hasWon() {
 
     }
 
-    
+    saveGame() {
+        //TODO: implement saving game
+    }
+
+    loadGame() {
+        //TODO: implement loading game
+    }
 }
