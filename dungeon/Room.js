@@ -73,6 +73,50 @@ export default class Room {
         return this.#myContent === Room.CONTENT.empty;
     }
 
+    isExit() {
+        return this.#myContent === Room.CONTENT.exit;
+    }
+
+    isPit() {
+        return this.#myContent === Room.CONTENT.pit;
+    }
+
+    hasGremlin() {
+        return this.#myContent === Room.CONTENT.gremlin;
+    }
+
+    hasOgre() {
+        return this.#myContent === Room.CONTENT.ogre;
+    }
+
+    hasGremlin() {
+        return this.#myContent === Room.CONTENT.skeleton;
+    }
+    
+    hasHealingPotion() {
+        return this.#myContent === Room.CONTENT.healingPotion;
+    }
+
+    hasVisionPotion() {
+        return this.#myContent === Room.CONTENT.visionPotion;
+    }
+
+    hasAbstractionPillar() {
+        return this.#myContent === Room.CONTENT.abstractionPillar;
+    }
+
+    hasEncapsulationPillar() {
+        return this.#myContent === Room.CONTENT.encapsulationPillar;
+    }
+
+    hasInheritancePillar() {
+        return this.#myContent === Room.CONTENT.inheritancePillar;
+    }
+
+    hasPolymorphismPillar() {
+        return this.#myContent === Room.CONTENT.polymorphismPillar;
+    }
+
     getContent() {
         return this.#myContent;
     }
