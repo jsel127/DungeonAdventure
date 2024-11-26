@@ -7,11 +7,8 @@ app.use(cors({
 }));
 
 app.get('/api/characters', (req, res) => {
-  res.json([
-    { name: "Warrior", hp: 125, dpMin: 35, dpMax: 60, blockChance: 80 },
-    { name: "Priestess", hp: 75, dpMin: 25, dpMax: 45, blockChance: 70 },
-    { name: "Thief", hp: 75, dpMin: 20, dpMax: 40, blockChance: 80 }
-  ]);
+  const characters = DungeonAdventure.getAllCharacters();
+  res.json(characters);
 });
 
 app.listen(5001, () => {
