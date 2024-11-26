@@ -4,6 +4,9 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
+import MonsterFactory from "../characters/MonsterFactory.js";
+import HealingPotion from "../HealingPotion.js";
+import Pillar from "../Pillar.js";
 import Coordinate from "./Coordinate.js";
 import Door from "./Door.js";
 export default class Room {
@@ -81,40 +84,42 @@ export default class Room {
         return this.#myContent === Room.CONTENT.pit;
     }
 
-    hasGremlin() {
-        return this.#myContent === Room.CONTENT.gremlin;
+    collectItem() {
+        if (this.#myContent === Room.CONTENT.abstractionPillar ) {
+            return new Pillar(Pillar.PillarType.ABSTRACTION);
+        } else if (this.#myContent === Room.CONTENT.encapsulationPillar) {
+            return new Pillar(Pillar.PillarType.ENCAPSULATION);
+        } else if (this.#myContent === Room.CONTENT.inheritancePillar) {
+            return new Pillar(Pillar.PillarType.INHERITANCE);
+        } else if (this.#myContent === Room.CONTENT.polymorphismPillar) {
+            return new Pillar(Pillar.PillarType.POLYMORPHISM);
+        } else if (this.#myContent === Room.CONTENT.visionPotion) {
+            return new VisionPotion();
+        } else if (this.#myContent === Room.CONTENT.healingPotion) {
+            return new HealingPotion();
+        }
+        return false;
     }
 
-    hasOgre() {
-        return this.#myContent === Room.CONTENT.ogre;
+    spawnMonster() {
+        if (this.#hasMonster()) {
+            return MonsterFactory.createMonster(this.#myContent);
+        }
+        return false;
     }
 
-    hasGremlin() {
-        return this.#myContent === Room.CONTENT.skeleton;
+    #hasItem() {
+        return this.#myContent === Room.CONTENT.abstractionPillar ||
+               this.#myContent === Room.CONTENT.encapsulationPillar ||
+               this.#myContent === Room.CONTENT.inheritancePillar ||
+               this.#myContent === Room.CONTENT.polymorphismPillar ||
+               this.#myContent === Room.CONTENT.visionPotion ||
+               this.#myContent === Room.CONTENT.healingPotion;
     }
-    
-    hasHealingPotion() {
-        return this.#myContent === Room.CONTENT.healingPotion;
-    }
-
-    hasVisionPotion() {
-        return this.#myContent === Room.CONTENT.visionPotion;
-    }
-
-    hasAbstractionPillar() {
-        return this.#myContent === Room.CONTENT.abstractionPillar;
-    }
-
-    hasEncapsulationPillar() {
-        return this.#myContent === Room.CONTENT.encapsulationPillar;
-    }
-
-    hasInheritancePillar() {
-        return this.#myContent === Room.CONTENT.inheritancePillar;
-    }
-
-    hasPolymorphismPillar() {
-        return this.#myContent === Room.CONTENT.polymorphismPillar;
+    #hasMonster() {
+        return this.#myContent === Room.CONTENT.gremlin ||
+               this.#myContent === Room.CONTENT.ogre ||
+               this.#myContent === Room.CONTENT.skeleton;
     }
 
     getContent() {
