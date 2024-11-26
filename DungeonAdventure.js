@@ -7,6 +7,8 @@ export default class DungeonAdventure {
     #myAdventurer
     #myCurrentRoom
     #myDifficulty
+    #myFightingStatus
+    #myCurrentOpponent
     constructor() {
     }
 
@@ -116,20 +118,38 @@ export default class DungeonAdventure {
     /**
      * This method will check what is in the room and call the appropriate methods.
      */
-    #processMove() {
-        const content = this.#myCurrentRoom.getContent();
+    #processContent() {
+        this.#pickupItem();
+        this.#processMonster();
     }
 
     #pickupItem() {
-
+        // NEED TO ADJUST BASED ON HOW ITEMS classes are adjusted
+        const inventory = this.#myAdventurer.getInventory();
+        const item = this.#myCurrentRoom.collectItem();
+        if (item) {
+            inventory.add(item);
+        }
     }
 
+    #processMonster() {
+        const monster = this.#myCurrentRoom.spawnMonster();
+        if (monster) {
+            const deathStatus = this.#fightMonster(monster);
+            if (deathStatus) {
+                this.#gameOver();
+            }
+        }
+    }
+
+    /**
+     * Fights the given monster. The method will return true if the hero won and false if the hero died. 
+     * @param {*} theMonster 
+     */
     #fightMonster(theMonster) {
-        // const adventurerHeroChar = this.#myAdventurer.getHero();
-        // let time = 0;
-        // while (!adventurerHeroChar.isDead() && !theMonster.isDead()) {
-            
-        // }
+        const adventurerHeroChar = this.#myAdventurer.getHero();
+        this.#myFightingStatus = true;
+        this.#myCurrentOpponent = monster;
     }
 
     #gameOver() {
