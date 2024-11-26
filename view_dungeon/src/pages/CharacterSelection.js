@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const CharacterSelection = () => {
-  return <h1 style={{ color: 'white' }}>Select Your Character</h1>;
-};
+  const [characters, setCharacters] = useState([]);
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
 
-export default CharacterSelection;
+  useEffect(() => {
+    fetch('http://localhost:5001/api/characters')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Fetched characters:', data); 
+        setCharacters(data);
+      })
+      .catch((error) => console.error('Error fetching characters:', error));
+  }, []);
+
+  

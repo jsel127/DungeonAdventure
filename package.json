@@ -12,10 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.1",
     "vite": "^5.4.10"
   },
-  "type": "commonjs",  
+  "type": "commonjs",
   "jest": {
     "transform": {}
   }
