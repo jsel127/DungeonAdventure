@@ -1,4 +1,5 @@
 import Adventurer from "./Adventurer.js";
+import DungeonCharacter from "./characters/DungeonCharacter.js";
 import HeroFactory from "./characters/HeroFactory.js";
 import Dungeon from "./dungeon/Dungeon.js";
 export default class DungeonAdventure {
@@ -7,7 +8,6 @@ export default class DungeonAdventure {
     #myAdventurer
     #myCurrentRoom
     #myDifficulty
-    #myFightingStatus
     #myCurrentOpponent
     constructor() {
     }
@@ -87,7 +87,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() - 1);
-            processContent();
+            this.#processMove();
         }
     }
 
@@ -95,7 +95,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() + 1, location.getY());
-            processContent();
+            this.#processMove();
         }
     }
 
@@ -103,7 +103,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() + 1);
-            processContent();
+            this.#processMove();
         }
     }
 
@@ -111,19 +111,23 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() - 1, location.getY());
-            processContent();
+            this.#processMove();
         }
+    }
+
+    #processMove() {
+        this.#processContent();
     }
 
     /**
      * This method will check what is in the room and call the appropriate methods.
      */
     #processContent() {
-        this.#pickupItem();
+        this.#pickUpItem();
         this.#processMonster();
     }
 
-    #pickupItem() {
+    #pickUpItem() {
         // NEED TO ADJUST BASED ON HOW ITEMS classes are adjusted
         const inventory = this.#myAdventurer.getInventory();
         const item = this.#myCurrentRoom.collectItem();
@@ -139,7 +143,7 @@ export default class DungeonAdventure {
         }
     }
 
-    attackOpponent() {
+    attackOpponent() { 
         if (this.#myAdventurer.attack(this.#myCurrentOpponent)) {
             return "Successful Attack";
         } else {
@@ -163,24 +167,31 @@ export default class DungeonAdventure {
         };    
     }
 
+    #checkDeathStatus(theDungeonCharacter) {
+        if (!theDungeonCharacter instanceof DungeonCharacter) {
+            throw new TypeError("Invalid argument. It must be a DungeonCharacter.");
+        }
+        return theDungeonCharacter.isDead();
+    }
+
     /**
      * Fights the given monster. The method will return true if the hero won and false if the hero died. 
      * @param {*} theMonster 
      */
     #setMonsterFight(theMonster) {
         const adventurerHeroChar = this.#myAdventurer.getHero();
-        this.#myFightingStatus = true;
+        this.#myAdventurer.setFightingStatus(true);
         this.#myCurrentOpponent = monster;
     }
 
-    #gameOver() {
+    #hasWonGame() {
         if (this.#myCurrentRoom.isExit()) {
-            return true;
-        }
-    }
-
-    #hasWon() {
-
+            const inventory = this.#myAdventurer.getInventory();
+            if (inventory.hasAllPillars()) {
+                return true;
+            }
+        } 
+        return false;
     }
 
     saveGame() {

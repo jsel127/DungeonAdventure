@@ -5,12 +5,14 @@ export default class Adventurer {
     #myHero
     #myFightingStatus
     constructor(theName, theHero, theFightingStatus = false) {
-        if (typeof theName !== "string" || !(theHero instanceof Hero)) {
-            throw new TypeError("Invalid name or hero provided");
-        }
+        if (typeof theName !== "string" || !(theHero instanceof Hero) 
+            || typeof theFightingStatus !== "boolean") {
+            throw new TypeError("Invalid name, hero, or fighting status provided");
+        } 
         this.#myInventory = new Inventory();
         this.#myName = theName;
         this.#myHero = theHero;
+        this.#myFightingStatus = theFightingStatus;
     }
 
     getName() {
@@ -22,6 +24,9 @@ export default class Adventurer {
     }
 
     setFightingStatus(theFightingStatus) {
+        if (typeof theFightingStatus !== "boolean") {
+            throw new TypeError("Invalid fighting status provided.");
+        }
         this.#myFightingStatus = theFightingStatus;
     }
 
