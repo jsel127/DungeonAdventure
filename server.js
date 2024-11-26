@@ -1,16 +1,11 @@
-const express = require('express');
-const cors = require('cors'); 
+import express from "express";
+import DungeonAdventure from "../DungeonAdventure.js";
+
 const app = express();
 
-app.use(cors({
-  origin: 'http://localhost:3002'  
-}));
+app.get("/select-character", (req, res) => { 
+    DungeonAdventure.getAdventurer()
+    res.json({"characters": ["Warrior", "Priestess", "Thief"]})   
+})  
 
-app.get('/api/characters', (req, res) => {
-  const characters = DungeonAdventure.getAllCharacters();
-  res.json(characters);
-});
-
-app.listen(5001, () => {
-  console.log('Server is running on http://localhost:5001');
-});
+app.listen(5001, () => { console.log("Server started on port 5001") }) 
