@@ -4,30 +4,46 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-import Coordinate from "../Coordinate.js";
+import Coordinate from "./Coordinate.js";
 import Door from "./Door.js";
 export default class Room {
+    /** Object of content in the room and their corresponding symbol */
+    static CONTENT = Object.freeze({
+        healingPotion: '#',
+        visionPotion: '/',
+        abstractionPillar: 'A',
+        encapsulationPillar: 'E',
+        inheritancePillar: 'I',
+        polymorphismPillar: 'P',
+        ogre: 'o',
+        gremlin: 'g',
+        skeleton: 's',
+        entrance: '-',
+        exit: '+',
+        pit: 'x',
+        empty: '*'
+    });
     #myCoordinate;
     #myNorthDoor;
     #myEastDoor;
     #mySouthDoor;
     #myWestDoor;
     #myContent;
-    constructor(theCoordinate, theNorthDoor, theEastDoor, theSouthDoor, theWestDoor, theContent = " ") {
-        if (!theCoordinate instanceof Coordinate) {
+    constructor(theCoordinate, theNorthDoor, theEastDoor, theSouthDoor, theWestDoor, theContent = Room.CONTENT.empty) {
+        if (theCoordinate === undefined || !theCoordinate instanceof Coordinate) {
             throw TypeError("The given coordinate was not a Coordinate type.");
         }
-        if (!theNorthDoor instanceof Door) {
+        if (theNorthDoor === undefined || !theNorthDoor instanceof Door) {
             throw TypeError("The North Door was not a Door type.");
         }
-        if (!theEastDoor instanceof Door) {
+        if (theEastDoor === undefined || !theEastDoor instanceof Door) {
             throw TypeError("The East Door was not a Door type.");
         }
-        if (!theSouthDoor instanceof Door) {
+        if (theSouthDoor === undefined || !theSouthDoor instanceof Door) {
             throw TypeError("The South Door was not a Door type.");
         }
-        if (!theWestDoor instanceof Door) {
-            throw TypeError("The West Door was not a Door type.");
+        if (theWestDoor === undefined || !theWestDoor instanceof Door) {
+            throw TypeError("The West Door was not a Door type. Coordinate");
         }
         this.#myCoordinate = theCoordinate;
         this.#myNorthDoor = theNorthDoor;      
@@ -51,6 +67,14 @@ export default class Room {
 
     isWestDoorOpen() {
         return this.#myWestDoor.isOpen();
+    }
+
+    isEmpty() {
+        return this.#myContent === Room.CONTENT.empty;
+    }
+
+    getContent() {
+        return this.#myContent;
     }
 
     getCoordinate() {
