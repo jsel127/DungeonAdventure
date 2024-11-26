@@ -4,7 +4,7 @@
   "description": "A dungeon adventure game",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "devDependencies": {
     "jest": "^27.5.1"
@@ -12,6 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
     "vite": "^5.4.10"
+  },
+  "type": "commonjs",
+  "jest": {
+    "transform": {}
   }
 }
