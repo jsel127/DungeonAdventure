@@ -60,7 +60,13 @@ const CharacterSelection = () => {
         </div>
       )}
 
-      
+      {selectedCharacter && (
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <button onClick={() => console.log('Start game with', selectedCharacter)}>
+            Start Game
+          </button>
+        </div>
+      )}
     </div>
   );
 };
