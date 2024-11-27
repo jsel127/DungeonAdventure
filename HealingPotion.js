@@ -13,10 +13,10 @@ import Item from './Item.js';
  */
 export default class HealingPotion extends Item {
 
-    static NAME = 'Healing Potion';
+    static #NAME = 'Healing Potion';
 
-    static MIN_HEAL = 25;
-    static MAX_HEAL = 50;
+    static #MIN_HEAL = 25;
+    static #MAX_HEAL = 50;
 
     /**
      * Constructs a new healing potion item. 
