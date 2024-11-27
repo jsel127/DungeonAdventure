@@ -146,7 +146,7 @@ export default class Room {
     }
     
     setContent(theContent) {
-        if (theContent.isEmpty()) {
+        if (this.isEmpty()) {
             this.#myContent = theContent;
         }
     }
@@ -156,7 +156,7 @@ export default class Room {
     }
 
     toString() {
-        // ALL DOORS
+// ALL DOORS
         let str = "";
         if (this.#myNorthDoor.isOpen()) {
             str += "* *\n";

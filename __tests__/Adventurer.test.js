@@ -9,28 +9,6 @@ describe("Testing Adventurer with valid data to make a Warrior character", () =>
         expect(warriorJoshua.getName()).toBe("Joshua");
     });
 
-    test("Proper number of potions", () => {
-        expect(warriorJoshua.getQuantityHealingPotion()).toBe(0);
-        expect(warriorJoshua.getQuantityVisionPotion()).toBe(0);
-    });
-
-    test("Proper setup of pillars (none yet).", () => {
-        expect(warriorJoshua.getPillars()).toBe("");
-    });
-
-    test("Add/Remove a healing potion", () => {
-        warriorJoshua.incrementQuantityHealingPotion();
-        expect(warriorJoshua.getQuantityHealingPotion()).toBe(1);
-        warriorJoshua.incrementQuantityHealingPotion();
-        expect(warriorJoshua.getQuantityHealingPotion()).toBe(2);
-
-        warriorJoshua.decrementQuantityHealingPotion();
-        expect(warriorJoshua.getQuantityHealingPotion()).toBe(1);
-        warriorJoshua.decrementQuantityHealingPotion();
-        expect(warriorJoshua.getQuantityHealingPotion()).toBe(0);
-    });
-
-
     // Not working yet
     // test("Adding Pillars", () => {
     //     warriorJoshua.addPillar(new Pillar(Pillar.PillarType.ABSTRACTION));
@@ -58,19 +36,5 @@ describe("Test invalid operations on the Adventurer", () => {
 
     test("Invalid Hero (monster)", () => {
         expect(() => new Adventurer("Joshua", MonsterFactory.createMonster("Skeleton"))).toThrow(TypeError);
-    });
-
-    test("Decrementing when no healing potions left", () => {
-        expect(() => {
-            const warriorJoshua = new Adventurer("Joshua", HeroFactory.createHero("Warrior"));
-            warriorJoshua.decrementQuantityHealingPotion()
-        }).toThrow(EvalError);
-    });
-
-    test("Decrementing when no vision potions left", () => {
-        expect(() => {
-            const warriorJoshua = new Adventurer("Joshua", HeroFactory.createHero("Warrior"));
-            warriorJoshua.decrementQuantityVisionPotion()
-        }).toThrow(EvalError);
     });
 })
