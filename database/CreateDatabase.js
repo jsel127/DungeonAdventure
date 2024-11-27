@@ -119,7 +119,7 @@ function createDatabase() {
         createTables();
         insertMonsters();
         insertHeroes();
+        characterDB.close();
     });
 }
 createDatabase();
-characterDB.close();
