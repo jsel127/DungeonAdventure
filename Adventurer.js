@@ -1,69 +1,57 @@
-import Pillar from "./Pillar.js";
 import Hero from "./characters/Hero.js"
 export default class Adventurer {
-    #myQuantityHealingPotion
-    #myQuantityVisionPotion
-    #myPillars
+    #myInventory
     #myName
     #myHero
-    constructor(theName, theHero) {
-        if (typeof theName !== "string" || !(theHero instanceof Hero)) {
-            throw new TypeError("Invalid name or hero provided");
-        }
-        this.#myQuantityHealingPotion = 0;
-        this.#myQuantityVisionPotion = 0;
-        this.#myPillars = [];
+    #myFightingStatus
+    constructor(theName, theHero, theFightingStatus = false) {
+        if (typeof theName !== "string" || !(theHero instanceof Hero) 
+            || typeof theFightingStatus !== "boolean") {
+            throw new TypeError("Invalid name, hero, or fighting status provided");
+        } 
+        this.#myInventory = new Inventory();
         this.#myName = theName;
         this.#myHero = theHero;
+        this.#myFightingStatus = theFightingStatus;
     }
 
     getName() {
         return this.#myName;
     }
 
-    getQuantityHealingPotion() {
-        return this.#myQuantityHealingPotion;
+    getInventory() {
+        return this.#myInventory;
     }
 
-    getQuantityVisionPotion() {
-        return this.#myQuantityVisionPotion;
-    }
-
-    getPillars() {
-        let str = '';
-        for (let i = 0; i < this.#myPillars.length; i++) {
-            str += this.#myPillars[i].getName() + '\n';
+    setFightingStatus(theFightingStatus) {
+        if (typeof theFightingStatus !== "boolean") {
+            throw new TypeError("Invalid fighting status provided.");
         }
-        return str;
+        this.#myFightingStatus = theFightingStatus;
     }
 
-    addPillar(thePillar) {
-        if (!thePillar instanceof Pillar) {
-            throw new TypeError("This is not a valid pillar.");
+    attack(theMonster) {
+        if (this.#myFightingStatus) {
+            return this.#myHero.attack(theMonster);
+        } else {
+            throw new EvalError("The adventurer is not currently fighting any monster. Attacks are not allowed.")
         }
-        this.#myPillars.push(thePillar);
     }
 
-    incrementQuantityHealingPotion() {
-        this.#myQuantityHealingPotion += 1;
-    }
-
-    decrementQuantityHealingPotion() {
-        if (this.#myQuantityHealingPotion <= 0) {
-            throw new EvalError("There are no more healing potions to use.");
+    specialAttack(theMonster) {
+        if (this.#myFightingStatus) {
+            return this.#myHero.specialAttack(theMonster);
+        } else {
+            throw new EvalError("The adventurer is not currently fighting any monster. Special Attacks are not allowed.")
         }
-        this.#myQuantityHealingPotion -= 1;
     }
 
-    incrementQuantityVisionPotion() {
-        this.#myQuantityVisionPotion += 1;
-    }
-
-    decrementQuantityVisionPotion() {
-        if (this.#myQuantityVisionPotion <= 0) {
-            throw new EvalError("There are no more vision potions to use.");
+    block() {
+        if (this.#myFightingStatus) {
+            return this.#myHero.block();
+        } else {
+            throw new EvalError("The adventurer is not currently fighting any monster. Blocks are not allowed.")
         }
-        this.#myQuantityVisionPotion -= 1;
     }
 
     toString() {

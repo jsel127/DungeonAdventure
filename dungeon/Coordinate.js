@@ -29,4 +29,8 @@ export default class Coordinate {
         }
         this.#myY = theY;
     }
+
+    toString() {
+        return this.#myX;
+    }
 }
