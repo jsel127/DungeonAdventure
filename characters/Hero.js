@@ -49,9 +49,9 @@ export default class Hero extends DungeonCharacter{
      */
     block() {
         if (Math.random() < this.#myChanceToBlock/100) {
-            return false;
+            return true;
         } 
-        return true;
+        return false;
     }
 
     /**
