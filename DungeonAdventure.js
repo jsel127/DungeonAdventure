@@ -144,6 +144,8 @@ export default class DungeonAdventure {
     }
 
     attackOpponent() { 
+        // if the attack speed of the adventurer is slower the monster can attack first otherwise it is the opposite
+        // after each attack the status of the player must be checked if it has died a gameover needs to run.
         if (this.#myAdventurer.attack(this.#myCurrentOpponent)) {
             return "Successful Attack";
         } else {
@@ -152,22 +154,35 @@ export default class DungeonAdventure {
     }
 
     specialAttackOpponent() {
-        if (this.#myAdventurer.specialAttack(this.#myCurrentOpponent)) {
-            return "Successful Special Attack";
+        const hero = this.#myAdventurer.getHero();
+        const heroFaster = hero.getAttackSpeed() - this.#myCurrentOpponent.getAttackSpeed();
+        if (heroFaster) {
+            hero.specialAttack(this.#myCurrentOpponent);
+            if (this.#isDead(this.#myCurrentOpponent())) {
+// MONSTER HAS DIED
+            } else {
+                this.#myCurrentOpponent.attack(hero);
+// CHECK HERO ALIVE
+            }
         } else {
-            return "Failed to Special Attack";
-        }; 
+// OPPOSITE OF ABOVE (LIKELY MODULARIZE)
+        }
     }
 
     blockOpponent() {   
-        if (this.#myAdventurer.block(this.#myCurrentOpponent)) {
+        const blockResult = this.#myAdventurer.block();
+        this.#myCurrentOpponent.attack(this.#myAdventurer.getHero(), blockResult);
+        if (blockResult) {
             return "Successful Block";
         } else {
+            if (this.#isDead(this.#myAdventurer.getHero())) {
+                return "Failed to Block, You have Died.";
+            }
             return "Failed to Block";
         };    
     }
 
-    #checkDeathStatus(theDungeonCharacter) {
+    #isDead(theDungeonCharacter) {
         if (!theDungeonCharacter instanceof DungeonCharacter) {
             throw new TypeError("Invalid argument. It must be a DungeonCharacter.");
         }
@@ -179,7 +194,6 @@ export default class DungeonAdventure {
      * @param {*} theMonster 
      */
     #setMonsterFight(theMonster) {
-        const adventurerHeroChar = this.#myAdventurer.getHero();
         this.#myAdventurer.setFightingStatus(true);
         this.#myCurrentOpponent = monster;
     }

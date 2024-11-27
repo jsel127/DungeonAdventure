@@ -45,17 +45,10 @@ export default class Hero extends DungeonCharacter{
      * Determines if the hero successfully blocked an attack. The success is random based on the 
      * chance to block of the hero. If the attack is successfully block no damange will be take
      * else the damage will be applied and the hero may die. 
-     * @param {*} theDPAttack the damage points the hero can potentially incure from the attack if the block was unsuccessful.
      * @return true if the attack was successfully blocked and false otherwise.
      */
-    block(theDPAttack) {
+    block() {
         if (Math.random() < this.#myChanceToBlock/100) {
-            const newHP = this.getHP() - theDPAttack;
-            if (newHP > 0) {
-                this.setHP(newHP);
-            } else {
-                this.setHP(0);
-            }
             return false;
         } 
         return true;
