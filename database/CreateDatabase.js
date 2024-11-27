@@ -6,9 +6,9 @@
 import sqlite3 from 'sqlite3';
 
 // Creates the database
-const characterDB = new sqlite3.Database('./characters.db', (err) => {
+const characterDB = new sqlite3.Database('./database/characters.db', (err) => {
     if (err) {
-        console.error("Database creation/connection failed \n");
+        console.error("Database creation connection failed \n");
     } else {
         console.log("Created database successfuly \n");
     }
@@ -115,9 +115,11 @@ function runStatements(theStatements) {
 }
 
 function createDatabase() {
-    createTables();
-    insertMonsters();
-    insertHeroes();
+    characterDB.serialize(() => {
+        createTables();
+        insertMonsters();
+        insertHeroes();
+    });
 }
-
+createDatabase();
 characterDB.close();
