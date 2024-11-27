@@ -17,3 +17,24 @@ describe("Basic behavior of a coordinate no invalid input", () => {
         expect(coord.getY()).toBe(5);
     });
 });
+
+describe("Invalid input constructor and setter methods", () => {
+    test("Negative x", () => {
+        expect(() => new Coordinate(-1, 1)).toThrow(RangeError);
+    });
+    test("Negative y", () => {
+        expect(() => new Coordinate(1, -1)).toThrow(RangeError);
+    });
+    test("Setting valid coordinate to a negative x", () => {
+        expect(() => {
+            const coord = new Coordinate(1, 2);
+            coord.setX(-1)
+        }).toThrow(RangeError);
+    });
+    test("Setting valid coordinate to a negative y", () => {
+        expect(() => {
+            const coord = new Coordinate(1, 2);
+            coord.setY(-1)
+        }).toThrow(RangeError);
+    });
+})
