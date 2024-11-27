@@ -6,9 +6,9 @@
 import sqlite3 from 'sqlite3';
 
 // Creates the database
-const characterDB = new sqlite3.Database('./characters.db', (err) => {
+const characterDB = new sqlite3.Database('./database/characters.db', (err) => {
     if (err) {
-        console.error("Database creation/connection failed \n");
+        console.error("Database creation connection failed \n");
     } else {
         console.log("Created database successfuly \n");
     }
@@ -16,23 +16,23 @@ const characterDB = new sqlite3.Database('./characters.db', (err) => {
 
 function createTables() {
     const createMonsterTableQuery = "CREATE TABLE IF NOT EXISTS Monsters ("+
-                                    "NAME TEXT NOT NULL UNIQUE, " + 
-                                    "HP INTEGER NOT NULL, " + 
-                                    "DP_MIN INTEGER NOT NULL, " + 
-                                    "DP_MAX INTEGER NOT NULL, " + 
-                                    "ATTACK_SPEED INTEGER NOT NULL, " + 
-                                    "HIT_CHANCE INTEGER NOT NULL, " +
-                                    "HEAL_CHANCE INTEGER NOT NULL, " +
-                                    "MIN_HEAL INTEGER NOT NULL, " +
-                                    "MAX_HEAL INTEGER NOT NULL)";
+                                    "name TEXT NOT NULL UNIQUE, " + 
+                                    "hp INTEGER NOT NULL, " + 
+                                    "dp_min INTEGER NOT NULL, " + 
+                                    "dp_max INTEGER NOT NULL, " + 
+                                    "attack_speed INTEGER NOT NULL, " + 
+                                    "hit_chance INTEGER NOT NULL, " +
+                                    "heal_chance INTEGER NOT NULL, " +
+                                    "min_heal INTEGER NOT NULL, " +
+                                    "max_heal INTEGER NOT NULL)";
     const createHeroTableQuery = "CREATE TABLE IF NOT EXISTS Heroes ("+
-                                 "NAME TEXT NOT NULL UNIQUE, " + 
-                                 "HP INTEGER NOT NULL, " + 
-                                 "DP_MIN INTEGER NOT NULL, " + 
-                                 "DP_MAX INTEGER NOT NULL, " + 
-                                 "ATTACK_SPEED INTEGER NOT NULL, " + 
-                                 "HIT_CHANCE INTEGER NOT NULL, " + 
-                                 "BLOCK_CHANCE INTEGER NOT NULL)";
+                                 "name TEXT NOT NULL UNIQUE, " + 
+                                 "hp INTEGER NOT NULL, " + 
+                                 "dp_min INTEGER NOT NULL, " + 
+                                 "dp_max INTEGER NOT NULL, " + 
+                                 "attack_speed INTEGER NOT NULL, " + 
+                                 "hit_chance INTEGER NOT NULL, " + 
+                                 "block_chance INTEGER NOT NULL)";
     characterDB.run(createMonsterTableQuery, (err) => {
         if (err) {
             console.error("Error creating Monsters table \n");
@@ -67,7 +67,7 @@ function insertMonsters() {
  * @returns 
  */
 function createMonsterInsertStatement(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance, theHealChance, theMinHeal, theMaxHeal) {
-    return `INSERT INTO Monsters (NAME, HP, DP_MIN, DP_MAX, ATTACK_SPEED, HIT_CHANCE, HEAL_CHANCE, MIN_HEAL, MAX_HEAL) ` +
+    return `INSERT INTO Monsters (name, hp, dp_min, dp_max, attack_speed, hit_chance, heal_chance, min_heal, max_heal) ` +
             `VALUES (${theName}, ${theHP}, ${theDPMin}, ${theDPMax}, ${theAttackSpeed}, ${theHitChance}, ${theHealChance}, ${theMinHeal}, ${theMaxHeal})`;
 }
 
@@ -92,7 +92,7 @@ function insertHeroes() {
  * @returns 
  */
 function createHeroInsertStatement(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance, theBlockChance) {
-    return `INSERT INTO Heroes (NAME, HP, DP_MIN, DP_MAX, ATTACK_SPEED, HIT_CHANCE, BLOCK_CHANCE) ` +
+    return `INSERT INTO Heroes (name, hp, dp_min, dp_max, attack_speed, hit_chance, block_chance) ` +
             `VALUES (${theName}, ${theHP}, ${theDPMin}, ${theDPMax}, ${theAttackSpeed}, ${theHitChance}, ${theBlockChance})`;
 }
 
@@ -115,9 +115,11 @@ function runStatements(theStatements) {
 }
 
 function createDatabase() {
-    createTables();
-    insertMonsters();
-    insertHeroes();
+    characterDB.serialize(() => {
+        createTables();
+        insertMonsters();
+        insertHeroes();
+        characterDB.close();
+    });
 }
-
-characterDB.close();
+createDatabase();
