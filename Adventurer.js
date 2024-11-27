@@ -46,9 +46,9 @@ export default class Adventurer {
         }
     }
 
-    block(theMonster) {
+    block() {
         if (this.#myFightingStatus) {
-            return this.#myHero.block(theMonster);
+            return this.#myHero.block();
         } else {
             throw new EvalError("The adventurer is not currently fighting any monster. Blocks are not allowed.")
         }
