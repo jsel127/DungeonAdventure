@@ -23,14 +23,21 @@ export default class Coordinate {
         this.#myX = theX;
     }
 
-    setY() {
+    setY(theY) {
         if (!Number.isInteger(theY) || theY < 0) {
             throw new RangeError("Negative coordinates are not supported");
         }
         this.#myY = theY;
     }
 
+    toJSON() {
+        return {
+          x: this.#myX,
+          y: this.#myY
+        };
+    }
+
     toString() {
-        return this.#myX;
+        return `${this.#myX} ${this.#myY}`;
     }
 }

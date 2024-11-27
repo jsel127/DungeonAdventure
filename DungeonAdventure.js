@@ -17,12 +17,13 @@ export default class DungeonAdventure {
     }
 
     getHeroes() {
+// 
         return [
             {
                 name: "Warrior",
                 hp: 125,
-                dpmin: 35,
-                dpmax: 60,
+                dp_min: 35,
+                dp_max: 60,
                 attack_speed: 4,
                 hit_chance: 80,
                 block_chance: 20
@@ -30,8 +31,8 @@ export default class DungeonAdventure {
             {
                 name: "Priestess",
                 hp: 75,
-                dpmin: 25,
-                dpmax: 45,
+                dp_min: 25,
+                dp_max: 45,
                 attack_speed: 5,
                 hit_chance: 70,
                 block_chance: 30
@@ -39,8 +40,8 @@ export default class DungeonAdventure {
             {
                 name: "Thief",
                 hp: 75,
-                dpmin: 20,
-                dpmax: 40,
+                dp_min: 20,
+                dp_max: 40,
                 attack_speed: 6,
                 hit_chance: 80,
                 block_chance: 40
@@ -210,6 +211,8 @@ export default class DungeonAdventure {
 
     saveGame() {
         //TODO: implement saving game
+        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify (convert data to a string)
+        //https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage (store savedState in browser)
     }
 
     loadGame() {

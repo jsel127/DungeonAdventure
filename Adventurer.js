@@ -1,4 +1,5 @@
-import Hero from "./characters/Hero.js"
+import Hero from "./characters/Hero.js";
+import Inventory from "./Inventory.js";
 export default class Adventurer {
     #myInventory
     #myName

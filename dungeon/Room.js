@@ -33,7 +33,8 @@ export default class Room {
     #mySouthDoor;
     #myWestDoor;
     #myContent;
-    constructor(theCoordinate, theNorthDoor, theEastDoor, theSouthDoor, theWestDoor, theContent = Room.CONTENT.empty) {
+    constructor(theCoordinate = new Coordinate(0,0), theNorthDoor = new Door(), theEastDoor = new Door(), 
+                theSouthDoor = new Door(), theWestDoor = new Door(), theContent = Room.CONTENT.empty) {
         if (theCoordinate === undefined || !theCoordinate instanceof Coordinate) {
             throw TypeError("The given coordinate was not a Coordinate type.");
         }
@@ -146,7 +147,7 @@ export default class Room {
     }
     
     setContent(theContent) {
-        if (theContent.isEmpty()) {
+        if (this.isEmpty()) {
             this.#myContent = theContent;
         }
     }
@@ -156,7 +157,7 @@ export default class Room {
     }
 
     toString() {
-        // ALL DOORS
+// ALL DOORS
         let str = "";
         if (this.#myNorthDoor.isOpen()) {
             str += "* *\n";
