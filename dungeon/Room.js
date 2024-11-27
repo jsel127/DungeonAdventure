@@ -146,7 +146,7 @@ export default class Room {
     }
     
     setContent(theContent) {
-        if (theContent.isEmpty()) {
+        if (this.isEmpty()) {
             this.#myContent = theContent;
         }
     }

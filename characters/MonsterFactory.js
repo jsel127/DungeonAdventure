@@ -4,7 +4,7 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-import Monster from "./Monster";
+import Monster from "./Monster.js";
 
 /**
  * Will create a Monster.

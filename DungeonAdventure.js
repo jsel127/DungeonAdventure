@@ -5,7 +5,7 @@ import Dungeon from "./dungeon/Dungeon.js";
 export default class DungeonAdventure {
     static #HARDEST_DIFFICULTY = 3;
     #myDungeon
-    static #myAdventurer
+    #myAdventurer
     #myCurrentRoom
     #myDifficulty
     #myCurrentOpponent
