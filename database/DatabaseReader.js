@@ -9,6 +9,7 @@
     Sources
         * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties 
         * https://www.freecodecamp.org/news/singleton-design-pattern-with-javascript/
+        * https://www.sqlitetutorial.net/sqlite-nodejs/query/
 */
 import sqlite3 from 'sqlite3';
 export default class DatabaseReader {
@@ -20,7 +21,7 @@ export default class DatabaseReader {
             throw new TypeError("DatabaseReader is not constructable");
         }
         DatabaseReader.#IS_INTERNAL_CONSTRUCTING = false;
-        this.#myDatabaseConnection = new sqlite3.Database('./characters.db', err => {
+        this.#myDatabaseConnection = new sqlite3.Database('./database/characters.db', err => {
             if (err) {
                 console.error("Failed to connect to the character.db database");
             }
@@ -35,37 +36,33 @@ export default class DatabaseReader {
         return DatabaseReader.#UNIQUE_INSTANCE;
     }
 
+    #getData(theQuery) {
+        // TODO: need to research async, await, and promises this seems to be the way to get data. https://www.sqlitetutorial.net/sqlite-nodejs/query/
+    }
+
     getWarriorData() {
-        let warriorData = this.#myDatabaseConnection.get("SELECT * FROM Heroes WHERE NAME = 'Warrior'", (error, row) => {
-            if (error) {
-                console.error("Failed to retrieve Warrior data");
-            } 
-            console.log(row);
-            return row;
-        });
-        return warriorData;
+        return this.#getData("SELECT * FROM Heroes WHERE name = 'Warrior'");
     }
 
     getPriestessData() {
+        return this.#getData("SELECT * FROM Heroes WHERE name = 'Warrior'");
 
     }
 
     getThiefData() {
+        return this.#getData("SELECT * FROM Heroes WHERE name = 'Warrior'");
 
     }
 
     getOgreData() {
-
+        return this.#getData("SELECT * FROM Monsters WHERE name = 'Ogre'");
     }
 
     getGremlinData() {
-
+        return this.#getData("SELECT * FROM Monsters WHERE name = 'Gremlin'");
     }
 
     getSkeletonData() {
-
+        return this.#getData("SELECT * FROM Monsters WHERE name = 'Skeleton'");
     }
 }
-
-const db = DatabaseReader.getInstance();
-console.log(db.getWarriorData());
