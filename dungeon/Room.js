@@ -33,7 +33,8 @@ export default class Room {
     #mySouthDoor;
     #myWestDoor;
     #myContent;
-    constructor(theCoordinate, theNorthDoor, theEastDoor, theSouthDoor, theWestDoor, theContent = Room.CONTENT.empty) {
+    constructor(theCoordinate = new Coordinate(0,0), theNorthDoor = new Door(), theEastDoor = new Door(), 
+                theSouthDoor = new Door(), theWestDoor = new Door(), theContent = Room.CONTENT.empty) {
         if (theCoordinate === undefined || !theCoordinate instanceof Coordinate) {
             throw TypeError("The given coordinate was not a Coordinate type.");
         }
