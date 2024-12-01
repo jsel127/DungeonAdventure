@@ -5,7 +5,7 @@ const CharacterSelection = () => {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5001/api/characters')
+    fetch('/api/characters')
       .then((response) => response.json())
       .then((data) => {
         console.log('Fetched characters:', data); 
@@ -44,8 +44,8 @@ const CharacterSelection = () => {
             >
               <h3>{character.name}</h3>
               <p>HP: {character.hp}</p>
-              <p>Damage: {character.dpMin} - {character.dpMax}</p>
-              <p>Block Chance: {character.blockChance}%</p>
+              <p>Damage: {character.dpmin} - {character.dpmax}</p>
+              <p>Block Chance: {character.block_chance}%</p>
             </div>
           ))}
         </div>
@@ -55,14 +55,14 @@ const CharacterSelection = () => {
         <div className="selected-character" style={{ marginTop: '20px', textAlign: 'center' }}>
           <h2>You selected: {selectedCharacter.name}</h2>
           <p>HP: {selectedCharacter.hp}</p>
-          <p>Damage: {selectedCharacter.dpMin} - {selectedCharacter.dpMax}</p>
-          <p>Block Chance: {selectedCharacter.blockChance}%</p>
+          <p>Damage: {selectedCharacter.dpmin} - {selectedCharacter.dpmax}</p>
+          <p>Block Chance: {selectedCharacter.block_chance}%</p>
         </div>
       )}
 
       {selectedCharacter && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <button onClick={() => console.log('Start game with', selectedCharacter)}>
+          <button onClick={() => console.log('Start game with', selectedCharacter.name)}>
             Start Game
           </button>
         </div>

@@ -7,7 +7,6 @@ const model = new DungeonAdventure()
 app.get("/api/characters", (req, res) => { 
     console.log("request to server /api/characters")
     res.json(model.getHeroes())
-    //res.json({"characters": ["Warrior", "Priestess", "Thief", "Joe Biden"]})   
 })  
 
 app.listen(5001, () => { console.log("Server started on port 5001") }) 
