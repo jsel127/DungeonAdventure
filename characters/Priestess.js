@@ -41,6 +41,7 @@ export default class Priestess extends Hero {
      * and false if no HP was gained.
      */
     specialAttack(theOpponent) {
+        super.specialAttack(theOpponent);
         const minHeal = Math.round(this.getHP() * Priestess.#HEAL_MIN_PERCENT / 100);
         const maxHeal = Math.round(this.getHP() * Priestess.#HEAL_MAX_PERCENT / 100);
         const rangeHeal = maxHeal - minHeal;

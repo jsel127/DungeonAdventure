@@ -1,7 +1,7 @@
-import Inventory from '../Inventory.js';
-import InventorySlot from '../InventorySlot.js';
-import VisionPotion from '../VisionPotion.js';
-import Pillar from '../Pillar.js';
+import Inventory from '../items/Inventory.js';
+import InventorySlot from '../items/InventorySlot.js';
+import VisionPotion from '../items/VisionPotion.js';
+import Pillar from '../items/Pillar.js';
 
 describe('Inventory test',  () => {
 
@@ -24,9 +24,6 @@ describe('Inventory test',  () => {
 
     test('addItem to empty Inventory', () => {
         myInventory.addItem(myPillar);
-        //expect(myInventory.getSlot(0)).toStrictEqual('AAAAIIIIIIEEEEEEEEEEYOUWONTMISSTHIS');
-        //console.log(new InventorySlot(myPillar, 1));
-        //console.log(myInventory.getSlot(0));
         expect(myInventory.getSlot(0)).toStrictEqual(new InventorySlot(myPillar, 1));
     });
 
@@ -98,7 +95,6 @@ describe('Inventory test',  () => {
         myInventory.addItem(myVisionPotion);
         myInventory.addItem(myVisionPotion);
         myInventory.addItem(myPillar);
-        console.log(myInventory.toString());
         expect(myInventory.toString()).toBe('[0] Vision Potion (3)\n[1] Pillar of Polymorphism (1)\n[2] empty\n[3] empty\n[4] empty\n[5] empty\n');
     });
 

@@ -25,7 +25,7 @@ export default class Room {
         entrance: '-',
         exit: '+',
         pit: 'x',
-        empty: '*'
+        empty: ' '
     });
     #myCoordinate;
     #myNorthDoor;
@@ -33,7 +33,8 @@ export default class Room {
     #mySouthDoor;
     #myWestDoor;
     #myContent;
-    constructor(theCoordinate, theNorthDoor, theEastDoor, theSouthDoor, theWestDoor, theContent = Room.CONTENT.empty) {
+    constructor(theCoordinate = new Coordinate(0,0), theNorthDoor = new Door(), theEastDoor = new Door(), 
+                theSouthDoor = new Door(), theWestDoor = new Door(), theContent = Room.CONTENT.empty) {
         if (theCoordinate === undefined || !theCoordinate instanceof Coordinate) {
             throw TypeError("The given coordinate was not a Coordinate type.");
         }
@@ -123,20 +124,6 @@ export default class Room {
         return false;
     }
 
-    #hasItem() {
-        return this.#myContent === Room.CONTENT.abstractionPillar ||
-               this.#myContent === Room.CONTENT.encapsulationPillar ||
-               this.#myContent === Room.CONTENT.inheritancePillar ||
-               this.#myContent === Room.CONTENT.polymorphismPillar ||
-               this.#myContent === Room.CONTENT.visionPotion ||
-               this.#myContent === Room.CONTENT.healingPotion;
-    }
-    #hasMonster() {
-        return this.#myContent === Room.CONTENT.gremlin ||
-               this.#myContent === Room.CONTENT.ogre ||
-               this.#myContent === Room.CONTENT.skeleton;
-    }
-
     getContent() {
         return this.#myContent;
     }
@@ -156,7 +143,6 @@ export default class Room {
     }
 
     toString() {
-        // ALL DOORS
         let str = "";
         if (this.#myNorthDoor.isOpen()) {
             str += "* *\n";

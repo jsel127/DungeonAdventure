@@ -4,7 +4,7 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-import Monster from "../characters/Monster";
+import Monster from "../characters/Monster.js";
 // TODO: test attack method
 describe('Tests Monster Character instanciated to Name: Gremlin, HP: 70, DPMin: 15, DPMax: 30, AttackSpeed: 5, HitChange: 80, HealChance: 40, MinHeal: 20, MaxHeal: 40', () => {
     const gremlin = new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);  

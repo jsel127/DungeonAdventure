@@ -153,5 +153,4 @@ export default class Inventory {
                 && this.hasItem(new Pillar(Pillar.PillarType.POLYMORPHISM))
                 && this.hasItem(new Pillar(Pillar.PillarType.INHERITANCE))
     }
-
 }
