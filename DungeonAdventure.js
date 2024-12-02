@@ -1,4 +1,3 @@
-import Adventurer from "./Adventurer.js";
 import DungeonCharacter from "./characters/DungeonCharacter.js";
 import HeroFactory from "./characters/HeroFactory.js";
 import Dungeon from "./dungeon/Dungeon.js";
@@ -17,7 +16,6 @@ export default class DungeonAdventure {
     }
 
     getHeroes() {
-// 
         return [
             {
                 name: "Warrior",
@@ -67,12 +65,8 @@ export default class DungeonAdventure {
     }
 
     startGame() {
-        this.#createDungeon(this.#myDifficulty);
-    }
-
-    #createDungeon() {
         this.#myDungeon = new Dungeon(this.#myDifficulty);
-        this.#myCurrentRoom = this.#myDungeon.getEntrance();
+        this.#myCurrentRoom = this.#myDungeon.getEntrance();    
     }
 
     getValidMoves() {
@@ -116,34 +110,6 @@ export default class DungeonAdventure {
         }
     }
 
-    #processMove() {
-        this.#processContent();
-        return this.#hasWonGame();
-    }
-
-    /**
-     * This method will check what is in the room and call the appropriate methods.
-     */
-    #processContent() {
-        this.#pickUpItem();
-        this.#processMonster();
-    }
-
-    #pickUpItem() {
-        const item = this.#myCurrentRoom.collectItem();
-        if (item) {
-            inventory.add(item);
-        }
-    }
-
-    #processMonster() {
-        const monster = this.#myCurrentRoom.spawnMonster();
-        if (monster) {
-            this.#myAdventurer.setFightingStatus(true);
-            this.#setOpponentToFight(monster);
-        }
-    }
-
     attackOpponent() { 
         if (!this.#myAdventurer.getFightingStatus()) {
             throw new EvalError("The adventurer is not currently fighting so it cannot attack.");
@@ -162,7 +128,6 @@ export default class DungeonAdventure {
             }
         }
     }
-
 
     specialAttackOpponent() {
         if (!this.#myAdventurer.getFightingStatus()) {
@@ -192,6 +157,7 @@ export default class DungeonAdventure {
         if (blockResult) {
             return "Successful Block";
         } else {
+            this.#processAttack();
         };    
     }
 
@@ -204,6 +170,45 @@ export default class DungeonAdventure {
             throw new EvalError("The adventurer is not currently fighting");
         }
         return this.#myCurrentOpponent.isDead();
+    }
+
+    saveGame() {
+        //TODO: implement saving game
+        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify (convert data to a string)
+        //https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage (store savedState in browser)
+    }
+
+    loadGame() {
+        //TODO: implement loading game
+        //https://stackoverflow.com/questions/6487699/best-way-to-serialize-unserialize-objects-in-javascript
+    }
+
+    #processMove() {
+        this.#processContent();
+        return this.#hasWonGame();
+    }
+
+    /**
+     * This method will check what is in the room and call the appropriate methods.
+     */
+    #processContent() {
+        this.#pickUpItem();
+        this.#processMonster();
+    }
+
+    #pickUpItem() {
+        const item = this.#myCurrentRoom.collectItem();
+        if (item) {
+            inventory.add(item);
+        }
+    }
+
+    #processMonster() {
+        const monster = this.#myCurrentRoom.spawnMonster();
+        if (monster) {
+            this.#myAdventurer.setFightingStatus(true);
+            this.#setOpponentToFight(monster);
+        }
     }
 
     /**
@@ -251,15 +256,5 @@ export default class DungeonAdventure {
             }
         } 
         return false;
-    }
-
-    saveGame() {
-        //TODO: implement saving game
-        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify (convert data to a string)
-        //https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage (store savedState in browser)
-    }
-
-    loadGame() {
-        //TODO: implement loading game
     }
 }
