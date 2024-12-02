@@ -107,6 +107,10 @@ export default class Hero extends DungeonCharacter{
         return this.#myFightingStatus
     }
 
+    getInventory() {
+        return this.#myInventory;
+    }
+
     /**
      * Returns the information of the hero including its name, HP, DPMin, DPMax, AttackSpeed, HitChange, and BlockChance.
      * @returns a string representation of the hero formatted by the information it contains (name, HP, DPMin, DPMax, AttackSpeed, HitChange, BlockChance)
