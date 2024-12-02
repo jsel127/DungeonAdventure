@@ -53,7 +53,7 @@ export default class DungeonAdventure {
         if (typeof theName !== "string") {
             throw new TypeError("Invalid name provided");
         }
-        this.#myAdventurer = new Adventurer(HeroFactory.createHero(theHeroType));
+        this.#myAdventurer = HeroFactory.createHero(theHeroType, theName);
     }
 
     setDifficulty(theDifficulty) {
@@ -88,7 +88,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() - 1);
-            this.#processMove();
+            return this.#processMove();
         }
     }
 
@@ -96,7 +96,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() + 1, location.getY());
-            this.#processMove();
+            return this.#processMove();
         }
     }
 
@@ -104,7 +104,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() + 1);
-            this.#processMove();
+            return this.#processMove();
         }
     }
 
@@ -112,12 +112,13 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() - 1, location.getY());
-            this.#processMove();
+            return this.#processMove();
         }
     }
 
     #processMove() {
         this.#processContent();
+        return this.#hasWonGame();
     }
 
     /**
@@ -129,8 +130,6 @@ export default class DungeonAdventure {
     }
 
     #pickUpItem() {
-        // NEED TO ADJUST BASED ON HOW ITEMS classes are adjusted
-        const inventory = this.#myAdventurer.getInventory();
         const item = this.#myCurrentRoom.collectItem();
         if (item) {
             inventory.add(item);
@@ -140,56 +139,75 @@ export default class DungeonAdventure {
     #processMonster() {
         const monster = this.#myCurrentRoom.spawnMonster();
         if (monster) {
+            this.#myAdventurer.setFightingStatus(true);
             this.#setMonsterFight(monster);
         }
     }
 
     attackOpponent() { 
-        // if the attack speed of the adventurer is slower the monster can attack first otherwise it is the opposite
-        // after each attack the status of the player must be checked if it has died a gameover needs to run.
-        if (this.#myAdventurer.attack(this.#myCurrentOpponent)) {
-            return "Successful Attack";
+        if (!this.#myAdventurer.getFightingStatus()) {
+            throw new EvalError("The adventurer is not currently fighting so it cannot attack.");
+        }
+        if (this.#doesAdventurerAttackFirst()) {
+            this.#myAdventurer.attack(this.#myCurrentOpponent);
+            this.#processAttack();
+            this.#myCurrentOpponent.attack(this.#myAdventurer);
+            this.#processAttack();
         } else {
-            return "Failed to Attack";
-        };
+            this.#myCurrentOpponent.attack(this.#myAdventurer);
+            this.#processAttack();
+            this.#myAdventurer.attack(this.#myCurrentOpponent);
+            this.#processAttack();
+        }
     }
 
+
     specialAttackOpponent() {
-        const hero = this.#myAdventurer.getHero();
-        const heroFaster = hero.getAttackSpeed() - this.#myCurrentOpponent.getAttackSpeed();
-        if (heroFaster) {
-            hero.specialAttack(this.#myCurrentOpponent);
-            if (this.#isDead(this.#myCurrentOpponent())) {
-// MONSTER HAS DIED
-            } else {
-                this.#myCurrentOpponent.attack(hero);
-// CHECK HERO ALIVE
-            }
+        if (!this.#myAdventurer.getFightingStatus()) {
+            throw new EvalError("The adventurer is not currently fighting so it cannot special attack.");
+        }
+        if (this.#doesAdventurerAttackFirst()) {
+            this.#myAdventurer.specialAttack(this.#myCurrentOpponent);
+            this.#processAttack();
+            this.#myCurrentOpponent.specialAttack(this.#myAdventurer);
+            this.#processAttack();
         } else {
-// OPPOSITE OF ABOVE (LIKELY MODULARIZE)
+            this.#myCurrentOpponent.specialAttack(this.#myAdventurer);
+            this.#processAttack();
+            this.#myAdventurer.specialAttack(this.#myCurrentOpponent);
+            this.#processAttack();
         }
     }
 
     blockOpponent() {   
+        if (!this.#myAdventurer.getFightingStatus()) {
+            throw new EvalError("The adventurer is not currently fighting so it cannot block.");
+        }
         const blockResult = this.#myAdventurer.block();
         this.#myCurrentOpponent.attack(this.#myAdventurer.getHero(), blockResult);
         if (blockResult) {
             return "Successful Block";
         } else {
-            if (this.#isDead(this.#myAdventurer.getHero())) {
-                return "Failed to Block, You have Died.";
-            }
-            return "Failed to Block";
         };    
     }
 
-    #isDead(theDungeonCharacter) {
-        if (!theDungeonCharacter instanceof DungeonCharacter) {
-            throw new TypeError("Invalid argument. It must be a DungeonCharacter.");
+    /**
+     * Checks if the character passed in is dead and chances the fighting status to not fighting if they died.
+     * @param {*} theCharacter the character to check the death status of.
+     */
+    #processAttack() {
+        if (theCharacter.isDead()) {
+            this.#myAdventurer.setFightingStatus(Hero.FIGHTING_STATUS.notFighting);
         }
-        return theDungeonCharacter.isDead();
     }
-
+    
+    #doesAdventurerAttackFirst() {
+        if (!this.#myCurrentOpponent instanceof DungeonCharacter) {
+            throw new EvalError("There is not opponent to fight.");
+        }
+        return this.#myAdventurer.getAttackSpeed() - this.#myCurrentOpponent.getAttackSpeed() >= 0;
+    }
+    
     /**
      * Fights the given monster. The method will return true if the hero won and false if the hero died. 
      * @param {*} theMonster 

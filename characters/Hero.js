@@ -12,6 +12,10 @@ import Inventory from "../Inventory.js";
  * @version 1.0
  */
 export default class Hero extends DungeonCharacter{
+    static FIGHTING_STATUS = Object.freeze({
+        fighting: true,
+        notFighting: false
+    })
     /** The chance the hero has to block an attack */
     #myChanceToBlock
     /** The inventory storing the items the adventurer will pick up. */
@@ -31,7 +35,8 @@ export default class Hero extends DungeonCharacter{
      * @param {*} theChanceToBlock the block chance of the hero.
      */
     constructor(theName, theHP, theDPMin, theDPMax,
-                theAttackSpeed, theHitChance, theChanceToBlock) {       
+                theAttackSpeed, theHitChance, theChanceToBlock,
+                theFightingStatus = Hero.FIGHTING_STATUS.notFighting) {       
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance);
         if (this.constructor === Hero) {
             throw new TypeError("Hero cannot be instanciated directly.");
@@ -42,9 +47,12 @@ export default class Hero extends DungeonCharacter{
         if (theChanceToBlock < 0 || theChanceToBlock > 100 ) {
             throw new RangeError("The Block Chance is not within the valid range [0,100].");
         }     
+        if (typeof theFightingStatus !== "boolean") {
+            throw new TypeError("Invalid fighting status. Must be of boolean type.");
+        }
         this.#myChanceToBlock = theChanceToBlock;
         this.#myInventory = new Inventory();
-        this.#myFightingStatus = false;
+        this.#myFightingStatus = theFightingStatus;
     }
 
     /**
@@ -54,7 +62,7 @@ export default class Hero extends DungeonCharacter{
      * @return true if the attack was successfully blocked and false otherwise.
      */
     block() {
-        if (this.#myFightingStatus !== true) {
+        if (this.#myFightingStatus !== Hero.FIGHTING_STATUS.fighting) {
             throw new EvalError("The hero is not currently fighting any monster. Attacks are not allowed.");
         }
         if (Math.random() < this.#myChanceToBlock/100) {
@@ -64,7 +72,7 @@ export default class Hero extends DungeonCharacter{
     }
 
     attack(theOpponent) {
-        if (this.#myFightingStatus !== true) {
+        if (this.#myFightingStatus !== Hero.FIGHTING_STATUS.fighting) {
             throw new EvalError("The hero is not currently fighting any monster. Attacks are not allowed.");
         }
         super.attack(theOpponent);
@@ -74,7 +82,7 @@ export default class Hero extends DungeonCharacter{
      * Carries out the special attack specific to the Heroes. This is an abstract method.
      */
     specialAttack(theOpponent) {
-        if (this.#myFightingStatus !== true) {
+        if (this.#myFightingStatus !== Hero.FIGHTING_STATUS.fighting) {
             throw new EvalError("The hero is not currently fighting any monster. Special attacks are not allowed.");
         }
     }
