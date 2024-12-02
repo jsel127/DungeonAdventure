@@ -1,8 +1,7 @@
-import Coordinate from "../dungeon/Coordinate";
-import Room from "../dungeon/Room";
-import HealingPotion from "../HealingPotion";
-import Pillar from "../Pillar";
-import VisionPotion from "../VisionPotion";
+import Room from "../dungeon/Room.js";
+import HealingPotion from "../items/HealingPotion.js";
+import Pillar from "../items/Pillar.js";
+import VisionPotion from "../items/VisionPotion.js";
 describe("Tests the room class and its functionality", () => {
     test("By default the created room is empty", () => {
         const room = new Room();
