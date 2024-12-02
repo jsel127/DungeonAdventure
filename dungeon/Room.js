@@ -25,7 +25,7 @@ export default class Room {
         entrance: '-',
         exit: '+',
         pit: 'x',
-        empty: '*'
+        empty: ' '
     });
     #myCoordinate;
     #myNorthDoor;
@@ -124,20 +124,6 @@ export default class Room {
         return false;
     }
 
-    #hasItem() {
-        return this.#myContent === Room.CONTENT.abstractionPillar ||
-               this.#myContent === Room.CONTENT.encapsulationPillar ||
-               this.#myContent === Room.CONTENT.inheritancePillar ||
-               this.#myContent === Room.CONTENT.polymorphismPillar ||
-               this.#myContent === Room.CONTENT.visionPotion ||
-               this.#myContent === Room.CONTENT.healingPotion;
-    }
-    #hasMonster() {
-        return this.#myContent === Room.CONTENT.gremlin ||
-               this.#myContent === Room.CONTENT.ogre ||
-               this.#myContent === Room.CONTENT.skeleton;
-    }
-
     getContent() {
         return this.#myContent;
     }
@@ -157,7 +143,6 @@ export default class Room {
     }
 
     toString() {
-// ALL DOORS
         let str = "";
         if (this.#myNorthDoor.isOpen()) {
             str += "* *\n";
