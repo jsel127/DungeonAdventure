@@ -1,7 +1,7 @@
-import Inventory from '../Inventory.js';
-import InventorySlot from '../InventorySlot.js';
-import VisionPotion from '../VisionPotion.js';
-import Pillar from '../Pillar.js';
+import Inventory from '../items/Inventory.js';
+import InventorySlot from '../items/InventorySlot.js';
+import VisionPotion from '../items/VisionPotion.js';
+import Pillar from '../items/Pillar.js';
 
 describe('Inventory test',  () => {
 

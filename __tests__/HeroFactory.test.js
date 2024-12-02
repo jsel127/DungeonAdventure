@@ -4,10 +4,10 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-import Warrior from "../characters/Warrior";
-import Thief from "../characters/Thief";
-import Priestess from "../characters/Priestess";
-import HeroFactory from "../characters/HeroFactory";
+import Warrior from "../characters/Warrior.js";
+import Thief from "../characters/Thief.js";
+import Priestess from "../characters/Priestess.js";
+import HeroFactory from "../characters/HeroFactory.js";
 
 describe("Testing hero factory to ensure proper hero is created and the object is instaciated.", () => {
     test("Creating a warrior", () => {

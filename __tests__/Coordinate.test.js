@@ -1,4 +1,4 @@
-import Coordinate from "../dungeon/Coordinate";
+import Coordinate from "../dungeon/Coordinate.js";
 
 describe("Basic behavior of a coordinate no invalid input", () => {
     const coord = new Coordinate(1, 2);

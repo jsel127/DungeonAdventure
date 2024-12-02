@@ -1,3 +1,4 @@
+import Hero from "../characters/Hero.js";
 import Thief from "../characters/Thief.js";
 import MonsterFactory from "../characters/MonsterFactory.js";
 describe("Tests Thief Character instanciated to Name: Thief, HP: 20, DPMin: 10, DPMax: 10, AttackSpeed: 5, HitChange: 100, BlockChance 100", () => {
@@ -31,18 +32,28 @@ describe("Tests Thief Character instanciated to Name: Thief, HP: 20, DPMin: 10, 
         expect(thief.getHitChance()).toBe(100);
     });
 
+    test("Set fighting status works", () => {
+        const thief = new Thief("Thief", 20, 10, 10, 5, 100, 100);
+        expect(thief.getFightingStatus()).toBeFalsy();
+        thief.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+        expect(thief.getFightingStatus()).toBeTruthy();
+    });
+
     test("Block should be successful (block change = 100).", () => {
         const thief = new Thief("Thief", 20, 10, 10, 5, 100, 100);
+        thief.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
         expect(thief.block()).toBeTruthy();
     });
 
     test("Block should fail (block chance = 0)", () => {
-        const warriorWithNoShield = new Thief("Thief", 20, 10, 10, 5, 100, 0);
-        expect(warriorWithNoShield.block()).toBeFalsy();
+        const thiefWithNoShield = new Thief("Thief", 20, 10, 10, 5, 100, 0);
+        thiefWithNoShield.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+        expect(thiefWithNoShield.block()).toBeFalsy();
     });
 
     test("Tests the attack method (hit chance = 100, DPmin = 10, DPmax = 10", () => {
         const thief = new Thief("Thief", 20, 10, 10, 5, 100, 100);
+        thief.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
         const monster = MonsterFactory.createMonster("Ogre");
         const monsterInitialHP = monster.getHP();
         thief.attack(monster);
@@ -51,6 +62,7 @@ describe("Tests Thief Character instanciated to Name: Thief, HP: 20, DPMin: 10, 
 
     test("Tests the attack method (hit chance = 0, DPmin = 10, DPmax = 10", () => {
         const thief = new Thief("Thief", 20, 10, 10, 5, 0, 100);
+        thief.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
         const monster = MonsterFactory.createMonster("Ogre");
         const monsterInitialHP = monster.getHP();
         thief.attack(monster);

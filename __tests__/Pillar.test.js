@@ -1,4 +1,4 @@
-import Pillar from '../Pillar';
+import Pillar from "../items/Pillar.js";
 
 test('constructor for pillar of abstraction', () => {
     expect(new Pillar(Pillar.PillarType.ABSTRACTION).getName()).toBe('Pillar of Abstraction');

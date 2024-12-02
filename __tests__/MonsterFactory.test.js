@@ -4,7 +4,7 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-import MonsterFactory from "../characters/MonsterFactory";
+import MonsterFactory from "../characters/MonsterFactory.js";
 
 describe("Tests the monster factory and ensures a Monster object is properly created", () => { 
     const oneHundredHitChance = MonsterFactory.createMonster("Ogre");  
