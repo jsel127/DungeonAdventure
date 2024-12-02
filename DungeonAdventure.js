@@ -150,14 +150,16 @@ export default class DungeonAdventure {
         }
         if (this.#doesAdventurerAttackFirst()) {
             this.#myAdventurer.attack(this.#myCurrentOpponent);
-            this.#processAttack();
-            this.#myCurrentOpponent.attack(this.#myAdventurer);
-            this.#processAttack();
+            if (this.#processAttack()) {
+                this.#myCurrentOpponent.attack(this.#myAdventurer);
+                this.#processAttack();
+            }
         } else {
             this.#myCurrentOpponent.attack(this.#myAdventurer);
-            this.#processAttack();
-            this.#myAdventurer.attack(this.#myCurrentOpponent);
-            this.#processAttack();
+            if (this.#processAttack()) {
+                this.#myAdventurer.attack(this.#myCurrentOpponent);
+                this.#processAttack();
+            }
         }
     }
 
@@ -168,14 +170,16 @@ export default class DungeonAdventure {
         }
         if (this.#doesAdventurerAttackFirst()) {
             this.#myAdventurer.specialAttack(this.#myCurrentOpponent);
-            this.#processAttack();
-            this.#myCurrentOpponent.specialAttack(this.#myAdventurer);
-            this.#processAttack();
+            if (this.#processAttack()) {
+                this.#myCurrentOpponent.specialAttack(this.#myAdventurer);
+                this.#processAttack();
+            }
         } else {
             this.#myCurrentOpponent.specialAttack(this.#myAdventurer);
-            this.#processAttack();
-            this.#myAdventurer.specialAttack(this.#myCurrentOpponent);
-            this.#processAttack();
+            if (this.#processAttack()) {
+                this.#myAdventurer.specialAttack(this.#myCurrentOpponent);
+                this.#processAttack();
+            }
         }
     }
 
@@ -195,14 +199,29 @@ export default class DungeonAdventure {
         return this.#myAdventurer.isDead();
     }
 
+    isOpponentDead() {
+        if (this.#myAdventurer.getFightingStatus()) {
+            throw new EvalError("The adventurer is not currently fighting");
+        }
+        return this.#myCurrentOpponent.isDead();
+    }
+
     /**
      * Checks if the character passed in is dead and chances the fighting status to not fighting if they died.
      * @param {*} theCharacter the character to check the death status of.
+     * @return true if no deaths occured and false otherwise.
      */
     #processAttack() {
-        if (this.#myAdventurer.isDead() || this.#myCurrentOpponent.isDead()) {
+        if (this.isOpponentDead()) {
             this.#myAdventurer.setFightingStatus(Hero.FIGHTING_STATUS.notFighting);
+            this.#myCurrentOpponent = null;
+            return false;
         }
+        if (this.isAdventurerDead()) {
+            this.#myAdventurer.setFightingStatus(Hero.FIGHTING_STATUS.notFighting);
+            return false;
+        }
+        return true;
     }
     
     #doesAdventurerAttackFirst() {
