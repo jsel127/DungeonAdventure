@@ -140,7 +140,7 @@ export default class DungeonAdventure {
         const monster = this.#myCurrentRoom.spawnMonster();
         if (monster) {
             this.#myAdventurer.setFightingStatus(true);
-            this.#setMonsterFight(monster);
+            this.#setOpponentToFight(monster);
         }
     }
 
@@ -191,12 +191,16 @@ export default class DungeonAdventure {
         };    
     }
 
+    isAdventurerDead() {
+        return this.#myAdventurer.isDead();
+    }
+
     /**
      * Checks if the character passed in is dead and chances the fighting status to not fighting if they died.
      * @param {*} theCharacter the character to check the death status of.
      */
     #processAttack() {
-        if (theCharacter.isDead()) {
+        if (this.#myAdventurer.isDead() || this.#myCurrentOpponent.isDead()) {
             this.#myAdventurer.setFightingStatus(Hero.FIGHTING_STATUS.notFighting);
         }
     }
@@ -209,12 +213,15 @@ export default class DungeonAdventure {
     }
     
     /**
-     * Fights the given monster. The method will return true if the hero won and false if the hero died. 
-     * @param {*} theMonster 
+     * Sets the current opponent.
+     * @param {*} theOpponent 
      */
-    #setMonsterFight(theMonster) {
-        this.#myAdventurer.setFightingStatus(true);
-        this.#myCurrentOpponent = monster;
+    #setOpponentToFight(theOpponent) {
+        if (!theOpponent instanceof DungeonCharacter) {
+            throw new TypeError("The given opponenet was not a dungeon character.");
+        }
+        this.#myAdventurer.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+        this.#myCurrentOpponent = theOpponent;
     }
 
     #hasWonGame() {
