@@ -53,6 +53,7 @@ export default class DungeonAdventure {
             throw new TypeError("Invalid name provided");
         }
         this.#myAdventurer = new Adventurer(HeroFactory.createHero(theHeroType));
+        console.log('Hero created', this.#myAdventurer);
     }
 
     setDifficulty(theDifficulty) {
