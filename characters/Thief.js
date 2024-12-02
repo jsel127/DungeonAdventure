@@ -41,6 +41,7 @@ export default class Thief extends Hero {
      * @returns true if a successful attack was made and false otherwise.
      */
     specialAttack(theOpponent) {
+        super.specialAttack(theOpponent);
         const randomInt = Math.round(Math.random() * 100);
         if (!this.isDead()) {
             if (randomInt < Thief.#HIT_RATE_SUPRISE_ATTACK) {
