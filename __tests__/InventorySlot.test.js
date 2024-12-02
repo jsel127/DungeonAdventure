@@ -1,6 +1,6 @@
-import InventorySlot from '../InventorySlot';
-import HealingPotion from '../HealingPotion';
-import Pillar from '../Pillar';
+import InventorySlot from '../items/InventorySlot.js';
+import HealingPotion from '../items/HealingPotion.js';
+import Pillar from '../items/Pillar.js';
 
 test('constructor (default) to create an empty InventorySlot', () => {
     expect(new InventorySlot().getItem()).toBe(InventorySlot.EMPTY);

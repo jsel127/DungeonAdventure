@@ -39,6 +39,7 @@ export default class Warrior extends Hero {
      * @returns true if a successful attack was made and false otherwise.
      */
     specialAttack(theOpponent) {
+        super.specialAttack(theOpponent);
         if (!this.isDead() && Math.random() * 100 < Warrior.#HIT_RATE_CRUSHING_BLOW) {
             const rangeDP = this.getDPMax() - this.getDPMin();
             const attackDP = Warrior.#MULTIPLIER_CRUSHING_BLOW * 

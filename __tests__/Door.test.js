@@ -1,4 +1,4 @@
-import Door from "../dungeon/Door";
+import Door from "../dungeon/Door.js";
 
 describe("Tests basic functionality of the Door class (keep track of state of door and open door)", () => {
     const closedDoor = new Door();
