@@ -104,7 +104,7 @@ export default class Dungeon {
         const doors = this.#createDoors();
         this.#generateTraversableMaze(doors);
         this.#createRooms(doors);
-        this.#fillRooms();
+        // this.#fillRooms();
     }   
 
     /**
@@ -135,7 +135,7 @@ export default class Dungeon {
      * Sets the dimensions of the maze and the access points of the maze (entrance and exit).
      */
     #generateTraversableMaze(theDoors) {
-        const visited = this.#createBufferedBooleanArray();
+        const visited = this.createBufferedBooleanArray();
         const x = Math.floor(Math.random() * this.#myDimension) + 1;
         const y = Math.floor(Math.random() * this.#myDimension) + 1;
         this.#createPath(visited, theDoors, x, y);
@@ -145,7 +145,7 @@ export default class Dungeon {
      * Creates a 2D buffered boolean array that keeps track of the visited rooms. 
      * @returns a 2D buffered boolean array that will mark true if the node has been visited and false if it hasn't.
      */
-    #createBufferedBooleanArray() {
+    createBufferedBooleanArray() {
         const visitedArray = [];
         visitedArray[0] = [];
         visitedArray[this.#myDimension + 1] = [];
@@ -179,16 +179,16 @@ export default class Dungeon {
         if (theVisited[theX - 1][theY] === false) {
             theDoors.east[theX - 1][theY].open();
             this.#createPath(theVisited, theDoors, theX - 1, theY);
+        } else if (theVisited[theX][theY + 1] === false) {
+            theDoors.south[theX][theY].open();
+            this.#createPath(theVisited, theDoors, theX, theY + 1);
         } else if (theVisited[theX + 1][theY] === false) {
             theDoors.east[theX][theY].open();
             this.#createPath(theVisited, theDoors, theX + 1, theY);
         } else if (theVisited[theX][theY - 1] === false) {
             theDoors.south[theX][theY - 1].open();
             this.#createPath(theVisited, theDoors, theX, theY - 1);
-        } else if (theVisited[theX][theY + 1] === false) {
-            theDoors.south[theX][theY].open();
-            this.#createPath(theVisited, theDoors, theX, theY + 1);
-        }
+        } 
     }
 
     /**
