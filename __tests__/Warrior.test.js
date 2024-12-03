@@ -1,3 +1,8 @@
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
 import Hero from "../characters/Hero.js";
 import Warrior from "../characters/Warrior.js";
 import MonsterFactory from "../characters/MonsterFactory.js";

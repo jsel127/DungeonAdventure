@@ -1,3 +1,8 @@
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
 import Coordinate from "../dungeon/Coordinate.js";
 
 describe("Basic behavior of a coordinate no invalid input", () => {
