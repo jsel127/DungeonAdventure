@@ -95,4 +95,31 @@ export default class Monster extends DungeonCharacter {
     toString() {
         return super.toString() + ` ${this.#myHealChance} ${this.#myMinHeal} ${this.#myMaxHeal}`;
     }
+
+    toJSON() {
+        return {
+            __type: Monster.name,
+            dungeon_character: super.toJSON(),
+            heal_chance: this.#myHealChance,
+            min_heal: this.#myMinHeal,
+            max_heal: this.#myMaxHeal
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type !== Monster.name) {
+            throw new TypeError("The JSON is not of monster type.");
+        }
+        return new Monster(theJSON.dungeon_character.name, theJSON.dungeon_character.hp, 
+                           theJSON.dungeon_character.dp_min, theJSON.dungeon_character.dp_max, 
+                           theJSON.dungeon_character.attack_speed, theJSON.dungeon_character.hit_chance,
+                           theJSON.heal_chance, theJSON.min_heal, theJSON.max_heal
+        );
+    }
 }
+
+// // Test
+// const gremlin = new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);
+// const s = JSON.stringify(gremlin);
+// const newGremlin = Monster.fromJSON(JSON.parse(s));
+// console.log(newGremlin.toString());

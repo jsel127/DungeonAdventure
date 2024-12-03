@@ -58,4 +58,26 @@ export default class Thief extends Hero {
         }
         return false;
     }
+
+    toJSON() {
+        return {
+            __type: Thief.name, 
+            hero: super.toJSON()
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type !== Thief.name) {
+            throw new TypeError("The JSON is not of thief type.");
+        }
+        return new Thief(theJSON.dungeon_character.name, theJSON.dungeon_character.hp, 
+                        theJSON.dungeon_character.dp_min, theJSON.dungeon_character.dp_max, 
+                        theJSON.dungeon_character.attack_speed, theJSON.dungeon_character.hit_chance,
+                        theJSON.block_chance, theJSON.inventory, theJSON.fighting_status
+        );
+    }
 }
+
+const c = new Thief("Jasmine", 10, 10, 10, 10, 10, 10);
+const s = JSON.stringify(c);
+console.log(s);

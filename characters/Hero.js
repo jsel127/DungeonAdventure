@@ -118,4 +118,13 @@ export default class Hero extends DungeonCharacter {
     toString() {
         return super.toString() + ` ${this.#myChanceToBlock}`
     }
+
+    toJSON() {
+        return {
+            dungeon_character: super.toJSON(),
+            block_chance: this.#myChanceToBlock,
+            inventory: this.#myInventory,
+            fighting_status: this.#myFightingStatus
+        }
+    }
 }
