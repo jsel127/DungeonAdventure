@@ -23,17 +23,17 @@ export default class Dungeon {
     /** Probability that a monster is a skeleton */
     static #PROB_SKELETON = 0.3;
     /** Holds the information for the rooms in the dungeon. */
-    #myRooms
+    #myRooms;
     /** The entrance for the dungeon. */
-    #myEntrance
+    #myEntrance;
     /** The exit for the dungeon. */
-    #myExit
+    #myExit;
     /** The dimension of the maze. */
-    #myDimension
+    #myDimension;
     /** 
      * Creates a Dungeon that stores the entrance, exit, dimensions, and rooms of the game.
      */
-    constructor(theDifficulty) {
+    constructor(theDifficulty, theRooms = undefined) {
         if (!Number.isInteger(theDifficulty) 
             || theDifficulty < Dungeon.DIFFICULTY.Easy 
             || theDifficulty > Dungeon.DIFFICULTY.Hard) {
@@ -41,7 +41,22 @@ export default class Dungeon {
                                  + "Select for the DIFFICULTY object.`);
         }
         this.#myDimension = theDifficulty * Dungeon.#DIFFICULTY_MULTIPLIER;
-        this.#makeDungeon();
+        if (theRooms === undefined) {
+            this.#makeDungeon();
+        } else {
+            if (!Array.isArray(theRooms)) throw new TypeError("The given rooms are not an array");
+            if (theRooms.length != this.#myDimension) throw new RangeError("The room row length is not valid");
+            for (let row = 0; row < this.#myDimension; row++) {
+                if (!Array.isArray(theRooms[0])) throw new TypeError("The rows rooms are not an array.");
+                if (theRooms[row].length != this.#myDimension) throw new RangeError("The room column length is not valid");
+                for (let col = 0; col < this.#myDimension; col++) {
+                    if (!theRooms[row][col] instanceof Room) {
+                        throw new TypeError("The element in the array is not a Room");
+                    }
+                }
+            }
+            this.#myRooms = theRooms;
+        }
     } 
 
     getEntrance() {
@@ -67,6 +82,14 @@ export default class Dungeon {
         }
         return this.#myRooms[theCoordinate.getX()][theCoordinate.getY()];
     }
+
+    // getAdjacentRooms(theCoordinate) {
+    //     const rooms = new Array(3);
+    //     rooms[1][1] = this.#myRooms.getRoom(theCoordinate);
+    //     if (theCoordinate.getX() > 0) {
+    //         rooms[0][0] = this.
+    //     }
+    // }
 
     /**
      * A string of the current state of the dungeon.
@@ -135,7 +158,7 @@ export default class Dungeon {
      * Sets the dimensions of the maze and the access points of the maze (entrance and exit).
      */
     #generateTraversableMaze(theDoors) {
-        const visited = this.createBufferedBooleanArray();
+        const visited = this.#createBufferedBooleanArray();
         const x = Math.floor(Math.random() * this.#myDimension) + 1;
         const y = Math.floor(Math.random() * this.#myDimension) + 1;
         this.#createPath(visited, theDoors, x, y);
@@ -145,7 +168,7 @@ export default class Dungeon {
      * Creates a 2D buffered boolean array that keeps track of the visited rooms. 
      * @returns a 2D buffered boolean array that will mark true if the node has been visited and false if it hasn't.
      */
-    createBufferedBooleanArray() {
+    #createBufferedBooleanArray() {
         const visitedArray = [];
         visitedArray[0] = [];
         visitedArray[this.#myDimension + 1] = [];
@@ -320,7 +343,18 @@ export default class Dungeon {
             }
         }
     }
-}
 
+    toJSON() {
+        return {
+            __type: Dungeon.name,
+            rooms: this.#myRooms,
+            entrance: this.#myEntrance,
+        }
+    }
+
+    static fromJSON(theJSON) {
+// TODO: parse rooms and make them connected again.
+    }
+}
 const d = new Dungeon(Dungeon.DIFFICULTY.Easy);
 console.log(d.toString());
