@@ -263,8 +263,10 @@ export default class Room {
         if (theJSON.__type === undefined || theJSON.__type !== Room.name) {
             throw new TypeError("The JSON is not a room type");
         }
-        return new Room(theJSON.coordinate, theJSON.north_door, 
-                        theJSON.east_door, theJSON.south_door,
-                        theJSON.west_door, theJSON.content);
+        return new Room(Coordinate.fromJSON(theJSON.coordinate), 
+                        Door.fromJSON(theJSON.north_door), 
+                        Door.fromJSON(theJSON.east_door), 
+                        Door.fromJSON(theJSON.south_door),
+                        Door.fromJSON(theJSON.west_door), theJSON.content);
     }
 }
