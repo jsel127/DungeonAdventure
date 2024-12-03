@@ -10,6 +10,7 @@
         * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties 
         * https://www.freecodecamp.org/news/singleton-design-pattern-with-javascript/
         * https://www.sqlitetutorial.net/sqlite-nodejs/query/
+        * https://www.sqlitetutorial.net/sqlite-nodejs/query/
 */
 import sqlite3 from 'sqlite3';
 export default class DatabaseReader {
@@ -44,11 +45,11 @@ export default class DatabaseReader {
             });
         });
     }
-    
+
     async getOgreData() {
         let warriorData = {};
         try {
-            warriorData = await this.#getData("SELECT * FROM Heroes WHERE name = 'Warrior'");
+            warriorData = await this.#getData("SELECT * FROM Monsters WHERE name = 'Ogre'");
         } catch (error) {
             console.error(error);
         }

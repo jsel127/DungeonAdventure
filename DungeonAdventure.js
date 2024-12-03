@@ -264,6 +264,10 @@ export default class DungeonAdventure {
         } 
         return false;
     }
+    
+    viewDungeon() {
+        console.log(this.#myDungeon.toString());
+    }
 
     getAdventurer() {
         return this.#myAdventurer;
