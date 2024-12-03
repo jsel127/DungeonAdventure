@@ -4,9 +4,9 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-import Warrior from './Warrior';
-import Priestess from './Priestess';
-import Thief from './Thief';
+import Warrior from './Warrior.js';
+import Priestess from './Priestess.js';
+import Thief from './Thief.js';
 
 /**
  * Will create a specific type of Hero based on the name it is passed (e.g. Warrior). 

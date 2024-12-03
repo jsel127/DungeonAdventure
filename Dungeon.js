@@ -1,6 +1,7 @@
 // const Room = require('./Room.js');
 import Room from './Room.js';
-class Dungeon {
+
+export default class Dungeon {
     /** Multiplier to determine the size of the room given the difficulty level */
     static DIFFICULTY_MULTIPLIER = 5;
     /** Probability that a room contains a healing potion */
@@ -205,3 +206,4 @@ class Dungeon {
 
 const test = new Dungeon(2);
 console.log(test.toString());
+
