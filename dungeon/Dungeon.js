@@ -83,10 +83,10 @@ export default class Dungeon {
         for (let row = 1; row < this.#myDimension - 1; row++) {
             for (let col = 0; col < this.#myDimension; col++) {
                 currentRoom = this.getRoom(new Coordinate(row, col));
-                str += (currentRoom.isWestDoorOpen()) ? "/" : "|";
+                str += (currentRoom.isWestDoorOpen()) ? "\\" : "|";
                 str += currentRoom.getContent();
             }
-            str += (currentRoom.isEastDoorOpen()) ? "/" : "|";
+            str += (currentRoom.isEastDoorOpen()) ? "\\" : "|";
             str += "\n ";
             for (let col = 0; col < this.#myDimension; col++) {
                 currentRoom = this.getRoom(new Coordinate(row, col));
@@ -117,13 +117,12 @@ export default class Dungeon {
         eastDoors[0] = [];
         southDoors[0] = []
         for (let buffer = 0; buffer <= this.#myDimension; buffer++) {
-            eastDoors[0][buffer] = null;
-            southDoors[0][buffer] = new Door();
-        }
-        for (let row = 1; row <= this.#myDimension; row++) {
-            //buffer
-            eastDoors[row] = [new Door()];
-            southDoors[row] = [null];
+            eastDoors[0][buffer] = null; 
+            southDoors[0][buffer] = new Door(); 
+        } 
+        for (let row = 1; row <= this.#myDimension; row++) { 
+            eastDoors[row] = [new Door()]; 
+            southDoors[row] = [null]; 
             for (let col = 1; col <= this.#myDimension; col++) {
                 eastDoors[row][col] = new Door();
                 southDoors[row][col] = new Door();
@@ -157,10 +156,10 @@ export default class Dungeon {
         for (let row = 1; row < this.#myDimension + 1; row++) {
             visitedArray[row] = [];
             visitedArray[row][0] = true;
-            visitedArray[row][this.#myDimension + 1] = true;
             for (let col = 1; col < this.#myDimension + 1; col++) {
                 visitedArray[row][col] = false;
             }
+            visitedArray[row][this.#myDimension + 1] = true;
         }
         return visitedArray;
     }
@@ -181,13 +180,13 @@ export default class Dungeon {
             theDoors.east[theX - 1][theY].open();
             this.#createPath(theVisited, theDoors, theX - 1, theY);
         } else if (theVisited[theX + 1][theY] === false) {
-            theDoors.east[theX + 1][theY].open();
+            theDoors.east[theX][theY].open();
             this.#createPath(theVisited, theDoors, theX + 1, theY);
         } else if (theVisited[theX][theY - 1] === false) {
             theDoors.south[theX][theY - 1].open();
             this.#createPath(theVisited, theDoors, theX, theY - 1);
         } else if (theVisited[theX][theY + 1] === false) {
-            theDoors.south[theX][theY + 1].open();
+            theDoors.south[theX][theY].open();
             this.#createPath(theVisited, theDoors, theX, theY + 1);
         }
     }
@@ -249,9 +248,11 @@ export default class Dungeon {
      * @return an array containing the row and col of the room the content was placed in
      */
     #placeSingleContent(theContent, theOccupiedRooms) {
+        let row;
+        let col;
         do { 
-            var row = Math.floor(Math.random() * this.#myDimension);
-            var col = Math.floor(Math.random() * this.#myDimension);
+            row = Math.floor(Math.random() * this.#myDimension);
+            col = Math.floor(Math.random() * this.#myDimension);
         } while (theOccupiedRooms.includes([row, col])); 
         this.#myRooms[row][col].setContent(theContent);
         theOccupiedRooms.push([row, col]);
