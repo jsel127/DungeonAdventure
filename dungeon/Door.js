@@ -32,4 +32,24 @@ export default class Door {
     open() {
         this.#myStatus = true;
     }
+
+    toJSON() {
+        return {
+            __type: Door.name,
+            status: this.#myStatus
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (!theJSON.__type === Door.type) {
+            throw new TypeError("The JSON is not of door type");
+        }
+        return new Door(theJSON.status);
+    }
 }
+
+const doorOpen = new Door(true);
+console.log(doorOpen.isOpen());
+const newDoor = Door.fromJSON(JSON.parse(JSON.stringify(doorOpen)));
+console.log(newDoor instanceof Door);
+console.log(newDoor.isOpen());

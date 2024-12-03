@@ -246,4 +246,25 @@ export default class Room {
         }
         return str;
     }
+
+    toJSON() {
+        return {
+            __type: Room.name,
+            coordinate: this.#myCoordinate,
+            north_door: this.#myNorthDoor,
+            east_door: this.#myEastDoor,
+            south_door: this.#mySouthDoor,
+            west_door: this.#myWestDoor,
+            content: this.#myContent
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || theJSON.__type !== Room.name) {
+            throw new TypeError("The JSON is not a room type");
+        }
+        return new Room(theJSON.coordinate, theJSON.north_door, 
+                        theJSON.east_door, theJSON.south_door,
+                        theJSON.west_door, theJSON.content);
+    }
 }

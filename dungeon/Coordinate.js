@@ -29,16 +29,24 @@ export default class Coordinate {
             throw new RangeError("Negative coordinates are not supported");
         }
         this.#myY = theY;
+    }    
+    
+    toString() {
+        return `${this.#myX} ${this.#myY}`;
     }
 
     toJSON() {
         return {
-          x: this.#myX,
-          y: this.#myY
+            __type: Coordinate.name,
+            x: this.#myX,
+            y: this.#myY
         };
     }
 
-    toString() {
-        return `${this.#myX} ${this.#myY}`;
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || theJSON !== Coordinate.name) {
+            throw new TypeError("The JSON is not of coordinate type.");
+        }
+        return new Coordinate(theJSON.x, theJSON.y);
     }
 }

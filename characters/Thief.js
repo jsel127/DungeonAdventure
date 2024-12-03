@@ -73,8 +73,7 @@ export default class Thief extends Hero {
         return new Thief(theJSON.dungeon_character.name, theJSON.dungeon_character.hp, 
                         theJSON.dungeon_character.dp_min, theJSON.dungeon_character.dp_max, 
                         theJSON.dungeon_character.attack_speed, theJSON.dungeon_character.hit_chance,
-                        theJSON.block_chance, theJSON.inventory, theJSON.fighting_status
-        );
+                        theJSON.block_chance, theJSON.inventory, theJSON.fighting_status);
     }
 }
 
