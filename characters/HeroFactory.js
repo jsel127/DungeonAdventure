@@ -4,7 +4,7 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-import Warrior from './Warrior.js';
+import Warrior from './Warrior.js'; 
 import Priestess from './Priestess.js';
 import Thief from './Thief.js';
 

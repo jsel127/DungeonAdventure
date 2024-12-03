@@ -13,7 +13,7 @@ import Item from './Item.js';
  */
 export default class VisionPotion extends Item {
 
-    static NAME = 'Vision Potion';
+    static #NAME = 'Vision Potion';
 
     /**
      * Constructs a new vision potion item. 

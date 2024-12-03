@@ -147,4 +147,11 @@ export default class Inventory {
         return this.#myInventorySlots[theIndex];
     }
 
+    hasAllPillars() {
+        return this.hasItem(new Pillar(Pillar.PillarType.ABSTRACTION))
+                && this.hasItem(new Pillar(Pillar.PillarType.ENCAPSULATION))
+                && this.hasItem(new Pillar(Pillar.PillarType.POLYMORPHISM))
+                && this.hasItem(new Pillar(Pillar.PillarType.INHERITANCE))
+    }
+
 }

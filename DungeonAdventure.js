@@ -1,206 +1,219 @@
-import Room from './Room.js';
-class Dungeon {
-    /** Multiplier to determine the size of the room given the difficulty level */
-    static DIFFICULTY_MULTIPLIER = 5;
-    /** Probability that a room contains a healing potion */
-    static PROB_HEALING_POTION = 0.1;
-    /** Probability that a room contains a vision potion */
-    static PROB_VISION_POTION = 0.1;
-    /** Probability that a room contains a monster */
-    static PROB_MONSTER = 0.1;
-    /** Probability that a monster is an ogre */
-    static PROB_OGRE = 0.4;
-    /** Probability that a monster is a gremlin */
-    static PROB_GREMLIN = 0.3;
-    /** Probability that a monster is a skeleton */
-    static PROB_SKELETON = 0.3;
-    /** Holds the information for the rooms in the dungeon. */
-    #myRooms
-    /** The entrance for the dungeon. */
-    #myEntrance
-    /** The exit for the dungeon. */
-    #myExit
-    /** The dimension of the maze. */
-    #myDimension
-    constructor(theDifficulty) {
-        this.#myDimension = theDifficulty * Dungeon.DIFFICULTY_MULTIPLIER;
-        this.makeDungeon();
+import Adventurer from "./Adventurer.js";
+import DungeonCharacter from "./characters/DungeonCharacter.js";
+import HeroFactory from "./characters/HeroFactory.js";
+import Dungeon from "./dungeon/Dungeon.js";
+export default class DungeonAdventure {
+    static #HARDEST_DIFFICULTY = 3;
+    #myDungeon
+    #myAdventurer
+    #myCurrentRoom
+    #myDifficulty
+    #myCurrentOpponent
+    constructor() {
     }
 
-    makeDungeon() {
-        this.createRooms();
-        // this.generateTraversableMaze();
-        this.fillRooms();
+    getGameDescription() {
+        return "Welcome to the Dungeon Adventure Game. There are three major heroes in the worlds of Dungeon Adventure, the Warrior, the Priestess, and the Thief. Your goal is to find the missing pillars of OOP which are currently somewhere in the dungeon. Once you find all pillars find the exit to save the world of OOP."
     }
 
-    /** 
-     * Sets the dimensions of the maze and the access points of the maze (entrance and exit).
-     */
-    generateTraversableMaze() {
+    getHeroes() {
+        return [
+            {
+                name: "Warrior",
+                hp: 125,
+                dpmin: 35,
+                dpmax: 60,
+                attack_speed: 4,
+                hit_chance: 80,
+                block_chance: 20
+            },
+            {
+                name: "Priestess",
+                hp: 75,
+                dpmin: 25,
+                dpmax: 45,
+                attack_speed: 5,
+                hit_chance: 70,
+                block_chance: 30
+            },
+            {
+                name: "Thief",
+                hp: 75,
+                dpmin: 20,
+                dpmax: 40,
+                attack_speed: 6,
+                hit_chance: 80,
+                block_chance: 40
+            }
+        ];
+    }
 
+    setAdventurer(theName, theHeroType) {
+        if (typeof theName !== "string") {
+            throw new TypeError("Invalid name provided");
+        }
+        this.#myAdventurer = new Adventurer(HeroFactory.createHero(theHeroType));
+        console.log('Hero created', this.#myAdventurer);
+    }
+
+    setDifficulty(theDifficulty) {
+        if (!Number.isInteger(theDifficulty)) {
+            throw new TypeError("The difficulty must be an integer");
+        }
+        if (theDifficulty < 0 || DungeonAdventure.#HARDEST_DIFFICULTY > 3) {
+            throw new RangeError("The difficulty was out of range.");
+        }
+        this.#myDifficulty = theDifficulty;
+    }
+
+    startGame() {
+        this.#createDungeon(this.#myDifficulty);
+    }
+
+    #createDungeon() {
+        this.#myDungeon = new Dungeon(this.#myDifficulty);
+        this.#myCurrentRoom = this.#myDungeon.getEntrance();
+    }
+
+    getValidMoves() {
+        return {
+            north: this.#myCurrentRoom.isNorthDoorOpen(),
+            east: this.#myCurrentRoom.isEastDoorOpen(),
+            south: this.#myCurrentRoom.isSouthDoorOpen(),
+            west: this.#myCurrentRoom.isWestDoorOpen()
+        }
+    }
+
+    moveNorth() {
+        if (this.#myCurrentRoom.isNorthDoorOpen()) {
+            const location = this.#myCurrentRoom.getCoordinate();
+            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() - 1);
+            this.#processMove();
+        }
+    }
+
+    moveEast() {
+        if (this.#myCurrentRoom.isEastDoorOpen()) {
+            const location = this.#myCurrentRoom.getCoordinate();
+            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() + 1, location.getY());
+            this.#processMove();
+        }
+    }
+
+    moveSouth() {
+        if (this.#myCurrentRoom.isSouthDoorOpen()) {
+            const location = this.#myCurrentRoom.getCoordinate();
+            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() + 1);
+            this.#processMove();
+        }
+    }
+
+    moveWest() {
+        if (this.#myCurrentRoom.isWestDoorOpen()) {
+            const location = this.#myCurrentRoom.getCoordinate();
+            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() - 1, location.getY());
+            this.#processMove();
+        }
+    }
+
+    #processMove() {
+        this.#processContent();
     }
 
     /**
-     * Creates the rooms of the dungeon (excluding the entrance and exit)
+     * This method will check what is in the room and call the appropriate methods.
      */
-    createRooms() {
-        // Rooms structure
-        // door (N, S, E, W), entrance exit pillar, has Potion
-        this.#myRooms = [];
-        for (let row = 0; row < this.#myDimension; row++) {
-            this.#myRooms[row] = [];
-            for (let col = 0; col < this.#myDimension; col++) {
-                this.#myRooms[row][col] = new Room();
-            }
+    #processContent() {
+        this.#pickUpItem();
+        this.#processMonster();
+    }
+
+    #pickUpItem() {
+        // NEED TO ADJUST BASED ON HOW ITEMS classes are adjusted
+        const inventory = this.#myAdventurer.getInventory();
+        const item = this.#myCurrentRoom.collectItem();
+        if (item) {
+            inventory.add(item);
         }
+    }
+
+    #processMonster() {
+        const monster = this.#myCurrentRoom.spawnMonster();
+        if (monster) {
+            this.#setMonsterFight(monster);
+        }
+    }
+
+    attackOpponent() { 
+        // if the attack speed of the adventurer is slower the monster can attack first otherwise it is the opposite
+        // after each attack the status of the player must be checked if it has died a gameover needs to run.
+        if (this.#myAdventurer.attack(this.#myCurrentOpponent)) {
+            return "Successful Attack";
+        } else {
+            return "Failed to Attack";
+        };
+    }
+
+    specialAttackOpponent() {
+        const hero = this.#myAdventurer.getHero();
+        const heroFaster = hero.getAttackSpeed() - this.#myCurrentOpponent.getAttackSpeed();
+        if (heroFaster) {
+            hero.specialAttack(this.#myCurrentOpponent);
+            if (this.#isDead(this.#myCurrentOpponent())) {
+// MONSTER HAS DIED
+            } else {
+                this.#myCurrentOpponent.attack(hero);
+// CHECK HERO ALIVE
+            }
+        } else {
+// OPPOSITE OF ABOVE (LIKELY MODULARIZE)
+        }
+    }
+
+    blockOpponent() {   
+        const blockResult = this.#myAdventurer.block();
+        this.#myCurrentOpponent.attack(this.#myAdventurer.getHero(), blockResult);
+        if (blockResult) {
+            return "Successful Block";
+        } else {
+            if (this.#isDead(this.#myAdventurer.getHero())) {
+                return "Failed to Block, You have Died.";
+            }
+            return "Failed to Block";
+        };    
+    }
+
+    #isDead(theDungeonCharacter) {
+        if (!theDungeonCharacter instanceof DungeonCharacter) {
+            throw new TypeError("Invalid argument. It must be a DungeonCharacter.");
+        }
+        return theDungeonCharacter.isDead();
     }
 
     /**
-     * Key:
-     * 
-     *     Items
-     *     # - Healing Potion (# is leet H)
-     *     / - Vision Potion (/ is leet V)
-     *     A, E, I, P - Pillars
-     * 
-     *     Monsters
-     *     o - ogre
-     *     g - gremlin
-     *     s - skeleton
-     * 
-     *     Other
-     *     - - entrance
-     *     + - exit
-     *     x - pit (if included)
-     *     * - empty
+     * Fights the given monster. The method will return true if the hero won and false if the hero died. 
+     * @param {*} theMonster 
      */
-    fillRooms() {
-        // TODO: fill rooms with items based on their corresponding quantities (ratio based on 
-        // number of rooms) if a rooms already contains an item it should put it somewhere else
-        // where a pillar is placed a monster should be placed in one of the adjacent rooms
-
-        let occupiedRooms = [];
-        let roomLocation;
-
-        // Place entrance, exit, pillars; surround exit and pillars with monsters
-        roomLocation = this.#placeSingleContent('-', occupiedRooms);
-        this.#myEntrance = this.#myRooms[roomLocation[0]][roomLocation[1]];
-        roomLocation = this.#placeSingleContent('+', occupiedRooms);
-        this.#myExit = this.#myRooms[roomLocation[0]][roomLocation[1]];
-        this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
-        roomLocation = this.#placeSingleContent('A', occupiedRooms);
-        this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
-        roomLocation = this.#placeSingleContent('E', occupiedRooms);
-        this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
-        roomLocation = this.#placeSingleContent('I', occupiedRooms);
-        this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
-        roomLocation = this.#placeSingleContent('P', occupiedRooms);
-        this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
-
-        // Place potions and monsters throughout maze
-        for (let row = 0; row < this.#myDimension; row++) {
-            for (let col = 0; col < this.#myDimension; col++) {
-                if (this.#myRooms[row][col].isEmpty()) {
-                    let rand = Math.random();
-                    if (rand < Dungeon.PROB_HEALING_POTION) {
-                        this.#myRooms[row][col].setContent('#');
-                    }
-                    else if (rand < Dungeon.PROB_VISION_POTION + Dungeon.PROB_HEALING_POTION) {
-                        this.#myRooms[row][col].setContent('/');
-                    }
-                    else if (rand < Dungeon.PROB_MONSTER + Dungeon.PROB_VISION_POTION + Dungeon.PROB_HEALING_POTION) {
-                        this.#placeMonster(this.#myRooms[row][col]);
-                    }
-                }
-            }
-        }
-
+    #setMonsterFight(theMonster) {
+        this.#myAdventurer.setFightingStatus(true);
+        this.#myCurrentOpponent = monster;
     }
 
-    /**
-     * Finds a random, unoccupied room and places the given content there. 
-     * 
-     * @param {*} theContent content (item, monster, etc) to be placed in a room
-     * @param {*} theOccupiedRooms array of coordinates of occupied rooms
-     * @return an array containing the row and col of the room the content was placed in
-     */
-    #placeSingleContent(theContent, theOccupiedRooms) {
-        do { 
-            var row = Math.floor(Math.random() * this.#myDimension);
-            var col = Math.floor(Math.random() * this.#myDimension);
-        } while (theOccupiedRooms.includes([row, col])); 
-        this.#myRooms[row][col].setContent(theContent);
-        theOccupiedRooms.push([row, col]);
-        return [row, col];
+    #hasWonGame() {
+        if (this.#myCurrentRoom.isExit()) {
+            const inventory = this.#myAdventurer.getInventory();
+            if (inventory.hasAllPillars()) {
+                return true;
+            }
+        } 
+        return false;
     }
 
-    /**
-     * Given a room, places a monster in every adjacent room that connects to it through a door. 
-     * Note that if an adjavent room already has a pillar, entrance, or exit, a monster will not be placed. 
-     * 
-     * @param {*} theRow row # of the room
-     * @param {*} theCol col # of the room
-     */
-    #surroundWithMonsters(theRow, theCol) {
-        let room = this.#myRooms[theRow][theCol];
-        if (theRow - 1 >= 0 && room.hasDoor('N')) {
-            //console.log('has north');
-            let northRoom = this.#myRooms[theRow - 1][theCol];
-            if (northRoom.isEmpty()) {
-                this.#placeMonster(northRoom);
-            }
-        }
-        if (theRow + 1 < this.#myDimension && room.hasDoor('S')) {
-            let southRoom = this.#myRooms[theRow + 1][theCol];
-            if (southRoom.isEmpty()) {
-                this.#placeMonster(southRoom);
-            }
-        }
-        if (theCol - 1 >= 0 && room.hasDoor('W')) {
-            let westRoom = this.#myRooms[theRow][theCol - 1];
-            if (westRoom.isEmpty()) {
-                this.#placeMonster(westRoom);
-            }
-        }
-        if (theCol + 1 < this.#myDimension && room.hasDoor('E')) {
-            let eastRoom = this.#myRooms[theRow][theCol + 1];
-            if (eastRoom.isEmpty()) {
-                this.#placeMonster(eastRoom);
-            }
-        }
+    saveGame() {
+        //TODO: implement saving game
     }
 
-    #placeMonster(theRoom) {
-        let rand = Math.random();
-
-        if (rand < Dungeon.PROB_OGRE) {
-            theRoom.setContent('o');
-        }
-        else if (rand < Dungeon.PROB_GREMLIN + Dungeon.PROB_OGRE) {
-            theRoom.setContent('g');
-        }
-        else { // skeleton
-            theRoom.setContent('s');
-        }
-
-    }
-
-    /**
-     * A string of the current state of the dungeon.
-     * @returns a string of the contents of the rooms in the dungeon.
-     */
-    toString() {
-        // TODO: make the string also print the state of the doors (open/closed) and the walls.
-        let str = '';
-        for (let row = 0; row < this.#myDimension; row++) {
-            for (let col = 0; col < this.#myDimension; col++) {
-                str += this.#myRooms[row][col].toString();
-            }
-            str += '\n';
-        }
-        return str;
+    loadGame() {
+        //TODO: implement loading game
     }
 }
-
-const test = new Dungeon(2);
-console.log(test.toString());

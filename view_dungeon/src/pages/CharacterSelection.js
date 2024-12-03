@@ -44,8 +44,8 @@ const CharacterSelection = () => {
             >
               <h3>{character.name}</h3>
               <p>HP: {character.hp}</p>
-              <p>Damage: {character.dpMin} - {character.dpMax}</p>
-              <p>Block Chance: {character.blockChance}%</p>
+              <p>Damage: {character.dpmin} - {character.dpmax}</p>
+              <p>Block Chance: {character.block_chance}%</p>
             </div>
           ))}
         </div>
@@ -55,14 +55,27 @@ const CharacterSelection = () => {
         <div className="selected-character" style={{ marginTop: '20px', textAlign: 'center' }}>
           <h2>You selected: {selectedCharacter.name}</h2>
           <p>HP: {selectedCharacter.hp}</p>
-          <p>Damage: {selectedCharacter.dpMin} - {selectedCharacter.dpMax}</p>
-          <p>Block Chance: {selectedCharacter.blockChance}%</p>
+          <p>Damage: {selectedCharacter.dpmin} - {selectedCharacter.dpmax}</p>
+          <p>Block Chance: {selectedCharacter.block_chance}%</p>
         </div>
       )}
 
       {selectedCharacter && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <button onClick={() => console.log('Start game with', selectedCharacter)}>
+          <button onClick={() => {
+            console.log('Start game with', selectedCharacter.name)
+            fetch('/api/selected-character', {
+              method: 'POST', 
+              headers: {
+                'content-type': 'application/json'
+              },
+              body: JSON.stringify({
+                character: selectedCharacter
+              })
+            }).then(res => {
+              return res.json()
+            }).catch(error => console.log('ERROR: select character post request'))
+          }}>
             Start Game
           </button>
         </div>
