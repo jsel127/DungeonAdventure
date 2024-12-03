@@ -3,7 +3,7 @@ import DungeonAdventure from "../DungeonAdventure.js";
 
 const app = express();
 
-app.get("/select-character", (req, res) => { 
+app.get("/characters", (req, res) => { 
     DungeonAdventure.getAdventurer()
     res.json({"characters": ["Warrior", "Priestess", "Thief"]})   
 })  

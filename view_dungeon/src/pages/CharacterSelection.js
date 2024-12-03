@@ -5,7 +5,7 @@ const CharacterSelection = () => {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5001/api/characters')
+    fetch('/api/characters')
       .then((response) => response.json())
       .then((data) => {
         console.log('Fetched characters:', data); 
