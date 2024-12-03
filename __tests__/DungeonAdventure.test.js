@@ -21,4 +21,5 @@ describe("Tests main functionality", () => {
         const currentRoom = gameWarriorEasy.getCurrentRoom();
         expect(currentRoom.isEntrance()).toBeTruthy();
     });
-})
+});
+

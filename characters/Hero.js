@@ -5,13 +5,13 @@
  */
 
 import DungeonCharacter from "./DungeonCharacter.js";
-import Inventory from "../Inventory.js";
+import Inventory from "../items/Inventory.js";
 /**
  * Class containing common methods and data for all hero character. 
  * @author Jasmine Sellers
  * @version 1.0
  */
-export default class Hero extends DungeonCharacter{
+export default class Hero extends DungeonCharacter {
     static FIGHTING_STATUS = Object.freeze({
         fighting: true,
         notFighting: false
@@ -63,7 +63,7 @@ export default class Hero extends DungeonCharacter{
      */
     block() {
         if (this.#myFightingStatus !== Hero.FIGHTING_STATUS.fighting) {
-            throw new EvalError("The hero is not currently fighting any monster. Attacks are not allowed.");
+            throw new EvalError("The hero is not currently fighting any monster. Blocks are not allowed.");
         }
         if (Math.random() < this.#myChanceToBlock/100) {
             return true;

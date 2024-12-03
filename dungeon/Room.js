@@ -5,9 +5,9 @@
  */
 
 import MonsterFactory from "../characters/MonsterFactory.js";
-import HealingPotion from "../HealingPotion.js";
-import VisionPotion from '../VisionPotion.js';
-import Pillar from "../Pillar.js";
+import HealingPotion from "../items/HealingPotion.js";
+import VisionPotion from '../items/VisionPotion.js';
+import Pillar from "../items/Pillar.js";
 import Coordinate from "./Coordinate.js";
 import Door from "./Door.js";
 export default class Room {
@@ -27,12 +27,31 @@ export default class Room {
         pit: 'x',
         empty: ' '
     });
+    /** The coordinate of the room in the dungeon. */
     #myCoordinate;
+    /** The north door of the room. */
     #myNorthDoor;
+    /** The east door of the room. */
     #myEastDoor;
+    /** The south door of the room. */
     #mySouthDoor;
+    /** The west door of the room. */
     #myWestDoor;
+    /** 
+     * The content of the room which can be any of the 
+     * things specified in the CONTENT static field. 
+     */
     #myContent;
+    /**
+     * Creates a room which contains the doors to other rooms, content, and a 
+     * coordinate to track its location in the dungeon.
+     * @param {*} theCoordinate the coordinate of the room in the dungeon.
+     * @param {*} theNorthDoor the north door shared with the room north to it (if present).
+     * @param {*} theEastDoor the east door shared with the room east to it (if present).
+     * @param {*} theSouthDoor the south door shared with the room south to it (if present).
+     * @param {*} theWestDoor the west door shared with the room west to it (if present).
+     * @param {*} theContent 
+     */
     constructor(theCoordinate = new Coordinate(0,0), theNorthDoor = new Door(), theEastDoor = new Door(), 
                 theSouthDoor = new Door(), theWestDoor = new Door(), theContent = Room.CONTENT.empty) {
         if (theCoordinate === undefined || !theCoordinate instanceof Coordinate) {
@@ -58,34 +77,65 @@ export default class Room {
         this.#myContent = theContent;
     }
 
+    /**
+     * Checks if the north door is open.
+     * @returns true if the north door is open.
+     */
     isNorthDoorOpen() {
         return this.#myNorthDoor.isOpen();
     }
 
+    /**
+     * Checks if the east door is open.
+     * @returns true if the east door is open.
+     */
     isEastDoorOpen() {
         return this.#myEastDoor.isOpen();
     }
-
+    /**
+     * Checks if the south door is open.
+     * @returns true if the south door is open.
+     */
     isSouthDoorOpen() {
         return this.#mySouthDoor.isOpen();
     }
-
+    /**
+     * Checks if the west door is open.
+     * @returns true if the west door is open.
+     */
     isWestDoorOpen() {
         return this.#myWestDoor.isOpen();
     }
 
+    /**
+     * Checks if the room is empty.
+     * @returns true if the room is empty.
+     */
     isEmpty() {
         return this.#myContent === Room.CONTENT.empty;
     }
 
+    /**
+     * Checks if the room is an exit.
+     * @returns true if the room is an exit.
+     */
     isExit() {
         return this.#myContent === Room.CONTENT.exit;
     }
 
+    /**
+     * Checks if the room is a pit.
+     * @returns true if the room is a pit.
+     */
     isPit() {
         return this.#myContent === Room.CONTENT.pit;
     }
 
+    /**
+     * Creates the corresponding item if present and clears the contents
+     * of the room.
+     * @returns the item in the room if present.
+     */
     collectItem() {
         if (this.#myContent === Room.CONTENT.abstractionPillar ) {
             this.#clearContent();
@@ -109,6 +159,11 @@ export default class Room {
         return false;
     }
 
+    /**
+     * Creates the corresponding monster if present and clears the contents
+     * of the room.
+     * @returns the monster in the room if present.
+     */
     spawnMonster() {
         const content = this.#myContent;
         if (content === 'o') {
@@ -124,24 +179,48 @@ export default class Room {
         return false;
     }
 
+    /**
+     * Gets the contents of the room.
+     * @returns the contents of the room as a character.
+     */
     getContent() {
         return this.#myContent;
     }
 
+    /**
+     * Gets the coordinates of the room in the dungeon.
+     * @returns a coordinate object of the room in the dungeon.
+     */
     getCoordinate() {
         return this.#myCoordinate;
     }
     
+    /**
+     * Sets the content to the given content.
+     * @param {*} theContent the content to set the room's content to.
+     */
     setContent(theContent) {
+        if (!Object.values(Room.CONTENT).includes(theContent)) {
+            throw new TypeError("This is not a valid type of content. " + 
+                                "The valid content is in the static field CONTENT")
+        }
         if (this.isEmpty()) {
             this.#myContent = theContent;
         }
     }
 
+    /**
+     * Clears the contents of the room.
+     */
     #clearContent() { 
-        this.#myContent = ' ';
+        this.#myContent = Room.CONTENT.empty;
     }
 
+    /**
+     * Returns a string representation of the room. 
+     * This includes the status of the doors and the content of the room.
+     * @returns a string representation of the room.
+     */
     toString() {
         let str = "";
         if (this.#myNorthDoor.isOpen()) {

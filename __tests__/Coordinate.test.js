@@ -24,6 +24,12 @@ describe("Basic behavior of a coordinate no invalid input", () => {
 });
 
 describe("Invalid input constructor and setter methods", () => {
+    test("String x", () => {
+        expect(() => new Coordinate("invalid", 1)).toThrow();
+    });
+    test("String y", () => {
+        expect(() => new Coordinate(1, "invalid")).toThrow();
+    });
     test("Negative x", () => {
         expect(() => new Coordinate(-1, 1)).toThrow(RangeError);
     });

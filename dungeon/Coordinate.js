@@ -2,8 +2,9 @@ export default class Coordinate {
     #myX
     #myY
     constructor(theX, theY) {
-        if (theX < 0 || theY < 0) {
-            throw new RangeError("Negative coordinates are not supported");
+        if (!Number.isInteger(theX) || !Number.isInteger(theY) 
+            || theX < 0 || theY < 0) {
+            throw new RangeError("Non-integer and negative coordinates are not supported");
         }
         this.#myX = theX;
         this.#myY = theY;

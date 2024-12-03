@@ -53,10 +53,15 @@ export default class Monster extends DungeonCharacter {
      * Heals the monster by a random HP within its min and max heal range. 
      */
     heal() {
-        const rangeAddHP = this.#myMaxHeal - this.#myMinHeal;
-        const addHP = Math.round(Math.random() * rangeAddHP);
-        const healedHP = this.getHP() + addHP + this.#myMinHeal
-        this.setHP(healedHP);
+        if (this.isDead()) {
+            throw new EvalError("The monster has died it can no longer be revived.");
+        }
+        if (Math.round(Math.random() * 100) < this.#myHealChance) {
+            const rangeAddHP = this.#myMaxHeal - this.#myMinHeal;
+            const addHP = Math.round(Math.random() * rangeAddHP);
+            const healedHP = this.getHP() + addHP + this.#myMinHeal
+            this.setHP(healedHP);
+        }
     }
 
     /**

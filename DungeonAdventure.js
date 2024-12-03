@@ -8,7 +8,14 @@ export default class DungeonAdventure {
     #myCurrentRoom
     #myDifficulty
     #myCurrentOpponent
-    constructor() {
+    
+    toJSON() {
+        return {
+            dungeon: this.#myDungeon,
+            adventurer: this.#myAdventurer,
+            room: this.#myCurrentRoom,
+            opponent: this.#myCurrentOpponent
+        }
     }
 
     getGameDescription() {
@@ -47,13 +54,6 @@ export default class DungeonAdventure {
         ];
     }
 
-    setAdventurer(theName, theHeroType) {
-        if (typeof theName !== "string") {
-            throw new TypeError("Invalid name provided");
-        }
-        this.#myAdventurer = HeroFactory.createHero(theHeroType, theName);
-    }
-
     setDifficulty(theDifficulty) {
         if (!Number.isInteger(theDifficulty)) {
             throw new TypeError("The difficulty must be an integer");
@@ -62,6 +62,13 @@ export default class DungeonAdventure {
             throw new RangeError("The difficulty was out of range.");
         }
         this.#myDifficulty = theDifficulty;
+    }
+
+    setAdventurer(theHeroType, theName) {
+        if (typeof theName !== "string") {
+            throw new TypeError("Invalid name provided");
+        }
+        this.#myAdventurer = HeroFactory.createHero(theHeroType, theName);
     }
 
     startGame() {
@@ -81,7 +88,7 @@ export default class DungeonAdventure {
     moveNorth() {
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() - 1);
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() - 1));
             return this.#processMove();
         }
     }
@@ -89,7 +96,7 @@ export default class DungeonAdventure {
     moveEast() {
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() + 1, location.getY());
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() + 1, location.getY()));
             return this.#processMove();
         }
     }
@@ -97,7 +104,7 @@ export default class DungeonAdventure {
     moveSouth() {
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() + 1);
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() + 1));
             return this.#processMove();
         }
     }
@@ -105,7 +112,7 @@ export default class DungeonAdventure {
     moveWest() {
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() - 1, location.getY());
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() - 1, location.getY()));
             return this.#processMove();
         }
     }
@@ -256,5 +263,13 @@ export default class DungeonAdventure {
             }
         } 
         return false;
+    }
+
+    getAdventurer() {
+        return this.#myAdventurer;
+    }
+
+    getDungeon() {
+        return this.#myDungeon;
     }
 }
