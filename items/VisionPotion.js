@@ -21,9 +21,4 @@ export default class VisionPotion extends Item {
     constructor() {
         super(VisionPotion.NAME);
     }
-
-    see(/* theDungeon */) {
-
-    }
-
 }

@@ -35,5 +35,4 @@ export default class HealingPotion extends Item {
         let hpHealed = MIN_HEAL + Math.round(Math.random() * (MAX_HEAL - MIN_HEAL));
         theHero.setHP(theHero.getHP() + hpHealed);
     }
-
 }

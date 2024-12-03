@@ -83,12 +83,6 @@ export default class Inventory {
             throw new Error('Pillars do not currently have an ability');
         }
         this.#myInventorySlots[this.getIndex(theItem)].decrementQuantity();
-        if (theItem instanceof HealingPotion) {
-            theItem.heal();
-        }
-        if (theItem instanceof VisionPotion) {
-            theItem.see();
-        }
     }
 
     /**
