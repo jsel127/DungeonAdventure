@@ -5,6 +5,9 @@ const app = express()
 const model = new DungeonAdventure()
 
 app.use(express.json())
+app.get("/", (req, res) => {
+    res.send("Welcome to the Dungeon Adventure server!");
+});
 
 app.get("/api/characters", (req, res) => { 
     console.log("request to server /api/characters")
