@@ -33,8 +33,8 @@ describe("Test basic setup of the Dungeon", () => {
         let encapsulationPillarPlaced = false;
         let inheritancePillarPlaced = false;
         let polymorphismPillarPlaced = false;
-        for (let row = 0; row < dungeonEasy.getDimensions(); row++) {
-            for (let col = 0; col < dungeonEasy.getDimensions(); col++) {
+        for (let row = Dungeon.BUFFER; row < dungeonEasy.getDimensions() + Dungeon.BUFFER; row++) {
+            for (let col = Dungeon.BUFFER; col < dungeonEasy.getDimensions() + Dungeon.BUFFER; col++) {
                 currentRoom = dungeonEasy.getRoom(new Coordinate(row, col));
                 if (currentRoom.getContent() === Room.CONTENT.abstractionPillar) {
                     abstractionPillarPlaced = true;
@@ -58,15 +58,15 @@ describe("Test basic setup of the Dungeon", () => {
         let roomClosedEast;
         let roomClosedSouth;
         let roomClosedWest;
-        const edge = dungeonEasy.getDimensions() - 1;
-        for (let i = 0; i <= edge; i++) {
-            roomClosedNorth = dungeonEasy.getRoom(new Coordinate(0, i));
+        const edge = dungeonEasy.getDimensions();
+        for (let i = Dungeon.BUFFER; i < dungeonEasy.getDimensions() + Dungeon.BUFFER; i++) {
+            roomClosedNorth = dungeonEasy.getRoom(new Coordinate(Dungeon.BUFFER, i));
             expect(roomClosedNorth.isNorthDoorOpen()).toBeFalsy();
             roomClosedEast = dungeonEasy.getRoom(new Coordinate(i, edge));
             expect(roomClosedEast.isEastDoorOpen()).toBeFalsy();
             roomClosedSouth = dungeonEasy.getRoom(new Coordinate(edge, i));
             expect(roomClosedSouth.isSouthDoorOpen()).toBeFalsy();
-            roomClosedWest = dungeonEasy.getRoom(new Coordinate(i, 0));
+            roomClosedWest = dungeonEasy.getRoom(new Coordinate(i, Dungeon.BUFFER));
             expect(roomClosedWest.isWestDoorOpen()).toBeFalsy();
         }
     });
