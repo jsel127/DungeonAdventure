@@ -8,7 +8,7 @@ import Coordinate from "../dungeon/Coordinate.js";
 import Dungeon from "../dungeon/Dungeon.js";
 import Room from "../dungeon/Room.js";
 
-describe("Test basic setup of the Dugeon", () => {
+describe("Test basic setup of the Dungeon", () => {
     const dungeonEasy = new Dungeon(Dungeon.DIFFICULTY.Easy);
     const entranceRoom = dungeonEasy.getEntrance();
     test("Entrance is set up properly", () => {

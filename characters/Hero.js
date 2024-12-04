@@ -104,7 +104,7 @@ export default class Hero extends DungeonCharacter {
      * @returns true if the hero is fighting and false otherwise.
      */
     getFightingStatus() {
-        return this.#myFightingStatus
+        return this.#myFightingStatus;
     }
 
     getInventory() {

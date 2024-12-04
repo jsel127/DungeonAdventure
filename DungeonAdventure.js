@@ -1,19 +1,27 @@
 import DungeonCharacter from "./characters/DungeonCharacter.js";
 import HeroFactory from "./characters/HeroFactory.js";
 import Dungeon from "./dungeon/Dungeon.js";
+import HealingPotion from "./items/HealingPotion.js";
+import VisionPotion from "./items/VisionPotion.js";
 export default class DungeonAdventure {
-    static #HARDEST_DIFFICULTY = 3;
+    static #PIT_MAX_DAMAGE = 20;
     #myDungeon
     #myAdventurer
     #myCurrentRoom
     #myDifficulty
     #myCurrentOpponent
     
+    constructor() {
+        
+    }
+    
     toJSON() {
         return {
+            __type: DungeonAdventure.name,
             dungeon: this.#myDungeon,
             adventurer: this.#myAdventurer,
             room: this.#myCurrentRoom,
+            difficulty: this.#myDifficulty,
             opponent: this.#myCurrentOpponent
         }
     }
@@ -58,7 +66,7 @@ export default class DungeonAdventure {
         if (!Number.isInteger(theDifficulty)) {
             throw new TypeError("The difficulty must be an integer");
         }
-        if (theDifficulty < 0 || DungeonAdventure.#HARDEST_DIFFICULTY > 3) {
+        if (theDifficulty < 0 || Dungeon.DIFFICULTY.Hard > theDifficulty) {
             throw new RangeError("The difficulty was out of range.");
         }
         this.#myDifficulty = theDifficulty;
@@ -179,6 +187,24 @@ export default class DungeonAdventure {
         return this.#myCurrentOpponent.isDead();
     }
 
+    useHealingPotion() {
+        const inventory = this.#myAdventurer.getInventory();
+        const healingPotion = new HealingPotion();
+        if (inventory.hasItem(healingPotion)) {
+            inventory.useItem(healingPotion);
+            healingPotion.heal(this.#myAdventurer);
+        }
+    }
+
+    useVisionPotion() {
+        const inventory = this.#myAdventurer.getInventory();
+        const visionPotion = new VisionPotion();
+        if (inventory.hasItem(visionPotion)) {
+            inventory.useItem(visionPotion);
+            return this.#myDungeon.getAdjacentRooms();
+        }
+    }
+
     saveGame() {
         //TODO: implement saving game
         //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify (convert data to a string)
@@ -201,6 +227,19 @@ export default class DungeonAdventure {
     #processContent() {
         this.#pickUpItem();
         this.#processMonster();
+        this.#processPit();
+    }
+
+    #processPit() {
+        if (this.#myCurrentRoom.isPit()) {
+            const damage = Math.round(Math.random() * DungeonAdventure.#PIT_MAX_DAMAGE);
+            const newHP = this.#myAdventurer.getHP() - damage;
+            if (newHP < 1) {
+                return "Player has died";
+            } else {
+                this.#myAdventurer.setHP(newHP);
+            }
+        }
     }
 
     #pickUpItem() {
