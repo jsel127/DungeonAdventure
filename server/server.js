@@ -19,7 +19,7 @@ app.post("/api/selected-character", (req, res) => {
 })
 
 app.get("/api/difficulty", (req, res) => {
-    console.log("Server: request for /api/difficulty")
+    console.log("Server: request for /api/difficulty") 
     res.json(model.getDifficulies())
 })
 
