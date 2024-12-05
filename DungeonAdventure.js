@@ -29,7 +29,7 @@ export default class DungeonAdventure {
         return "Welcome to the Dungeon Adventure Game. There are three major heroes in the worlds of Dungeon Adventure, the Warrior, the Priestess, and the Thief. Your goal is to find the missing pillars of OOP which are currently somewhere in the dungeon. Once you find all pillars find the exit to save the world of OOP."
     }
 
-    getHeroes() {
+    static getHeroes() {
         return [
             {
                 name: "Warrior",
@@ -80,6 +80,7 @@ export default class DungeonAdventure {
             throw new TypeError("Invalid name provided");
         }
         this.#myAdventurer = HeroFactory.createHero(theHeroType, theName);
+        console.log('DungeonAdventure: hero created successfully', this.#myAdventurer.toString());
     }
 
     startGame() {

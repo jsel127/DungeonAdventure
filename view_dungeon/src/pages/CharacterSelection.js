@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const CharacterSelection = () => {
   const [characters, setCharacters] = useState([]);
@@ -62,22 +63,24 @@ const CharacterSelection = () => {
 
       {selectedCharacter && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <button onClick={() => {
-            console.log('Start game with', selectedCharacter.name)
-            fetch('/api/selected-character', {
-              method: 'POST', 
-              headers: {
-                'content-type': 'application/json'
-              },
-              body: JSON.stringify({
-                character: selectedCharacter
-              })
-            }).then(res => {
-              return res.json()
-            }).catch(error => console.log('ERROR: select character post request'))
-          }}>
-            Start Game
-          </button>
+          <Link to="/select-name">
+            <button onClick={() => {
+              console.log('Start game with', selectedCharacter.name)
+              fetch('/api/selected-character', {
+                method: 'POST', 
+                headers: {
+                  'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                  character: selectedCharacter
+                })
+              }).then(res => {
+                return res.json()
+              }).catch(error => console.log('ERROR: select character post request'))
+            }}>
+              Start Game
+            </button>
+          </Link>
         </div>
       )}
     </div>

@@ -4,23 +4,30 @@ import DungeonAdventure from "../DungeonAdventure.js"
 const app = express()
 const model = new DungeonAdventure()
 
+// stores the character type selected on the CharacterSelection screen, 
+// to be used in a call to the model once the character name is recieved. 
+let selectedCharacter
+
 app.use(express.json())
 
 app.get("/api/characters", (req, res) => { 
-    console.log("request to server /api/characters") 
-    res.json(model.getHeroes())
+    console.log("Server: request to /api/characters")  
+    res.json(DungeonAdventure.getHeroes())
 })  
 
-app.post("/api/selected-character", (req, res) => {
-    const selectedCharacter = req.body.character
-    console.log("request to server /api/selected-character:", selectedCharacter.name)
-    model.setAdventurer('name of hero', selectedCharacter.name)
-    console.log('Server: hero created sucessfully')
+app.post("/api/selected-character", (req, res) => { 
+    selectedCharacter = req.body.character
+    console.log("Server: request to /api/selected-character:", selectedCharacter.name)
 })
 
-app.get("/api/difficulty", (req, res) => {
-    console.log("Server: request for /api/difficulty") 
-    res.json(model.getDifficulies())
+app.post("/api/selected-name", (req, res) => {
+    console.log('Server: post request to /api/selected-name', req.body.heroName)
+    model.setAdventurer(selectedCharacter.name, req.body.heroName)
+})
+
+app.get("/api/difficulties", (req, res) => {
+    console.log("Server: request to /api/difficulties")  
+    res.json(DungeonAdventure.getDifficulties())
 })
 
 app.listen(5001, () => { console.log("Server started on port 5001") }) 

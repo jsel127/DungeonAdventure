@@ -10,6 +10,8 @@ import HowToPlayPage from './pages/HowtoPlayPage';
 import FAQPage from './pages/FAQPage'; 
 import AboutCreatorsPage from './pages/AboutCreatorsPage'; 
 import CharacterSelection from './pages/CharacterSelection'; 
+import NameSelection from './pages/NameSelection';
+import DifficultySelection from './pages/DifficultySelection';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -22,6 +24,8 @@ root.render(
       <Route path="/faq" element={<FAQPage />} />
       <Route path="/about-creators" element={<AboutCreatorsPage />} />
       <Route path="/select-character" element={<CharacterSelection />} />
+      <Route path="/select-name" element={<NameSelection />} />
+      <Route path="/select-difficulty" element={<DifficultySelection />} />
     </Routes>
   </Router>
 );
