@@ -62,7 +62,7 @@ export default class Warrior extends Hero {
     }
 
     static fromJSON(theJSON) {
-        if (theJSON.__type !== Warrior.name) {
+        if (theJSON.__type === undefined || theJSON.__type !== Warrior.name) {
             throw new TypeError("The JSON is not of warrior type.");
         }
         return new Warrior(theJSON.hero.dungeon_character.name, theJSON.hero.dungeon_character.hp, 

@@ -50,7 +50,7 @@ export default class Inventory {
     }
     
     static fromJSON(theJSON) {
-        if (theJSON.__type !== Inventory.name) {
+        if (theJSON.__type === undefined || theJSON.__type !== Inventory.name) {
             throw new TypeError("The JSON is not of inventory type.");
         }
         return new Inventory(theJSON.items.healing_potion, theJSON.items.vision_potion, theJSON.pillars);

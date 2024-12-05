@@ -19,8 +19,20 @@ describe("Tests the room class and its functionality", () => {
 
 });
 
-describe("Tests the room class with invalid input", () => {
-    test("Testing if invalid content is placed an error is thrown", () => {
+// describe("Tests the room class with invalid input", () => {
+//     test("Testing if invalid content is placed an error is thrown", () => {
 
+//     });
+// });
+
+describe("Tests Saves and Loads Room class", () => {
+    test("Saves and Loads Door class properly (No chances made from initialization)", () => {
+        const roomToSave = new Room();  
+        const roomFromSave = Room.fromJSON(JSON.parse(JSON.stringify(roomToSave)));
+        expect(roomFromSave.toString()).toBe(roomToSave.toString());
+    });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Room.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
     });
 });

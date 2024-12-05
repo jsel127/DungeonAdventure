@@ -67,7 +67,7 @@ export default class Thief extends Hero {
     }
 
     static fromJSON(theJSON) {
-        if (theJSON.__type !== Thief.name) {
+        if (theJSON.__type === undefined || theJSON.__type !== Thief.name) {
             throw new TypeError("The JSON is not of thief type.");
         }
         return new Thief(theJSON.hero.dungeon_character.name, theJSON.hero.dungeon_character.hp, 

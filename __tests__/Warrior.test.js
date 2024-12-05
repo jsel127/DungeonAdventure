@@ -82,4 +82,8 @@ describe("Tests Saves and Loads Warrior class", () => {
         expect(warriorFromSave.toString()).toBe(warriorToSave.toString());
         expect(warriorToSave.getFightingStatus()).toBe(warriorFromSave.getFightingStatus());
     });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Warrior.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
 });

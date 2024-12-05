@@ -84,4 +84,8 @@ describe("Tests Saves and Loads Thief class", () => {
         expect(thiefFromSave.toString()).toBe(thiefToSave.toString());
         expect(thiefFromSave.getFightingStatus()).toBe(thiefToSave.getFightingStatus());
     });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Thief.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
 });

@@ -61,7 +61,7 @@ export default class Priestess extends Hero {
     }
 
     static fromJSON(theJSON) {
-        if (theJSON.__type !== Priestess.name) {
+        if (theJSON.__type === undefined || theJSON.__type !== Priestess.name) {
             throw new TypeError("The JSON is not of priestess type.");
         }
         return new Priestess(theJSON.hero.dungeon_character.name, theJSON.hero.dungeon_character.hp, 

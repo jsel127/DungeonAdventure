@@ -85,4 +85,8 @@ describe("Tests Saves and Loads Priestess class", () => {
         expect(priestessFromSave.toString()).toBe(priestessToSave.toString());
         expect(priestessFromSave.getFightingStatus()).toBe(priestessToSave.getFightingStatus());
     });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Priestess.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
 });
