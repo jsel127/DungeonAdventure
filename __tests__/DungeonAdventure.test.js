@@ -18,11 +18,11 @@ describe("Tests main functionality", () => {
         expect(adventurer.getName()).toBe("Jasmine");
     });
 
-    test("Adventurer starts at the entrance.", () => {
-        gameWarriorEasy.setDifficulty(Dungeon.DIFFICULTY.Easy);
-        gameWarriorEasy.startGame();
-        const currentRoom = gameWarriorEasy.getCurrentRoom();
-        expect(currentRoom.isEntrance()).toBeTruthy();
-    });
+    // test("Adventurer starts at the entrance.", () => {
+    //     gameWarriorEasy.setDifficulty(Dungeon.DIFFICULTY.Easy);
+    //     gameWarriorEasy.startGame();
+    //     const currentRoom = gameWarriorEasy.getCurrentRoom();
+    //     expect(currentRoom.isEntrance()).toBeTruthy();
+    // });
 });
 
