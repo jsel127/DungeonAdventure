@@ -44,7 +44,7 @@ const CharacterSelection = () => {
             >
               <h3>{character.name}</h3>
               <p>HP: {character.hp}</p>
-              <p>Damage: {character.dpmin} - {character.dpmax}</p>
+              <p>Damage: {character.dp_min} - {character.dp_max}</p>
               <p>Block Chance: {character.block_chance}%</p>
             </div>
           ))}
@@ -55,7 +55,7 @@ const CharacterSelection = () => {
         <div className="selected-character" style={{ marginTop: '20px', textAlign: 'center' }}>
           <h2>You selected: {selectedCharacter.name}</h2>
           <p>HP: {selectedCharacter.hp}</p>
-          <p>Damage: {selectedCharacter.dpmin} - {selectedCharacter.dpmax}</p>
+          <p>Damage: {selectedCharacter.dp_min} - {selectedCharacter.dp_max}</p>
           <p>Block Chance: {selectedCharacter.block_chance}%</p>
         </div>
       )}

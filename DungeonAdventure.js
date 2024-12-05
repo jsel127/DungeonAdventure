@@ -51,12 +51,8 @@ export default class DungeonAdventure {
         if (typeof theName !== "string") {
             throw new TypeError("Invalid name provided");
         }
-<<<<<<< HEAD
-        this.#myAdventurer = new Adventurer(HeroFactory.createHero(theHeroType));
-        console.log('Hero created', this.#myAdventurer);
-=======
         this.#myAdventurer = HeroFactory.createHero(theHeroType, theName);
->>>>>>> sellersj
+        console.log('DungeonAdventure: hero created successfully:', this.#myAdventurer.toString())
     }
 
     setDifficulty(theDifficulty) {

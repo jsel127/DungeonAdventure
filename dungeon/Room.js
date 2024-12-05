@@ -5,9 +5,9 @@
  */
 
 import MonsterFactory from "../characters/MonsterFactory.js";
-import HealingPotion from "../HealingPotion.js";
-import VisionPotion from '../VisionPotion.js';
-import Pillar from "../Pillar.js";
+import HealingPotion from "../items/HealingPotion.js";
+import VisionPotion from '../items/VisionPotion.js';
+import Pillar from "../items/Pillar.js";
 import Coordinate from "./Coordinate.js";
 import Door from "./Door.js";
 export default class Room {

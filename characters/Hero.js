@@ -5,7 +5,7 @@
  */
 
 import DungeonCharacter from "./DungeonCharacter.js";
-import Inventory from "../Inventory.js";
+import Inventory from "../items/Inventory.js";
 /**
  * Class containing common methods and data for all hero character. 
  * @author Jasmine Sellers
