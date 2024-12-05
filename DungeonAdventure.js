@@ -61,6 +61,10 @@ export default class DungeonAdventure {
         ];
     }
 
+    static getDifficulties() {
+        return Object.keys(Dungeon.DIFFICULTY);
+    }
+
     setDifficulty(theDifficulty) {
         if (!Number.isInteger(theDifficulty)) {
             throw new TypeError("The difficulty must be an integer");
