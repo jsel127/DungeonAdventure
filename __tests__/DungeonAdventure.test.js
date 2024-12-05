@@ -18,6 +18,15 @@ describe("Tests main functionality", () => {
         expect(adventurer.getName()).toBe("Jasmine");
     });
 
+    test("Get difficulty levels", () => {
+        expect(DungeonAdventure.getDifficulties()).toStrictEqual(Object.keys(Dungeon.DIFFICULTY));
+    });
+
+    test("Setting difficulty", () => {
+        gameWarriorEasy.setDifficulty(DungeonAdventure.getDifficulties()[2]);
+        expect(gameWarriorEasy.getDifficulty()).toBe(Dungeon.DIFFICULTY.Easy);
+    })
+
     // test("Adventurer starts at the entrance.", () => {
     //     gameWarriorEasy.setDifficulty(Dungeon.DIFFICULTY.Easy);
     //     gameWarriorEasy.startGame();
