@@ -66,7 +66,7 @@ export default class DungeonAdventure {
     }
 
     setDifficulty(theDifficulty) {
-        const difficulty = Dungeon[theDifficulty];
+        const difficulty = Dungeon.DIFFICULTY[theDifficulty];
         if (difficulty === undefined) {
             throw new TypeError("The given difficulty was invalid");
         }
@@ -318,6 +318,10 @@ export default class DungeonAdventure {
 
     getDungeon() {
         return this.#myDungeon;
+    }
+
+    getDifficulty() {
+        return this.#myDifficulty;
     }
 
     getCurrentRoom() {
