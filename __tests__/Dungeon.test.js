@@ -24,34 +24,64 @@ describe("Test basic setup of the Dungeon", () => {
     });
 
     test("Traversable from entrance to exit.", () => {
-        // TODO figure out how to implement recursive test (DFS)
+        function exitReachable(theDungeon, theRoom) {
+            const visited = new Array(theDungeon.getDimensions() + Dungeon.BUFFER * 2);
+            for (let row = 0; row < visited.length; row++) {
+                visited[row] = new Array(theDungeon.getDimensions() + Dungeon.BUFFER * 2).fill(false);
+            }
+            return checkExitReached(visited, theDungeon, theRoom);
+        }
+        function checkExitReached(theVisited, theDungeon, theRoom) {
+            const coordinate = theRoom.getCoordinate();
+            theVisited[coordinate.getY()][coordinate.getX()] = true;
+            if (theRoom.isExit()) {
+                return true;
+            } 
+            if (theRoom.isNorthDoorOpen() && theVisited[coordinate.getY() - 1][coordinate.getX()]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY() - 1, coordinate.getX()));
+            }
+            if (theRoom.isEastDoorOpen() && theVisited[coordinate.getY()][coordinate.getX() + 1]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY(), coordinate.getX() + 1));
+            }
+            if (theRoom.isSouthDoorOpen() && theVisited[coordinate.getY() + 1][coordinate.getX() ]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY() + 1, coordinate.getX()));
+            }
+            if (theRoom.isWestDoorOpen() && theVisited[coordinate.getY()][coordinate.getX() - 1]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY(), coordinate.getX() - 1));
+            } 
+            return false;
+        };
+        expect(() => {
+            const entrance = dungeonEasy.getEntrance();
+            return exitReachable(dungeonEasy, entrance);
+        }).toBeTruthy();
     });
 
-    // test("All four pillars are placed in dungeon", () => {
-    //     let currentRoom;
-    //     let abstractionPillarPlaced = false;
-    //     let encapsulationPillarPlaced = false;
-    //     let inheritancePillarPlaced = false;
-    //     let polymorphismPillarPlaced = false;
-    //     for (let row = Dungeon.BUFFER; row < dungeonEasy.getDimensions() + Dungeon.BUFFER; row++) {
-    //         for (let col = Dungeon.BUFFER; col < dungeonEasy.getDimensions() + Dungeon.BUFFER; col++) {
-    //             currentRoom = dungeonEasy.getRoom(new Coordinate(row, col));
-    //             if (currentRoom.getContent() === Room.CONTENT.abstractionPillar) {
-    //                 abstractionPillarPlaced = true;
-    //             } else if (currentRoom.getContent() === Room.CONTENT.encapsulationPillar) {
-    //                 encapsulationPillarPlaced = true;
-    //             } else if (currentRoom.getContent() === Room.CONTENT.inheritancePillar) {
-    //                 inheritancePillarPlaced = true;
-    //             } else if (currentRoom.getContent() === Room.CONTENT.polymorphismPillar) {
-    //                 polymorphismPillarPlaced = true;
-    //             }
-    //         }
-    //     }
-    //     expect(abstractionPillarPlaced).toBeTruthy();
-    //     expect(encapsulationPillarPlaced).toBeTruthy();
-    //     expect(inheritancePillarPlaced).toBeTruthy();
-    //     expect(polymorphismPillarPlaced).toBeTruthy();
-    // });
+    test("All four pillars are placed in dungeon", () => {
+        let currentRoom;
+        let abstractionPillarPlaced = false;
+        let encapsulationPillarPlaced = false;
+        let inheritancePillarPlaced = false;
+        let polymorphismPillarPlaced = false;
+        for (let row = Dungeon.BUFFER; row < dungeonEasy.getDimensions() + Dungeon.BUFFER; row++) {
+            for (let col = Dungeon.BUFFER; col < dungeonEasy.getDimensions() + Dungeon.BUFFER; col++) {
+                currentRoom = dungeonEasy.getRoom(new Coordinate(row, col));
+                if (currentRoom.getContent() === Room.CONTENT.abstractionPillar) {
+                    abstractionPillarPlaced = true;
+                } else if (currentRoom.getContent() === Room.CONTENT.encapsulationPillar) {
+                    encapsulationPillarPlaced = true;
+                } else if (currentRoom.getContent() === Room.CONTENT.inheritancePillar) {
+                    inheritancePillarPlaced = true;
+                } else if (currentRoom.getContent() === Room.CONTENT.polymorphismPillar) {
+                    polymorphismPillarPlaced = true;
+                }
+            }
+        }
+        expect(abstractionPillarPlaced).toBeTruthy();
+        expect(encapsulationPillarPlaced).toBeTruthy();
+        expect(inheritancePillarPlaced).toBeTruthy();
+        expect(polymorphismPillarPlaced).toBeTruthy();
+    });
 
     test("All edge rooms have corresponding doors closed", () => {
         let roomClosedNorth;
@@ -82,7 +112,7 @@ describe("Tests Dungeon class with invalid input.", () => {
 });
 
 describe("Tests Saves and Loads Dungeon class", () => {
-    test("Saves and Loads Thief Dungeon properly (No chances made from initialization)", () => {
+    test("Saves and Loads Dungeon properly (No chances made from initialization)", () => {
         const dungeonToSave = new Dungeon(Dungeon.DIFFICULTY.Easy);
         const dungeonFromSave = Dungeon.fromJSON(JSON.parse(JSON.stringify(dungeonToSave)));
         expect(dungeonFromSave.toString()).toBe(dungeonToSave.toString());
