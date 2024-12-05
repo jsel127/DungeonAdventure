@@ -1,14 +1,28 @@
 import DungeonCharacter from "./characters/DungeonCharacter.js";
 import HeroFactory from "./characters/HeroFactory.js";
+import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
 export default class DungeonAdventure {
-    static #HARDEST_DIFFICULTY = 3;
+    static #PIT_MAX_DAMAGE = 20;
     #myDungeon
     #myAdventurer
     #myCurrentRoom
     #myDifficulty
     #myCurrentOpponent
+    
     constructor() {
+        
+    }
+    
+    toJSON() {
+        return {
+            __type: DungeonAdventure.name,
+            dungeon: this.#myDungeon,
+            adventurer: this.#myAdventurer,
+            room: this.#myCurrentRoom,
+            difficulty: this.#myDifficulty,
+            opponent: this.#myCurrentOpponent
+        }
     }
 
     getGameDescription() {
@@ -47,22 +61,21 @@ export default class DungeonAdventure {
         ];
     }
 
-    setAdventurer(theName, theHeroType) {
-        if (typeof theName !== "string") {
-            throw new TypeError("Invalid name provided");
-        }
-        this.#myAdventurer = HeroFactory.createHero(theHeroType, theName);
-        console.log('DungeonAdventure: hero created successfully:', this.#myAdventurer.toString())
-    }
-
     setDifficulty(theDifficulty) {
         if (!Number.isInteger(theDifficulty)) {
             throw new TypeError("The difficulty must be an integer");
         }
-        if (theDifficulty < 0 || DungeonAdventure.#HARDEST_DIFFICULTY > 3) {
+        if (theDifficulty < Dungeon.DIFFICULTY.Easy || Dungeon.DIFFICULTY.Hard < theDifficulty) {
             throw new RangeError("The difficulty was out of range.");
         }
         this.#myDifficulty = theDifficulty;
+    }
+
+    setAdventurer(theHeroType, theName) {
+        if (typeof theName !== "string") {
+            throw new TypeError("Invalid name provided");
+        }
+        this.#myAdventurer = HeroFactory.createHero(theHeroType, theName);
     }
 
     startGame() {
@@ -82,7 +95,7 @@ export default class DungeonAdventure {
     moveNorth() {
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() - 1);
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() - 1));
             return this.#processMove();
         }
     }
@@ -90,7 +103,7 @@ export default class DungeonAdventure {
     moveEast() {
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() + 1, location.getY());
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() + 1, location.getY()));
             return this.#processMove();
         }
     }
@@ -98,7 +111,7 @@ export default class DungeonAdventure {
     moveSouth() {
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX(), location.getY() + 1);
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() + 1));
             return this.#processMove();
         }
     }
@@ -106,7 +119,7 @@ export default class DungeonAdventure {
     moveWest() {
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(location.getX() - 1, location.getY());
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() - 1, location.getY()));
             return this.#processMove();
         }
     }
@@ -173,6 +186,29 @@ export default class DungeonAdventure {
         return this.#myCurrentOpponent.isDead();
     }
 
+    useHealingPotion() {
+        const inventory = this.#myAdventurer.getInventory();
+        if (!inventory.hasHealingPotion()) {
+            return "You have not healing potions";
+        }
+        this.#myAdventurer.setHP(Inventory.getHealingPotionHP());
+    }
+
+    /**
+     * If there is a vision potion to use then the method
+     * will get the adjacent rooms and return them otherwise
+     * it will return a string stating they have no vision potions to use.
+     * @returns 9 rooms total (8 adjacent rooms and itself);
+     */
+    useVisionPotion() {
+        const inventory = this.#myAdventurer.getInventory();
+        if (!inventory.hasVisionPotion()) {
+            return "You have no vision potions";
+        } 
+        inventory.useVisionPotion();
+        return this.#myDungeon.getAdjacentRooms(this.#myCurrentRoom);
+    }
+
     saveGame() {
         //TODO: implement saving game
         //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify (convert data to a string)
@@ -195,13 +231,24 @@ export default class DungeonAdventure {
     #processContent() {
         this.#pickUpItem();
         this.#processMonster();
+        this.#processPit();
+    }
+
+    #processPit() {
+        if (this.#myCurrentRoom.isPit()) {
+            const damage = Math.round(Math.random() * DungeonAdventure.#PIT_MAX_DAMAGE);
+            const newHP = this.#myAdventurer.getHP() - damage;
+            if (newHP < 1) {
+                return "Player has died";
+            } else {
+                this.#myAdventurer.setHP(newHP);
+            }
+        }
     }
 
     #pickUpItem() {
-        const item = this.#myCurrentRoom.collectItem();
-        if (item) {
-            inventory.add(item);
-        }
+        const inventory = this.#myAdventurer.getInventory();
+        inventory.collectItemFromRoom(this.#myCurrentRoom);
     }
 
     #processMonster() {
@@ -257,5 +304,21 @@ export default class DungeonAdventure {
             }
         } 
         return false;
+    }
+    
+    viewDungeon() {
+        console.log(this.#myDungeon.toString());
+    }
+
+    getAdventurer() {
+        return this.#myAdventurer;
+    }
+
+    getDungeon() {
+        return this.#myDungeon;
+    }
+
+    getCurrentRoom() {
+        return this.#myCurrentRoom;
     }
 }
