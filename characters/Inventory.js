@@ -1,4 +1,4 @@
-import Room from "../dungeon/Room";
+import Room from "../dungeon/Room.js";
 
 export default class Inventory {
     static HEALTH_POTION_MAX_HP = 10;
