@@ -19,7 +19,7 @@ export default class DungeonAdventure {
             __type: DungeonAdventure.name,
             dungeon: this.#myDungeon,
             adventurer: this.#myAdventurer,
-            room: this.#myCurrentRoom,
+            current_room_coordinate: this.#myCurrentRoom.getCoordinate(),
             difficulty: this.#myDifficulty,
             opponent: this.#myCurrentOpponent
         }

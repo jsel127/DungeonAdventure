@@ -54,7 +54,6 @@ export default class Dungeon {
 
         if (theRoomContent === null || theEastDoors === null || theSouthDoors === null
             || theEntranceCoordinate === null || theExitCoordinate === null) {
-                console.log("entered");
             this.#makeDungeon();
         } else {
             if (!theEntranceCoordinate instanceof Coordinate 
@@ -73,7 +72,6 @@ export default class Dungeon {
             this.#mySouthDoors = theSouthDoors;
             this.#createRooms(theRoomContent);
 // POTENTIAL SWAPPING ERROR (Y, X) V (X, Y)
-            console.log(theEntranceCoordinate instanceof Coordinate);
             this.#myEntrance = this.#myRooms[theEntranceCoordinate.getY()][theEntranceCoordinate.getX()]; 
             this.#myExit = this.#myRooms[theExitCoordinate.getY()][theExitCoordinate.getX()];
         }
@@ -83,20 +81,20 @@ export default class Dungeon {
         let str = " ";
         let currentRoom;
         for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {
-            currentRoom = this.getRoom(new Coordinate(Dungeon.BUFFER, col));
+            currentRoom = this.getRoomWithRowCol(Dungeon.BUFFER, col);
             str += (currentRoom.isNorthDoorOpen()) ? "  " : "- ";
         }
         str += "\n";
         for (let row = Dungeon.BUFFER; row < this.#myDimension + Dungeon.BUFFER; row++) {
             for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {
-                currentRoom = this.getRoom(new Coordinate(row, col));
+                currentRoom = this.getRoomWithRowCol(row, col);
                 str += (currentRoom.isWestDoorOpen()) ? "\\" : "|";
                 str += currentRoom.getContent();
             }
             str += (currentRoom.isEastDoorOpen()) ? "\\" : "|";
             str += "\n ";
             for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {                
-                currentRoom = this.getRoom(new Coordinate(row, col));
+                currentRoom = this.getRoomWithRowCol(row, col);
                 str += (currentRoom.isSouthDoorOpen()) ? "  " : "- ";
             }
             str += "\n";
@@ -125,6 +123,17 @@ export default class Dungeon {
             throw TypeError("The given coordinate was not a Coordinate type.");
         }
         return this.#myRooms[theCoordinate.getX()][theCoordinate.getY()];
+    }
+
+    getRoomWithRowCol(theRow, theCol) {
+        if (!Number.isInteger(theRow) || !Number.isInteger(theCol)) {
+            throw new TypeError("The row and/or the column is not of integer type");
+        }
+        if (theRow > this.#myDimension || theRow < Dungeon.BUFFER
+            || theCol > this.#myDimension || theCol < Dungeon.BUFFER) {
+            throw new RangeError("The row and/or column are not valid");
+        }
+        return this.#myRooms[theRow][theCol];
     }
 
     getAdjacentRooms(theRoom) {
@@ -237,26 +246,25 @@ export default class Dungeon {
     }
 
     #placeRequiredContent() {
-        let occupiedRooms = [];
         let roomLocation;
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.entrance, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.entrance);
         this.#myEntrance = this.#myRooms[roomLocation[0]][roomLocation[1]];
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.exit, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.exit);
         this.#myExit = this.#myRooms[roomLocation[0]][roomLocation[1]];
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.abstractionPillar, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.abstractionPillar);
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.encapsulationPillar, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.encapsulationPillar);
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.inheritancePillar, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.inheritancePillar);
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.polymorphismPillar, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.polymorphismPillar);
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
     }
 
@@ -264,18 +272,16 @@ export default class Dungeon {
      * Finds a random, unoccupied room and places the given content there. 
      * 
      * @param {*} theContent content (item, monster, etc) to be placed in a room
-     * @param {*} theOccupiedRooms array of coordinates of occupied rooms
      * @return an array containing the row and col of the room the content was placed in
      */
-    #placeSingleContent(theContent, theOccupiedRooms) {
+    #placeSingleContent(theContent) {
         let row;
         let col;
         do { 
             row = Math.floor(Math.random() * this.#myDimension) + Dungeon.BUFFER;
             col = Math.floor(Math.random() * this.#myDimension) + Dungeon.BUFFER;
-        } while (theOccupiedRooms.includes([row, col])); 
+        } while (!this.#myRooms[row][col].isEmpty()); 
         this.#myRooms[row][col].setContent(theContent);
-        theOccupiedRooms.push([row, col]);
         return [row, col];
     }
 
@@ -287,14 +293,19 @@ export default class Dungeon {
         for (let row = Dungeon.BUFFER; row < this.#myDimension + Dungeon.BUFFER; row++) {
             for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {
                 if (this.#myRooms[row][col].isEmpty()) {
+                    let placed = false;
                     rand = Math.random();
                     if (rand < Dungeon.#PROB_HEALING_POTION) {
                         this.#myRooms[row][col].setContent(Room.CONTENT.healingPotion);
+                        placed = true;
                     }
-                    else if (rand < Dungeon.#PROB_VISION_POTION + Dungeon.#PROB_HEALING_POTION) {
+                    rand = Math.random();
+                    if (!placed && rand < Dungeon.#PROB_VISION_POTION) {
                         this.#myRooms[row][col].setContent(Room.CONTENT.visionPotion);
+                        placed = true;
                     }
-                    else if (rand < Dungeon.#PROB_MONSTER + Dungeon.#PROB_VISION_POTION + Dungeon.#PROB_HEALING_POTION) {
+                    rand = Math.random();
+                    if (!placed && rand < Dungeon.#PROB_MONSTER) {
                         this.#placeMonster(row, col);
                     }
                 }
@@ -311,16 +322,16 @@ export default class Dungeon {
      */
     #surroundWithMonsters(theRow, theCol) {
         let room = this.#myRooms[theRow][theCol];
-        if (room.isNorthDoorOpen()) {
+        if (room.isNorthDoorOpen() && room.isEmpty(theRow - 1, theCol)) {
             this.#placeMonster(theRow - 1, theCol);
         }
-        if (room.isSouthDoorOpen()) {
+        if (room.isSouthDoorOpen() && room.isEmpty(theRow + 1, theCol)) {
             this.#placeMonster(theRow + 1, theCol);
         }
-        if (room.isWestDoorOpen()) {
+        if (room.isWestDoorOpen() && room.isEmpty(theRow, theCol - 1)){
             this.#placeMonster(theRow, theCol - 1);
         }
-        if (room.isEastDoorOpen()) {
+        if (room.isEastDoorOpen() && room.isEmpty(theRow, theCol + 1)) {
             this.#placeMonster(theRow, theCol + 1);
         }
     }
