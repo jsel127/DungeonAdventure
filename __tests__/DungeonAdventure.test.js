@@ -4,11 +4,10 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-import DungeonAdventure from "../DungeonAdventure";
-import Hero from "../characters/Hero";
-import HeroFactory from "../characters/HeroFactory";
-import Warrior from "../characters/Warrior";
-import Dungeon from "../dungeon/Dungeon";
+import DungeonAdventure from "../DungeonAdventure.js";
+import HeroFactory from "../characters/HeroFactory.js";
+import Dungeon from "../dungeon/Dungeon.js";
+import Room from "../dungeon/Room.js";
 
 describe("Tests main functionality", () => {
     const gameWarriorEasy = new DungeonAdventure();
@@ -36,9 +35,58 @@ describe("Tests main functionality", () => {
         const heroes = DungeonAdventure.getHeroes();
         for (let i = 0; i < heroes.length; i++) {
             gameWarriorEasy.setAdventurer(heroes[i].name, "Bob");
-            expect(gameWarriorEasy.getAdventurer()).toStrictEqual(HeroFactory.createHero(heroes[i].name));
+            expect(gameWarriorEasy.getAdventurer()).toStrictEqual(HeroFactory.createHero(heroes[i].name, "Bob"));
         }
     });
+
+    describe("Starting the game", () => {
+        gameWarriorEasy.setAdventurer("Warrior", "Tester");
+        gameWarriorEasy.setDifficulty("Easy");
+        gameWarriorEasy.startGame();
+        test("Check dungeon set up", () => {
+            const dungeon = gameWarriorEasy.getDungeon();
+            expect(dungeon instanceof Dungeon).toBeTruthy();
+        });
+
+        test("Check current room is the entrance", () => {
+            const currentRoom = gameWarriorEasy.getCurrentRoom();
+            expect(currentRoom instanceof Room).toBeTruthy();
+            expect(currentRoom.isEntrance()).toBeTruthy();
+        });
+
+        test("Check status of game is now started", () => {
+            expect(gameWarriorEasy.getStartStatus()).toBeTruthy();
+        });
+    });
+   
+
+    test("Getting valid moves (makes sure getting status of correct door.", () => {
+        const validMoves = gameWarriorEasy.getValidMoves();
+        const currentRoom = gameWarriorEasy.getCurrentRoom();
+        expect(validMoves.north).toBe(currentRoom.isNorthDoorOpen());
+        expect(validMoves.east).toBe(currentRoom.isEastDoorOpen());
+        expect(validMoves.south).toBe(currentRoom.isSouthDoorOpen());
+        expect(validMoves.west).toBe(currentRoom.isWestDoorOpen());
+    });
+
+    describe("Test navigation methods (moving rooms)", () => {
+        describe("Moving north", () => {
+
+        });
+
+        describe("Moving east", () => {
+
+        });
+
+        describe("Moving south", () => {
+
+        });
+
+        describe("Moving west", () => {
+
+        });
+    });
+
     // // Testing purposes created getter methods for this purpose (will be removed)
     // test("Setting adventurer", () => {
     //     gameWarriorEasy.setAdventurer("Warrior", "Jasmine");

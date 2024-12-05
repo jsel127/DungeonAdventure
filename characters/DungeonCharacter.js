@@ -43,6 +43,7 @@ export default class DungeonCharacter {
         }
         if (!(Number.isInteger(theHP) && Number.isInteger(theDPMax) && Number.isInteger(theAttackSpeed) &&
             Number.isInteger(theDPMin) && Number.isInteger(theHitChance) && typeof theName === "string")) {
+            console.error(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance);
             throw new TypeError("The argument(s) do not match the expected type of data.");
         }
         if (theHP <= 0 || theDPMax <= 0 || theAttackSpeed <= 0) {

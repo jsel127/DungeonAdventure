@@ -7,8 +7,6 @@
 import Warrior from './Warrior.js';
 import Priestess from './Priestess.js';
 import Thief from './Thief.js';
-import Hero from './Hero.js';
-
 /**
  * Will create a specific type of Hero based on the name it is passed (e.g. Warrior). 
  * @author Jasmine Sellers
@@ -56,22 +54,22 @@ export default class HeroFactory {
     static createHero(theHeroType, theName) {
         if (theHeroType === "Warrior") {
             const warriorData = HeroFactory.getWarriorData();
-            return new Warrior(warriorData.name, warriorData.hp, 
+            return new Warrior(theName, warriorData.hp, 
                                warriorData.dp_min, warriorData.dp_max, 
                                warriorData.attack_speed, warriorData.hit_chance, 
-                               warriorData.hit_chance);
+                               warriorData.block_chance);
         } else if (theHeroType === "Priestess") {
             const priestessData = HeroFactory.getPriestessData();
-            return new Priestess(priestessData.name, priestessData.hp, 
-                               priestessData.dp_min, priestessData.dp_max, 
-                               priestessData.attack_speed, priestessData.hit_chance, 
-                               priestessData.hit_chance);
+            return new Priestess(theName, priestessData.hp, 
+                                 priestessData.dp_min, priestessData.dp_max, 
+                                 priestessData.attack_speed, priestessData.hit_chance, 
+                                 priestessData.block_chance);
         } else if (theHeroType === "Thief") {
             const thiefData = HeroFactory.getThiefData();
-            return new Thief(thiefData.name, thiefData.hp, 
-                               thiefData.dp_min, thiefData.dp_max, 
-                               thiefData.attack_speed, thiefData.hit_chance, 
-                               thiefData.hit_chance);
+            return new Thief(theName, thiefData.hp, 
+                             thiefData.dp_min, thiefData.dp_max, 
+                             thiefData.attack_speed, thiefData.hit_chance, 
+                             thiefData.block_chance);
         } else {
             throw new UndefinedValueError("The given hero type does not exist.");
         }
