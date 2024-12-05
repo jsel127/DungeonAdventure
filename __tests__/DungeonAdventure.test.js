@@ -35,3 +35,15 @@ describe("Tests main functionality", () => {
     // });
 });
 
+describe("Tests Saves and Loads DungeonAdventure class", () => {
+    test("Saves and Loads Thief DungeonAdventure properly (No chances made from initialization)", () => {
+        const dungeonAdventureToSave = new DungeonAdventure();
+        const dungeonAdventureFromSave = DungeonAdventure.fromJSON(JSON.parse(JSON.stringify(dungeonAdventureToSave)));
+        expect(dungeonAdventureFromSave.toString()).toBe(dungeonAdventureToSave.toString());
+    });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => DungeonAdventure.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
+});
+
