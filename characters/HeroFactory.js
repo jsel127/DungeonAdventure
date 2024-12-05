@@ -7,6 +7,7 @@
 import Warrior from './Warrior.js';
 import Priestess from './Priestess.js';
 import Thief from './Thief.js';
+import Hero from './Hero.js';
 
 /**
  * Will create a specific type of Hero based on the name it is passed (e.g. Warrior). 
@@ -14,6 +15,38 @@ import Thief from './Thief.js';
  * @version 1.0
  */
 export default class HeroFactory {
+    static #WARRIOR_INDEX = 0;
+    static #PRIESTESS_INDEX = 1;
+    static #THIEF_INDEX = 2;
+    static #HERO_TYPES = [
+        {
+            name: "Warrior",
+            hp: 125,
+            dp_min: 35,
+            dp_max: 60,
+            attack_speed: 4,
+            hit_chance: 80,
+            block_chance: 20
+        },
+        {
+            name: "Priestess",
+            hp: 75,
+            dp_min: 25,
+            dp_max: 45,
+            attack_speed: 5,
+            hit_chance: 70,
+            block_chance: 30
+        },
+        {
+            name: "Thief",
+            hp: 75,
+            dp_min: 20,
+            dp_max: 40,
+            attack_speed: 6,
+            hit_chance: 80,
+            block_chance: 40
+        }
+    ];
     /**
      * Creates and returns a Hero of the specified type.
      * @param {*} theHeroType the type of the hero.
@@ -22,13 +55,37 @@ export default class HeroFactory {
      */
     static createHero(theHeroType, theName) {
         if (theHeroType === "Warrior") {
-            return new Warrior(theName, 125, 35, 60, 4, 80, 20);
+            const warriorData = HeroFactory.getWarriorData();
+            return new Warrior(warriorData.name, warriorData.hp, 
+                               warriorData.dp_min, warriorData.dp_max, 
+                               warriorData.attack_speed, warriorData.hit_chance, 
+                               warriorData.hit_chance);
         } else if (theHeroType === "Priestess") {
-            return new Priestess(theName, 75, 25, 45, 5, 70, 30);
+            const priestessData = HeroFactory.getPriestessData();
+            return new Priestess(priestessData.name, priestessData.hp, 
+                               priestessData.dp_min, priestessData.dp_max, 
+                               priestessData.attack_speed, priestessData.hit_chance, 
+                               priestessData.hit_chance);
         } else if (theHeroType === "Thief") {
-            return new Thief(theName, 75, 20, 40, 6, 80, 40);
+            const thiefData = HeroFactory.getThiefData();
+            return new Thief(thiefData.name, thiefData.hp, 
+                               thiefData.dp_min, thiefData.dp_max, 
+                               thiefData.attack_speed, thiefData.hit_chance, 
+                               thiefData.hit_chance);
         } else {
             throw new UndefinedValueError("The given hero type does not exist.");
         }
+    }
+
+    static getWarriorData() {
+        return HeroFactory.#HERO_TYPES[HeroFactory.#WARRIOR_INDEX];
+    }
+    
+    static getPriestessData() {
+        return HeroFactory.#HERO_TYPES[HeroFactory.#PRIESTESS_INDEX];
+    }
+
+    static getThiefData() {
+        return HeroFactory.#HERO_TYPES[HeroFactory.#THIEF_INDEX];
     }
 }

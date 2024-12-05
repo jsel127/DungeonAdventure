@@ -29,3 +29,49 @@ describe("Testing hero factory to ensure proper hero is created and the object i
         expect(() => HeroFactory.createHero("Skeleton")).toThrow();
     });
 });
+
+describe("Tests methods that get hero statistics", () => {
+    test("Getting warrior data", () => {
+        const defaultWarriorData = {
+            name: "Warrior",
+            hp: 125,
+            dp_min: 35,
+            dp_max: 60,
+            attack_speed: 4,
+            hit_chance: 80,
+            block_chance: 20
+        };
+        const retrievedWarriorObject = HeroFactory.getWarriorData();
+        expect(retrievedWarriorObject).toStrictEqual(defaultWarriorData);
+        expect(retrievedWarriorObject.name).toBe(defaultWarriorData.name);
+    });
+
+    test("Getting priestess data", () => {
+        const defaultPriestessData = {
+            name: "Priestess",
+            hp: 75,
+            dp_min: 25,
+            dp_max: 45,
+            attack_speed: 5,
+            hit_chance: 70,
+            block_chance: 30
+        };
+        const retrievedPriestessObject = HeroFactory.getPriestessData();
+        expect(retrievedPriestessObject).toStrictEqual(defaultPriestessData);
+    });
+
+    test("Getting thief data", () => {
+        const defaultThiefData = {
+            name: "Thief",
+            hp: 75,
+            dp_min: 20,
+            dp_max: 40,
+            attack_speed: 6,
+            hit_chance: 80,
+            block_chance: 40
+        };
+        const retrievedThiefObject = HeroFactory.getThiefData();
+        expect(retrievedThiefObject).toStrictEqual(defaultThiefData);
+    });
+})
+
