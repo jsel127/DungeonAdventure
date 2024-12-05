@@ -1,8 +1,7 @@
 import DungeonCharacter from "./characters/DungeonCharacter.js";
 import HeroFactory from "./characters/HeroFactory.js";
+import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
-import HealingPotion from "./items/HealingPotion.js";
-import VisionPotion from "./items/VisionPotion.js";
 export default class DungeonAdventure {
     static #PIT_MAX_DAMAGE = 20;
     #myDungeon
@@ -66,7 +65,7 @@ export default class DungeonAdventure {
         if (!Number.isInteger(theDifficulty)) {
             throw new TypeError("The difficulty must be an integer");
         }
-        if (theDifficulty < 0 || Dungeon.DIFFICULTY.Hard > theDifficulty) {
+        if (theDifficulty < Dungeon.DIFFICULTY.Easy || Dungeon.DIFFICULTY.Hard < theDifficulty) {
             throw new RangeError("The difficulty was out of range.");
         }
         this.#myDifficulty = theDifficulty;
@@ -189,20 +188,25 @@ export default class DungeonAdventure {
 
     useHealingPotion() {
         const inventory = this.#myAdventurer.getInventory();
-        const healingPotion = new HealingPotion();
-        if (inventory.hasItem(healingPotion)) {
-            inventory.useItem(healingPotion);
-            healingPotion.heal(this.#myAdventurer);
+        if (!inventory.hasHealingPotion()) {
+            return "You have not healing potions";
         }
+        this.#myAdventurer.setHP(Inventory.getHealingPotionHP());
     }
 
+    /**
+     * If there is a vision potion to use then the method
+     * will get the adjacent rooms and return them otherwise
+     * it will return a string stating they have no vision potions to use.
+     * @returns 9 rooms total (8 adjacent rooms and itself);
+     */
     useVisionPotion() {
         const inventory = this.#myAdventurer.getInventory();
-        const visionPotion = new VisionPotion();
-        if (inventory.hasItem(visionPotion)) {
-            inventory.useItem(visionPotion);
-            return this.#myDungeon.getAdjacentRooms();
-        }
+        if (!inventory.hasVisionPotion()) {
+            return "You have no vision potions";
+        } 
+        inventory.useVisionPotion();
+        return this.#myDungeon.getAdjacentRooms(this.#myCurrentRoom);
     }
 
     saveGame() {
@@ -243,10 +247,8 @@ export default class DungeonAdventure {
     }
 
     #pickUpItem() {
-        const item = this.#myCurrentRoom.collectItem();
-        if (item) {
-            inventory.add(item);
-        }
+        const inventory = this.#myAdventurer.getInventory();
+        inventory.collectItemFromRoom(this.#myCurrentRoom);
     }
 
     #processMonster() {
@@ -314,5 +316,9 @@ export default class DungeonAdventure {
 
     getDungeon() {
         return this.#myDungeon;
+    }
+
+    getCurrentRoom() {
+        return this.#myCurrentRoom;
     }
 }

@@ -47,9 +47,3 @@ export default class Door {
         return new Door(theJSON.status);
     }
 }
-
-const doorOpen = new Door(true);
-console.log(doorOpen.isOpen());
-const newDoor = Door.fromJSON(JSON.parse(JSON.stringify(doorOpen)));
-console.log(newDoor instanceof Door);
-console.log(newDoor.isOpen());

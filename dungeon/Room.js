@@ -5,9 +5,6 @@
  */
 
 import MonsterFactory from "../characters/MonsterFactory.js";
-import HealingPotion from "../items/HealingPotion.js";
-import VisionPotion from '../items/VisionPotion.js';
-import Pillar from "../items/Pillar.js";
 import Coordinate from "./Coordinate.js";
 import Door from "./Door.js";
 export default class Room {
@@ -27,6 +24,7 @@ export default class Room {
         pit: 'x',
         empty: ' '
     });
+
     /** The coordinate of the room in the dungeon. */
     #myCoordinate;
     /** The north door of the room. */
@@ -132,34 +130,6 @@ export default class Room {
     }
 
     /**
-     * Creates the corresponding item if present and clears the contents
-     * of the room.
-     * @returns the item in the room if present.
-     */
-    collectItem() {
-        if (this.#myContent === Room.CONTENT.abstractionPillar ) {
-            this.#clearContent();
-            return new Pillar(Pillar.PillarType.ABSTRACTION);
-        } else if (this.#myContent === Room.CONTENT.encapsulationPillar) {
-            this.#clearContent();
-            return new Pillar(Pillar.PillarType.ENCAPSULATION);
-        } else if (this.#myContent === Room.CONTENT.inheritancePillar) {
-            this.#clearContent();
-            return new Pillar(Pillar.PillarType.INHERITANCE);
-        } else if (this.#myContent === Room.CONTENT.polymorphismPillar) {
-            this.#clearContent();
-            return new Pillar(Pillar.PillarType.POLYMORPHISM);
-        } else if (this.#myContent === Room.CONTENT.visionPotion) {
-            this.#clearContent();
-            return new VisionPotion();
-        } else if (this.#myContent === Room.CONTENT.healingPotion) {
-            this.#clearContent();
-            return new HealingPotion();
-        }
-        return false;
-    }
-
-    /**
      * Creates the corresponding monster if present and clears the contents
      * of the room.
      * @returns the monster in the room if present.
@@ -167,13 +137,13 @@ export default class Room {
     spawnMonster() {
         const content = this.#myContent;
         if (content === 'o') {
-            this.#clearContent();
+            this.clearContent();
             return MonsterFactory.createMonster("Ogre");
         } else if (content === 'g') {
-            this.#clearContent();
+            this.clearContent();
             return MonsterFactory.createMonster("Gremlin");
         } else if (content === 's') {
-            this.#clearContent();
+            this.clearContent();
             return MonsterFactory.createMonster("Skeleton");
         }
         return false;
@@ -212,7 +182,7 @@ export default class Room {
     /**
      * Clears the contents of the room.
      */
-    #clearContent() { 
+    clearContent() { 
         this.#myContent = Room.CONTENT.empty;
     }
 

@@ -6,6 +6,8 @@
 
 import DungeonAdventure from "../DungeonAdventure";
 import Warrior from "../characters/Warrior";
+import Dungeon from "../dungeon/Dungeon";
+
 describe("Tests main functionality", () => {
     const gameWarriorEasy = new DungeonAdventure();
     // Testing purposes created getter methods for this purpose (will be removed)
@@ -17,6 +19,7 @@ describe("Tests main functionality", () => {
     });
 
     test("Adventurer starts at the entrance.", () => {
+        gameWarriorEasy.setDifficulty(Dungeon.DIFFICULTY.Easy);
         gameWarriorEasy.startGame();
         const currentRoom = gameWarriorEasy.getCurrentRoom();
         expect(currentRoom.isEntrance()).toBeTruthy();

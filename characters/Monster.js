@@ -117,9 +117,3 @@ export default class Monster extends DungeonCharacter {
         );
     }
 }
-
-// // Test
-// const gremlin = new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);
-// const s = JSON.stringify(gremlin);
-// const newGremlin = Monster.fromJSON(JSON.parse(s));
-// console.log(newGremlin.toString());

@@ -73,7 +73,5 @@ describe("Tests Warrior Character instanciated to Name: Warrior, HP: 20, DPMin: 
         warrior.attack(monster);
         expect(monsterInitialHP - monster.getHP()).toBe(0);
     });
-
-    test("")
 // TODO: tests special attack
 });

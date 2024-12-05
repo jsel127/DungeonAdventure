@@ -76,7 +76,3 @@ export default class Thief extends Hero {
                         theJSON.block_chance, theJSON.inventory, theJSON.fighting_status);
     }
 }
-
-const c = new Thief("Jasmine", 10, 10, 10, 10, 10, 10);
-const s = JSON.stringify(c);
-console.log(s);

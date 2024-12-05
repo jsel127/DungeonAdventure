@@ -1,115 +1,99 @@
-/*
- * TCSS360 Software Development and Quality Assurance
- * Fall 2024
- * Jasmine Sellers, Boyd Bouck, Simran Narwal
- */
-import Inventory from '../items/Inventory.js';
-import InventorySlot from '../items/InventorySlot.js';
-import VisionPotion from '../items/VisionPotion.js';
-import Pillar from '../items/Pillar.js';
+import Inventory from "../characters/Inventory";
 
-describe('Inventory test',  () => {
-
-    let myInventory = new Inventory();
-    const myVisionPotion = new VisionPotion();
-    const myPillar = new Pillar(Pillar.PillarType.POLYMORPHISM);
-
-    beforeEach(() => {
-        myInventory = new Inventory();
+describe("Instanciates an empty inventory and checks basic functionality", () => {
+    const inventory = new Inventory();
+    const potionsAdd = 10;
+    test("Inventory does not have anything yet", () => {
+        expect(inventory.hasVisionPotion()).toBeFalsy();
+        expect(inventory.hasHealingPotion()).toBeFalsy();
+        expect(inventory.hasAllPillars()).toBeFalsy();
     });
 
-    test('constructor builds an Inventory object', () => {
-        const inventoryArray = myInventory.getArray();
-        const emptySlot = new InventorySlot();
-        expect(inventoryArray.length).toBe(Inventory.NUM_SLOTS);
-        for (let i in inventoryArray) {
-            expect(inventoryArray[i]).toStrictEqual(emptySlot);
+    test("Add vision potion",  () => {
+        for (let potions = 1; potions <= potionsAdd; potions++) {
+            inventory.addVisionPotion();
+            expect(inventory.getVisionPotionQuantity()).toBe(potions);
         }
     });
 
-    test('addItem to empty Inventory', () => {
-        myInventory.addItem(myPillar);
-        expect(myInventory.getSlot(0)).toStrictEqual(new InventorySlot(myPillar, 1));
+    test("Add healing potion",  () => {
+        for (let potions = 1; potions <= potionsAdd; potions++) {
+            inventory.addHealingPotion();
+            expect(inventory.getHealingPotionQuantity()).toBe(potions);
+        }
     });
 
-    test('addItem when the Item is the first of its type', () => {
-        myInventory.addItem(myPillar);
-        myInventory.addItem(myVisionPotion);
-        expect(myInventory.getSlot(1)).toStrictEqual(new InventorySlot(myVisionPotion, 1));
+    test("Use vision potions", () => {
+        for (let potions = potionsAdd - 1; potions > 0; potions--) {
+            inventory.useVisionPotion();
+            expect(inventory.getVisionPotionQuantity()).toBe(potions);
+        }
     });
 
-    test('addItem when an identical item exists in the Inventory', () => {
-        myInventory.addItem(myPillar);
-        myInventory.addItem(myVisionPotion);
-        myInventory.addItem(myVisionPotion);
-        expect(myInventory.getSlot(1)).toStrictEqual(new InventorySlot(myVisionPotion, 2));
+    test("Use healing potions", () => {
+        for (let potions = potionsAdd - 1; potions > 0; potions--) {
+            inventory.useHealingPotion();
+            expect(inventory.getHealingPotionQuantity()).toBe(potions);
+        }
     });
 
-    test('useItem when the Item is not the last of its type in Inventory', () => {
-        myInventory.addItem(myPillar);
-        myInventory.addItem(myVisionPotion);
-        myInventory.addItem(myVisionPotion);
-        myInventory.useItem(myVisionPotion);
-        expect(myInventory.getSlot(1)).toStrictEqual(new InventorySlot(myVisionPotion, 1));
+    test("Add abstraction pillar", () => {
+        inventory.addAbstractionPillar();
+        expect(inventory.hasAbstractionPillar()).toBeTruthy();
+        expect(inventory.hasAllPillars()).toBeFalsy();
     });
 
-    test('useItem when the Item is the last of its type in Inventory', () => {
-        myInventory.addItem(myPillar);
-        myInventory.addItem(myVisionPotion);
-        myInventory.useItem(myVisionPotion);
-        expect(myInventory.getSlot(1)).toStrictEqual(new InventorySlot());
+    test("Add encapsulation pillar", () => {
+        inventory.addEncapsulationPillar();
+        expect(inventory.hasEncapsulationPillar()).toBeTruthy();
+        expect(inventory.hasAllPillars()).toBeFalsy();
     });
 
-    test('useItem for a Pillar', () => {
-        myInventory.addItem(myPillar);
-        expect(() => myInventory.useItem(myPillar)).toThrow('Pillars do not currently have an ability');
+    test("Add inheritance pillar", () => {
+        inventory.addInheritancePillar();
+        expect(inventory.hasInheritancePillar()).toBeTruthy();
+        expect(inventory.hasAllPillars()).toBeFalsy();
     });
 
-    test('useItem when the Inventory does not contain the item', () => {
-        myInventory.addItem(myPillar);
-        expect(() => myInventory.useItem(myVisionPotion)).toThrow('Inventory does not contain item Vision Potion');
+    test("Add polymorphism pillar", () => {
+        inventory.addPolymorphismPillar();
+        expect(inventory.hasPolymorphismPillar()).toBeTruthy();
+        expect(inventory.hasAllPillars()).toBeTruthy();
     });
 
-    test('hasItem when item exists', () => {
-        myInventory.addItem(myVisionPotion);
-        expect(myInventory.hasItem(myVisionPotion)).toBe(true);
+    test("Check has all pillars works", () => {
+        expect(inventory.hasAllPillars()).toBeTruthy();
+    });
+});
+
+describe("Tests with invalid data", () => {
+    test("Check cannot instanciate inventory with negative quantities", () => {
+        expect(() => new Inventory(-1, 0)).toThrow();
     });
 
-    test('hasItem when item does not exist', () => {
-        myInventory.addItem(myVisionPotion);
-        expect(myInventory.hasItem(myPillar)).toBe(false);
+    test("Check cannot instanciate inventory with negative quantities", () => {
+        expect(() => new Inventory(0 ,-1)).toThrow();
     });
 
-    test('getIndex when the item is not in the Inventory', () => {
-        myInventory.addItem(myPillar);
-        expect(myInventory.getIndex(myVisionPotion)).toBe(-1);
+    test("Cannot healing potion decrement quantity if don't have any of the item", () => {
+        expect(() => {
+            const inventory = new Inventory();
+            expect(() => inventory.useHealingPotion()).toThrow();
+        });
     });
 
-    test('getIndex when the item is in the Inventory', () => {
-        myInventory.addItem(myVisionPotion);
-        myInventory.addItem(myPillar);
-        expect(myInventory.getIndex(myPillar)).toBe(1);
+    test("Cannot vision potion decrement quantity if don't have any of the item", () => {
+        expect(() => {
+            const inventory = new Inventory();
+            expect(() => inventory.useVisionPotion()).toThrow();
+        });
     });
+});
 
-    test('toString for empty Inventory', () => {
-        expect(myInventory.toString()).toBe('[0] empty\n[1] empty\n[2] empty\n[3] empty\n[4] empty\n[5] empty\n');
+describe("Saves and Loads Inventory class properly", () => {
+    test("Saves and Loads Inventory class properly", () => {
+        const inventoryToSave = new Inventory();
+        const inventoryFromSave = Inventory.fromJSON(JSON.parse(JSON.stringify(inventoryToSave)));
+        expect(inventoryFromSave.toString()).toBe(inventoryToSave.toString());
     });
-
-    test('toString for Inventory with contents', () => {
-        myInventory.addItem(myVisionPotion);
-        myInventory.addItem(myVisionPotion);
-        myInventory.addItem(myVisionPotion);
-        myInventory.addItem(myPillar);
-        expect(myInventory.toString()).toBe('[0] Vision Potion (3)\n[1] Pillar of Polymorphism (1)\n[2] empty\n[3] empty\n[4] empty\n[5] empty\n');
-    });
-
-    test('getSlot for empty slot', () => {
-        expect(myInventory.getSlot(3)).toStrictEqual(new InventorySlot());
-    });
-
-    test('getSlot for slot with contents', () => {
-        myInventory.addItem(myVisionPotion);
-        expect(myInventory.getSlot(0)).toStrictEqual(new InventorySlot(myVisionPotion, 1));
-    });
-
-})
+});

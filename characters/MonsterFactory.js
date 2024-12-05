@@ -4,7 +4,6 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-import DatabaseReader from "../database/DatabaseReader.js";
 import Monster from "./Monster.js";
 
 /**
@@ -28,17 +27,5 @@ export default class MonsterFactory {
         } else {
             throw new UndefinedValueError("The given monster type does not exist.");
         }
-    }
-
-    createMonster(theName) {
-        if (theName === "Gremlin") {
-            return new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);
-        } else if (theName === "Ogre") {
-            return new Monster("Ogre", 200, 30, 60, 2, 60, 10, 30, 60);
-        } else if (theName === "Skeleton") {
-            return new Monster("Skeleton", 100, 30, 50, 3, 80, 30, 30, 50);
-        } else {
-            throw new UndefinedValueError("The given monster type does not exist.");
-        }    
     }
 }
