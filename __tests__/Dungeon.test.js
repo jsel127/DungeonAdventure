@@ -1,17 +1,82 @@
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
+
 import Coordinate from "../dungeon/Coordinate.js";
 import Dungeon from "../dungeon/Dungeon.js";
+import Room from "../dungeon/Room.js";
 
-// describe("Tests Dungeon Difficuly 1", () => {
-//     const dungeonEasy = new Dungeon(Dungeon.DIFFICULTY.Easy);
-//     test("Tests dungeon is traversable", () => {
-//         let location = dungeonEasy.getEntrance();
-//         while (dungeonEasy.getEntrance() != dungeonEasy.getE)
-//     });
-// });
+describe("Test basic setup of the Dungeon", () => {
+    const dungeonEasy = new Dungeon(Dungeon.DIFFICULTY.Easy);
+    const entranceRoom = dungeonEasy.getEntrance();
+    test("Entrance is set up properly", () => {
+        expect(entranceRoom.getContent()).toBe(Room.CONTENT.entrance);
+    });
+    const exitRoom = dungeonEasy.getExit();
+    test("Exit is set up.", () => {
+        expect(exitRoom.getContent()).toBe(Room.CONTENT.exit);
+    });
 
-// describe("Tests Dungeon catches invalid inputs", () => {
-//     test("Invalid difficulty", () => {
-//         expect(() => new Dungeon(0)).toThrow(RangeError);
-//         expect(() => new Dungeon(-1)).toThrow(RangeError);
-//     }); 
-// });
+    test("Dimensions are set up correctly", () => {
+        expect(dungeonEasy.getDimensions()).toBe(Dungeon.DIFFICULTY.Easy * 5);
+    });
+
+    test("Traversable from entrance to exit.", () => {
+        // TODO figure out how to implement recursive test (DFS)
+    });
+
+    test("All four pillars are placed in dungeon", () => {
+        let currentRoom;
+        let abstractionPillarPlaced = false;
+        let encapsulationPillarPlaced = false;
+        let inheritancePillarPlaced = false;
+        let polymorphismPillarPlaced = false;
+        for (let row = Dungeon.BUFFER; row < dungeonEasy.getDimensions() + Dungeon.BUFFER; row++) {
+            for (let col = Dungeon.BUFFER; col < dungeonEasy.getDimensions() + Dungeon.BUFFER; col++) {
+                currentRoom = dungeonEasy.getRoom(new Coordinate(row, col));
+                if (currentRoom.getContent() === Room.CONTENT.abstractionPillar) {
+                    abstractionPillarPlaced = true;
+                } else if (currentRoom.getContent() === Room.CONTENT.encapsulationPillar) {
+                    encapsulationPillarPlaced = true;
+                } else if (currentRoom.getContent() === Room.CONTENT.inheritancePillar) {
+                    inheritancePillarPlaced = true;
+                } else if (currentRoom.getContent() === Room.CONTENT.polymorphismPillar) {
+                    polymorphismPillarPlaced = true;
+                }
+            }
+        }
+        expect(abstractionPillarPlaced).toBeTruthy();
+        expect(encapsulationPillarPlaced).toBeTruthy();
+        expect(inheritancePillarPlaced).toBeTruthy();
+        expect(polymorphismPillarPlaced).toBeTruthy();
+    });
+
+    test("All edge rooms have corresponding doors closed", () => {
+        let roomClosedNorth;
+        let roomClosedEast;
+        let roomClosedSouth;
+        let roomClosedWest;
+        const edge = dungeonEasy.getDimensions();
+        for (let i = Dungeon.BUFFER; i < dungeonEasy.getDimensions() + Dungeon.BUFFER; i++) {
+            roomClosedNorth = dungeonEasy.getRoom(new Coordinate(Dungeon.BUFFER, i));
+            expect(roomClosedNorth.isNorthDoorOpen()).toBeFalsy();
+            roomClosedEast = dungeonEasy.getRoom(new Coordinate(i, edge));
+            expect(roomClosedEast.isEastDoorOpen()).toBeFalsy();
+            roomClosedSouth = dungeonEasy.getRoom(new Coordinate(edge, i));
+            expect(roomClosedSouth.isSouthDoorOpen()).toBeFalsy();
+            roomClosedWest = dungeonEasy.getRoom(new Coordinate(i, Dungeon.BUFFER));
+            expect(roomClosedWest.isWestDoorOpen()).toBeFalsy();
+        }
+    });
+});
+
+describe("Tests Dungeon class with invalid input.", () => {
+    test("Test Dungeon class created with negative difficulty.", () => {
+        expect(() => new Dungeon(-1)).toThrow();
+    });
+    test("Test Dungeon class created with to large a difficulty", () => {
+        expect(() => new Dungeon(Dungeon.DIFFICULTY.Hard + 1)).toThrow();
+    });
+});

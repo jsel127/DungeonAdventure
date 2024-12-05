@@ -6,8 +6,6 @@
 
 import InventorySlot from './InventorySlot.js';
 import Item from './Item.js';
-import HealingPotion from './HealingPotion.js';
-import VisionPotion from './VisionPotion.js';
 import Pillar from './Pillar.js';
 
 /**
@@ -83,12 +81,6 @@ export default class Inventory {
             throw new Error('Pillars do not currently have an ability');
         }
         this.#myInventorySlots[this.getIndex(theItem)].decrementQuantity();
-        if (theItem instanceof HealingPotion) {
-            theItem.heal();
-        }
-        if (theItem instanceof VisionPotion) {
-            theItem.see();
-        }
     }
 
     /**
@@ -152,5 +144,12 @@ export default class Inventory {
                 && this.hasItem(new Pillar(Pillar.PillarType.ENCAPSULATION))
                 && this.hasItem(new Pillar(Pillar.PillarType.POLYMORPHISM))
                 && this.hasItem(new Pillar(Pillar.PillarType.INHERITANCE))
+    }
+
+    toJSON() {
+        return {
+            __type: Inventory.name,
+            inventory_slots: this.#myInventorySlots
+        }
     }
 }

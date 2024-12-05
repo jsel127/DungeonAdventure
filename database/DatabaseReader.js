@@ -10,6 +10,7 @@
         * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties 
         * https://www.freecodecamp.org/news/singleton-design-pattern-with-javascript/
         * https://www.sqlitetutorial.net/sqlite-nodejs/query/
+        * https://www.sqlitetutorial.net/sqlite-nodejs/query/
 */
 import sqlite3 from 'sqlite3';
 export default class DatabaseReader {
@@ -36,33 +37,42 @@ export default class DatabaseReader {
         return DatabaseReader.#UNIQUE_INSTANCE;
     }
 
-    #getData(theQuery) {
-        // TODO: need to research async, await, and promises this seems to be the way to get data. https://www.sqlitetutorial.net/sqlite-nodejs/query/
+    async #getData(theQuery) {
+        return new Promise((resolve, reject) => {
+            this.#myDatabaseConnection.get(theQuery, (error, row) => {
+                if (error) reject(error);
+                resolve(row);
+            });
+        });
     }
 
-    getWarriorData() {
-        return this.#getData("SELECT * FROM Heroes WHERE name = 'Warrior'");
+    async getOgreData() {
+        let warriorData = {};
+        try {
+            warriorData = await this.#getData("SELECT * FROM Monsters WHERE name = 'Ogre'");
+        } catch (error) {
+            console.error(error);
+        }
+        return warriorData;    
     }
 
-    getPriestessData() {
-        return this.#getData("SELECT * FROM Heroes WHERE name = 'Warrior'");
-
+    async getGremlinData() {
+        let warriorData = {};
+        try {
+            warriorData = await this.#getData("SELECT * FROM Monsters WHERE name = 'Gremlin'");
+        } catch (error) {
+            console.error(error);
+        }
+        return warriorData;    
     }
 
-    getThiefData() {
-        return this.#getData("SELECT * FROM Heroes WHERE name = 'Warrior'");
-
-    }
-
-    getOgreData() {
-        return this.#getData("SELECT * FROM Monsters WHERE name = 'Ogre'");
-    }
-
-    getGremlinData() {
-        return this.#getData("SELECT * FROM Monsters WHERE name = 'Gremlin'");
-    }
-
-    getSkeletonData() {
-        return this.#getData("SELECT * FROM Monsters WHERE name = 'Skeleton'");
+    async getSkeletonData() {
+        let warriorData = {};
+        try {
+            warriorData = await this.#getData("SELECT * FROM Monsters WHERE name = 'Skeleton'");
+        } catch (error) {
+            console.error(error);
+        }
+        return warriorData;    
     }
 }

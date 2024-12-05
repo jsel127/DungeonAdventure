@@ -53,4 +53,21 @@ export default class Warrior extends Hero {
         }
         return false;
     }
+
+    toJSON() {
+        return {
+            __type: Warrior.name, 
+            hero: super.toJSON()
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type !== Warrior.name) {
+            throw new TypeError("The JSON is not of warrior type.");
+        }
+        return new Warrior(theJSON.dungeon_character.name, theJSON.dungeon_character.hp, 
+                           theJSON.dungeon_character.dp_min, theJSON.dungeon_character.dp_max, 
+                           theJSON.dungeon_character.attack_speed, theJSON.dungeon_character.hit_chance,
+                           theJSON.block_chance, theJSON.inventory, theJSON.fighting_status);
+    }
 }

@@ -53,10 +53,15 @@ export default class Monster extends DungeonCharacter {
      * Heals the monster by a random HP within its min and max heal range. 
      */
     heal() {
-        const rangeAddHP = this.#myMaxHeal - this.#myMinHeal;
-        const addHP = Math.round(Math.random() * rangeAddHP);
-        const healedHP = this.getHP() + addHP + this.#myMinHeal
-        this.setHP(healedHP);
+        if (this.isDead()) {
+            throw new EvalError("The monster has died it can no longer be revived.");
+        }
+        if (Math.round(Math.random() * 100) < this.#myHealChance) {
+            const rangeAddHP = this.#myMaxHeal - this.#myMinHeal;
+            const addHP = Math.round(Math.random() * rangeAddHP);
+            const healedHP = this.getHP() + addHP + this.#myMinHeal
+            this.setHP(healedHP);
+        }
     }
 
     /**
@@ -89,5 +94,26 @@ export default class Monster extends DungeonCharacter {
      */
     toString() {
         return super.toString() + ` ${this.#myHealChance} ${this.#myMinHeal} ${this.#myMaxHeal}`;
+    }
+
+    toJSON() {
+        return {
+            __type: Monster.name,
+            dungeon_character: super.toJSON(),
+            heal_chance: this.#myHealChance,
+            min_heal: this.#myMinHeal,
+            max_heal: this.#myMaxHeal
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type !== Monster.name) {
+            throw new TypeError("The JSON is not of monster type.");
+        }
+        return new Monster(theJSON.dungeon_character.name, theJSON.dungeon_character.hp, 
+                           theJSON.dungeon_character.dp_min, theJSON.dungeon_character.dp_max, 
+                           theJSON.dungeon_character.attack_speed, theJSON.dungeon_character.hit_chance,
+                           theJSON.heal_chance, theJSON.min_heal, theJSON.max_heal
+        );
     }
 }
