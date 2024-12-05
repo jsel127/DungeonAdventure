@@ -66,13 +66,11 @@ export default class DungeonAdventure {
     }
 
     setDifficulty(theDifficulty) {
-        if (!Number.isInteger(theDifficulty)) {
-            throw new TypeError("The difficulty must be an integer");
+        const difficulty = Dungeon[theDifficulty];
+        if (difficulty === undefined) {
+            throw new TypeError("The given difficulty was invalid");
         }
-        if (theDifficulty < Dungeon.DIFFICULTY.Easy || Dungeon.DIFFICULTY.Hard < theDifficulty) {
-            throw new RangeError("The difficulty was out of range.");
-        }
-        this.#myDifficulty = theDifficulty;
+        this.#myDifficulty = difficulty;
     }
 
     setAdventurer(theHeroType, theName) {
