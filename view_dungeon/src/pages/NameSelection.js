@@ -45,7 +45,7 @@ const NameSelection = () => {
 
                     form {
                         background-color: white;
-                        padding: 20px;
+                        padding: 40px;
                         border-radius: 10px;
                         display: flex;
                         flex-direction: column;
@@ -59,7 +59,31 @@ const NameSelection = () => {
                     }
         
 
-                
+                    input {
+                        margin-top: 10px;
+                        padding: 10px;
+                        font-size: 16px;
+                        width: 200px;
+                        border-radius: 5px;
+                        border: 1px solid #fff;
+                        background-color: #444;
+                        color: white;
+                    }
+
+                    button {
+                        margin-top: 20px;
+                        padding: 10px 20px;
+                        background-color: grey;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        font-size: 16px;
+                        cursor: pointer;
+                    }
+
+                    button:hover {
+                        background-color: maroon;
+                    }
                 `}
             </style>
 
