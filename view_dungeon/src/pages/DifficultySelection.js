@@ -21,7 +21,16 @@ const DifficultySelection = () => {
       };
 
       return (
-        <div style={{ backgroundColor: 'maroon', minHeight: '100vh', color: 'white', padding: '20px' }}>
+        <div style={{           
+          backgroundColor: 'maroon', 
+          minHeight: '100vh', 
+          color: 'white', 
+          padding: '20px', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          justifyContent: 'center', 
+          alignItems: 'center' 
+ }}>
           <h1>Difficulty Selection</h1>
           {difficulties.length === 0 ? (
             <p>Loading...</p>

@@ -57,7 +57,6 @@ const NameSelection = () => {
                         font-size: 18px;
                         color: black;
                     }
-        
 
                     input {
                         margin-top: 10px;
@@ -86,8 +85,6 @@ const NameSelection = () => {
                     }
                 `}
             </style>
-
-            {/* Form */}
             <form onSubmit={handleSubmit}>
                 <label>
                     Enter a name for your adventurer:
@@ -97,7 +94,6 @@ const NameSelection = () => {
             </form>
         </>
     )
-
 }
 
 export default NameSelection
