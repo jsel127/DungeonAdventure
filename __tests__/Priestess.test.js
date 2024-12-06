@@ -77,3 +77,16 @@ describe("Tests Priestess Character instanciated to Name: Priestess, HP: 20, DPM
 
 // TODO: tests special attack
 });
+
+describe("Tests Saves and Loads Priestess class", () => {
+    test("Saves and Loads Priestess class properly (No chances made from initialization)", () => {
+        const priestessToSave = new Priestess("Priestess", 20, 10, 10, 5, 0, 100);
+        const priestessFromSave = Priestess.fromJSON(JSON.parse(JSON.stringify(priestessToSave)));
+        expect(priestessFromSave.toString()).toBe(priestessToSave.toString());
+        expect(priestessFromSave.getFightingStatus()).toBe(priestessToSave.getFightingStatus());
+    });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Priestess.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
+});

@@ -76,3 +76,16 @@ describe("Tests Thief Character instanciated to Name: Thief, HP: 20, DPMin: 10, 
 
 // TODO: tests special attack
 });
+
+describe("Tests Saves and Loads Thief class", () => {
+    test("Saves and Loads Thief class properly (No chances made from initialization)", () => {
+        const thiefToSave = new Thief("Thief", 20, 10, 10, 5, 0, 100);
+        const thiefFromSave = Thief.fromJSON(JSON.parse(JSON.stringify(thiefToSave)));
+        expect(thiefFromSave.toString()).toBe(thiefToSave.toString());
+        expect(thiefFromSave.getFightingStatus()).toBe(thiefToSave.getFightingStatus());
+    });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Thief.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
+});

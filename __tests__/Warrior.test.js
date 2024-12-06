@@ -73,5 +73,17 @@ describe("Tests Warrior Character instanciated to Name: Warrior, HP: 20, DPMin: 
         warrior.attack(monster);
         expect(monsterInitialHP - monster.getHP()).toBe(0);
     });
-// TODO: tests special attack
+});
+
+describe("Tests Saves and Loads Warrior class", () => {
+    test("Saves and Loads Warrior class properly (No chances made from initialization)", () => {
+        const warriorToSave = new Warrior("Warrior", 20, 10, 10, 5, 0, 100, Hero.FIGHTING_STATUS.fighting);
+        const warriorFromSave = Warrior.fromJSON(JSON.parse(JSON.stringify(warriorToSave)));
+        expect(warriorFromSave.toString()).toBe(warriorToSave.toString());
+        expect(warriorToSave.getFightingStatus()).toBe(warriorFromSave.getFightingStatus());
+    });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Warrior.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
 });

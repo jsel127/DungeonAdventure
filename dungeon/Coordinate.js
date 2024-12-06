@@ -44,7 +44,7 @@ export default class Coordinate {
     }
 
     static fromJSON(theJSON) {
-        if (theJSON.__type === undefined || theJSON !== Coordinate.name) {
+        if (theJSON.__type === undefined || theJSON.__type !== Coordinate.name) {
             throw new TypeError("The JSON is not of coordinate type.");
         }
         return new Coordinate(theJSON.x, theJSON.y);

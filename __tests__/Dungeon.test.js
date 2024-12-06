@@ -24,7 +24,37 @@ describe("Test basic setup of the Dungeon", () => {
     });
 
     test("Traversable from entrance to exit.", () => {
-        // TODO figure out how to implement recursive test (DFS)
+        function exitReachable(theDungeon, theRoom) {
+            const visited = new Array(theDungeon.getDimensions() + Dungeon.BUFFER * 2);
+            for (let row = 0; row < visited.length; row++) {
+                visited[row] = new Array(theDungeon.getDimensions() + Dungeon.BUFFER * 2).fill(false);
+            }
+            return checkExitReached(visited, theDungeon, theRoom);
+        }
+        function checkExitReached(theVisited, theDungeon, theRoom) {
+            const coordinate = theRoom.getCoordinate();
+            theVisited[coordinate.getY()][coordinate.getX()] = true;
+            if (theRoom.isExit()) {
+                return true;
+            } 
+            if (theRoom.isNorthDoorOpen() && theVisited[coordinate.getY() - 1][coordinate.getX()]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY() - 1, coordinate.getX()));
+            }
+            if (theRoom.isEastDoorOpen() && theVisited[coordinate.getY()][coordinate.getX() + 1]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY(), coordinate.getX() + 1));
+            }
+            if (theRoom.isSouthDoorOpen() && theVisited[coordinate.getY() + 1][coordinate.getX() ]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY() + 1, coordinate.getX()));
+            }
+            if (theRoom.isWestDoorOpen() && theVisited[coordinate.getY()][coordinate.getX() - 1]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY(), coordinate.getX() - 1));
+            } 
+            return false;
+        };
+        expect(() => {
+            const entrance = dungeonEasy.getEntrance();
+            return exitReachable(dungeonEasy, entrance);
+        }).toBeTruthy();
     });
 
     test("All four pillars are placed in dungeon", () => {
@@ -78,5 +108,17 @@ describe("Tests Dungeon class with invalid input.", () => {
     });
     test("Test Dungeon class created with to large a difficulty", () => {
         expect(() => new Dungeon(Dungeon.DIFFICULTY.Hard + 1)).toThrow();
+    });
+});
+
+describe("Tests Saves and Loads Dungeon class", () => {
+    test("Saves and Loads Dungeon properly (No chances made from initialization)", () => {
+        const dungeonToSave = new Dungeon(Dungeon.DIFFICULTY.Easy);
+        const dungeonFromSave = Dungeon.fromJSON(JSON.parse(JSON.stringify(dungeonToSave)));
+        expect(dungeonFromSave.toString()).toBe(dungeonToSave.toString());
+    });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Dungeon.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
     });
 });

@@ -107,7 +107,7 @@ export default class Monster extends DungeonCharacter {
     }
 
     static fromJSON(theJSON) {
-        if (theJSON.__type !== Monster.name) {
+        if (theJSON.__type === undefined || theJSON.__type !== Monster.name) {
             throw new TypeError("The JSON is not of monster type.");
         }
         return new Monster(theJSON.dungeon_character.name, theJSON.dungeon_character.hp, 
