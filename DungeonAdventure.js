@@ -3,6 +3,7 @@ import Hero from "./characters/Hero.js";
 import HeroFactory from "./characters/HeroFactory.js";
 import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
+import Coordinate from "./dungeon/Coordinate.js";
 export default class DungeonAdventure {
     static #PIT_MAX_DAMAGE = 20;
     #myDungeon
@@ -80,7 +81,8 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() - 1));
-            return this.#processMove();
+            console.log('DungeonAdventure: moveNorth, room:', this.#myCurrentRoom.getCoordinate())
+            //return this.#processMove();
         }
     }
 
@@ -89,7 +91,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() + 1, location.getY()));
-            return this.#processMove();
+            //return this.#processMove();
         }
     }
 
@@ -98,7 +100,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() + 1));
-            return this.#processMove();
+            //return this.#processMove();
         }
     }
 
@@ -107,7 +109,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() - 1, location.getY()));
-            return this.#processMove();
+            //return this.#processMove();
         }
     }
 

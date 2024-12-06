@@ -11,7 +11,7 @@ let selectedCharacter
 app.use(express.json())
 
 app.get("/api/characters", (req, res) => { 
-    console.log("Server: request to /api/characters")  
+    console.log("Server: request to /api/characters") 
     res.json(DungeonAdventure.getHeroes())
 })  
 
@@ -20,9 +20,9 @@ app.post("/api/selected-character", (req, res) => {
     console.log("Server: request to /api/selected-character:", selectedCharacter.name)
 })
 
-app.post("/api/selected-name", (req, res) => {
+app.post("/api/selected-name", (req, res) => { 
     console.log('Server: post request to /api/selected-name', req.body.heroName)
-    model.setAdventurer(selectedCharacter.name, req.body.heroName)
+    model.setAdventurer(selectedCharacter.name, req.body.heroName) 
 })
 
 app.get("/api/difficulties", (req, res) => {
@@ -32,7 +32,34 @@ app.get("/api/difficulties", (req, res) => {
 
 app.post("/api/selected-difficulty", (req, res) => {
     console.log('Server: recieved selected difficulty from react:', req.body.difficulty)
-    model.setDifficulty(req.body.difficulty)
+    model.setDifficulty(req.body.difficulty) 
+    model.startGame()
+})
+
+app.get("/api/valid-moves", (req, res) => {
+    console.log('Server: request to /api/valid-moves', model.getValidMoves())
+    res.json(model.getValidMoves()) 
+})
+
+app.post("/api/move-direction", (req, res) => {
+    console.log('Server: request to /api/move-direction')
+    switch(req.body.dir) {
+        case 'North':
+            model.moveNorth()
+            break
+        case 'East':
+            model.moveEast()
+            break
+        case 'South':
+            model.moveSouth()
+            break
+        case 'West':
+            model.moveWest() 
+            break
+        default:
+            throw new Error('ERROR Server: direction must be North, East, South, West')
+    }
+    console.log(model.getDungeon().toString())
 })
 
 app.listen(5001, () => { console.log("Server started on port 5001") }) 

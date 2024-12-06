@@ -389,3 +389,6 @@ export default class Dungeon {
                            Coordinate.fromJSON(theJSON.exit_coordinate));
     }
 }
+
+const x = new Dungeon(2)
+console.log(x.toString())

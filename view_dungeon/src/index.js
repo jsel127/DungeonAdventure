@@ -12,6 +12,7 @@ import AboutCreatorsPage from './pages/AboutCreatorsPage';
 import CharacterSelection from './pages/CharacterSelection'; 
 import NameSelection from './pages/NameSelection';
 import DifficultySelection from './pages/DifficultySelection';
+import DisplayDungeon from './pages/DisplayDungeon'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -26,6 +27,7 @@ root.render(
       <Route path="/select-character" element={<CharacterSelection />} />
       <Route path="/select-name" element={<NameSelection />} />
       <Route path="/select-difficulty" element={<DifficultySelection />} />
+      <Route path="/dungeon" element={<DisplayDungeon />} />
     </Routes>
   </Router>
 );
