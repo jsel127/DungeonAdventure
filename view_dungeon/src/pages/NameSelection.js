@@ -43,6 +43,16 @@ const NameSelection = () => {
                         align-items: center;
                     }
 
+                    form {
+                        background-color: white;
+                        padding: 20px;
+                        border-radius: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+
+                    
                 `}
             </style>
 
