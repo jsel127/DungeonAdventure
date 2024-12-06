@@ -182,3 +182,15 @@ describe("Tests Monster's setter methods with invalid data", () => {
         }).toThrow();
     });
 });
+
+describe("Tests Saves and Loads Monster class", () => {
+    test("Saves and Loads Monster class properly (No chances made from initialization)", () => {
+        const monsterToSave = new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);  
+        const monsterFromSave = Monster.fromJSON(JSON.parse(JSON.stringify(monsterToSave)));
+        expect(monsterFromSave.toString()).toBe(monsterToSave.toString());
+    });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Monster.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
+});

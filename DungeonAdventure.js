@@ -1,4 +1,5 @@
 import DungeonCharacter from "./characters/DungeonCharacter.js";
+import Hero from "./characters/Hero.js";
 import HeroFactory from "./characters/HeroFactory.js";
 import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
@@ -9,6 +10,7 @@ export default class DungeonAdventure {
     #myCurrentRoom
     #myDifficulty
     #myCurrentOpponent
+    #myStarted;
     
     constructor() {
         
@@ -19,7 +21,7 @@ export default class DungeonAdventure {
             __type: DungeonAdventure.name,
             dungeon: this.#myDungeon,
             adventurer: this.#myAdventurer,
-            room: this.#myCurrentRoom,
+            current_room_coordinate: this.#myCurrentRoom.getCoordinate(),
             difficulty: this.#myDifficulty,
             opponent: this.#myCurrentOpponent
         }
@@ -29,36 +31,11 @@ export default class DungeonAdventure {
         return "Welcome to the Dungeon Adventure Game. There are three major heroes in the worlds of Dungeon Adventure, the Warrior, the Priestess, and the Thief. Your goal is to find the missing pillars of OOP which are currently somewhere in the dungeon. Once you find all pillars find the exit to save the world of OOP."
     }
 
-    getHeroes() {
-        return [
-            {
-                name: "Warrior",
-                hp: 125,
-                dp_min: 35,
-                dp_max: 60,
-                attack_speed: 4,
-                hit_chance: 80,
-                block_chance: 20
-            },
-            {
-                name: "Priestess",
-                hp: 75,
-                dp_min: 25,
-                dp_max: 45,
-                attack_speed: 5,
-                hit_chance: 70,
-                block_chance: 30
-            },
-            {
-                name: "Thief",
-                hp: 75,
-                dp_min: 20,
-                dp_max: 40,
-                attack_speed: 6,
-                hit_chance: 80,
-                block_chance: 40
-            }
-        ];
+    static getHeroes() {
+        const heroes = [HeroFactory.getWarriorData(), 
+                       HeroFactory.getPriestessData(), 
+                       HeroFactory.getThiefData()];
+        return heroes;
     }
 
     static getDifficulties() {
@@ -66,13 +43,11 @@ export default class DungeonAdventure {
     }
 
     setDifficulty(theDifficulty) {
-        if (!Number.isInteger(theDifficulty)) {
-            throw new TypeError("The difficulty must be an integer");
+        const difficulty = Dungeon.DIFFICULTY[theDifficulty];
+        if (difficulty === undefined) {
+            throw new TypeError("The given difficulty was invalid");
         }
-        if (theDifficulty < Dungeon.DIFFICULTY.Easy || Dungeon.DIFFICULTY.Hard < theDifficulty) {
-            throw new RangeError("The difficulty was out of range.");
-        }
-        this.#myDifficulty = theDifficulty;
+        this.#myDifficulty = difficulty;
     }
 
     setAdventurer(theHeroType, theName) {
@@ -85,9 +60,11 @@ export default class DungeonAdventure {
     startGame() {
         this.#myDungeon = new Dungeon(this.#myDifficulty);
         this.#myCurrentRoom = this.#myDungeon.getEntrance();    
+        this.#myStarted = true;
     }
 
     getValidMoves() {
+        this.#checkStarted();
         return {
             north: this.#myCurrentRoom.isNorthDoorOpen(),
             east: this.#myCurrentRoom.isEastDoorOpen(),
@@ -97,6 +74,7 @@ export default class DungeonAdventure {
     }
 
     moveNorth() {
+        this.#checkStarted();
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() - 1));
@@ -105,6 +83,7 @@ export default class DungeonAdventure {
     }
 
     moveEast() {
+        this.#checkStarted();
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() + 1, location.getY()));
@@ -113,6 +92,7 @@ export default class DungeonAdventure {
     }
 
     moveSouth() {
+        this.#checkStarted();
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() + 1));
@@ -121,6 +101,7 @@ export default class DungeonAdventure {
     }
 
     moveWest() {
+        this.#checkStarted();
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() - 1, location.getY()));
@@ -129,6 +110,7 @@ export default class DungeonAdventure {
     }
 
     attackOpponent() { 
+        this.#checkStarted();
         if (!this.#myAdventurer.getFightingStatus()) {
             throw new EvalError("The adventurer is not currently fighting so it cannot attack.");
         }
@@ -148,6 +130,7 @@ export default class DungeonAdventure {
     }
 
     specialAttackOpponent() {
+        this.#checkStarted();
         if (!this.#myAdventurer.getFightingStatus()) {
             throw new EvalError("The adventurer is not currently fighting so it cannot special attack.");
         }
@@ -167,6 +150,7 @@ export default class DungeonAdventure {
     }
 
     blockOpponent() {   
+        this.#checkStarted();
         if (!this.#myAdventurer.getFightingStatus()) {
             throw new EvalError("The adventurer is not currently fighting so it cannot block.");
         }
@@ -180,10 +164,12 @@ export default class DungeonAdventure {
     }
 
     isAdventurerDead() {
+        this.#checkStarted();
         return this.#myAdventurer.isDead();
     }
 
     isOpponentDead() {
+        this.#checkStarted();
         if (this.#myAdventurer.getFightingStatus()) {
             throw new EvalError("The adventurer is not currently fighting");
         }
@@ -191,6 +177,7 @@ export default class DungeonAdventure {
     }
 
     useHealingPotion() {
+        this.#checkStarted();
         const inventory = this.#myAdventurer.getInventory();
         if (!inventory.hasHealingPotion()) {
             return "You have not healing potions";
@@ -205,6 +192,7 @@ export default class DungeonAdventure {
      * @returns 9 rooms total (8 adjacent rooms and itself);
      */
     useVisionPotion() {
+        this.#checkStarted();
         const inventory = this.#myAdventurer.getInventory();
         if (!inventory.hasVisionPotion()) {
             return "You have no vision potions";
@@ -214,6 +202,7 @@ export default class DungeonAdventure {
     }
 
     saveGame() {
+        this.#checkStarted();
         //TODO: implement saving game
         //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify (convert data to a string)
         //https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage (store savedState in browser)
@@ -322,7 +311,17 @@ export default class DungeonAdventure {
         return this.#myDungeon;
     }
 
+    getDifficulty() {
+        return this.#myDifficulty;
+    }
+
     getCurrentRoom() {
         return this.#myCurrentRoom;
+    }
+
+    #checkStarted() {
+        if (!this.#myStarted) {
+            throw new EvalError("The game has not been started yet. This method cannot be called yet");
+        }
     }
 }

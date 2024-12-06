@@ -48,4 +48,16 @@ describe("Invalid input constructor and setter methods", () => {
             coord.setY(-1)
         }).toThrow(RangeError);
     });
-})
+});
+
+describe("Tests Saves and Loads Coordinate class", () => {
+    test("Saves and Loads Coordinate class properly (No chances made from initialization)", () => {
+        const coordinateToSave = new Coordinate(10, 11);  
+        const coordinateFromSave = Coordinate.fromJSON(JSON.parse(JSON.stringify(coordinateToSave)));
+        expect(coordinateFromSave.toString()).toBe(coordinateToSave.toString());
+    });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Coordinate.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
+});

@@ -23,14 +23,34 @@ describe("Tests construction of the Door class. Ensure account for invalid input
         expect(() => new Door(null)).toThrow();
     });
     test("Creates an open door", () => {
-        const openDoor = new Door(true);
+        const openDoor = new Door(Door.STATUS.open);
         expect(openDoor.isOpen()).toBeTruthy();
     });
     test("Checks open door stays open if opened again.", () => {
-        const openDoor = new Door(true);
+        const openDoor = new Door(Door.STATUS.open);
         expect(openDoor.isOpen()).toBeTruthy();
         openDoor.open();
         expect(openDoor.isOpen()).toBeTruthy();
     });
 
 });
+
+
+describe("Tests Saves and Loads Door class", () => {
+    test("Saves and Loads Door class properly (No chances made from initialization)", () => {
+        const doorToSave = new Door();  
+        const doorFromSave = Door.fromJSON(JSON.parse(JSON.stringify(doorToSave)));
+        expect(doorFromSave.toString()).toBe(doorToSave.toString());
+    });
+
+    test("Saves and Loads Door class where door is open.", () => {
+        const doorToSave = new Door(Door.STATUS.open);  
+        const doorFromSave = Door.fromJSON(JSON.parse(JSON.stringify(doorToSave)));
+        expect(doorFromSave.toString()).toBe(doorToSave.toString());
+    });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Door.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
+});
+

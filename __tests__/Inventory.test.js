@@ -96,4 +96,8 @@ describe("Saves and Loads Inventory class properly", () => {
         const inventoryFromSave = Inventory.fromJSON(JSON.parse(JSON.stringify(inventoryToSave)));
         expect(inventoryFromSave.toString()).toBe(inventoryToSave.toString());
     });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Inventory.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
 });
