@@ -9,6 +9,9 @@ const model = new DungeonAdventure()
 let selectedCharacter
 
 app.use(express.json())
+app.get("/", (req, res) => {
+    res.send("Welcome to the Dungeon Adventure server!");
+});
 
 app.get("/api/characters", (req, res) => { 
     console.log("Server: request to /api/characters") 

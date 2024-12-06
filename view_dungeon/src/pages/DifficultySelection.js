@@ -21,7 +21,16 @@ const DifficultySelection = () => {
       };
 
       return (
-        <div style={{ backgroundColor: 'maroon', minHeight: '100vh', color: 'white', padding: '20px' }}>
+        <div style={{           
+          backgroundColor: 'maroon', 
+          minHeight: '100vh', 
+          color: 'white', 
+          padding: '20px', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          justifyContent: 'center', 
+          alignItems: 'center' 
+ }}>
           <h1>Difficulty Selection</h1>
           {difficulties.length === 0 ? (
             <p>Loading...</p>
@@ -33,6 +42,7 @@ const DifficultySelection = () => {
                   className={`character-card ${selectedDifficulty === difficulty ? 'selected' : ''}`}
                   onClick={() => handleDifficultySelect(difficulty)}
                   style={{
+                    backgrounColor: 'maroon',
                     cursor: 'pointer',
                     marginBottom: '15px',
                     border: selectedDifficulty === difficulty ? '2px solid green' : '2px solid gray',

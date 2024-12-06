@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './Homepage'; // Adjust path if necessary
+import HomePage from './Homepage'; 
 import AboutGamePage from './pages/AboutGamePage';
 import HowToPlayPage from './pages/HowtoPlayPage';
 import FAQPage from './pages/FAQPage';
