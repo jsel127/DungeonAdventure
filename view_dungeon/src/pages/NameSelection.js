@@ -52,7 +52,14 @@ const NameSelection = () => {
                         align-items: center;
                     }
 
-                    
+                    label {
+                        margin-bottom: 10px;
+                        font-size: 18px;
+                        color: black;
+                    }
+        
+
+                
                 `}
             </style>
 
