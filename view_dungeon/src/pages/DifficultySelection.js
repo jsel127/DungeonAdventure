@@ -42,6 +42,7 @@ const DifficultySelection = () => {
                   className={`character-card ${selectedDifficulty === difficulty ? 'selected' : ''}`}
                   onClick={() => handleDifficultySelect(difficulty)}
                   style={{
+                    backgrounColor: 'maroon',
                     cursor: 'pointer',
                     marginBottom: '15px',
                     border: selectedDifficulty === difficulty ? '2px solid green' : '2px solid gray',
