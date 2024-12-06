@@ -5,16 +5,49 @@
  */
 
 export default class Door {
+    static STATUS = Object.freeze({
+        open: true,
+        closed: false
+    });
+    /** The status of the door (open = true, close = false). */
     #myStatus;
-    constructor(theStatus = false) {
+    /**
+     * Creates a door that can be open or closed.
+     * @param {*} theStatus the status to set the door (open/closed).
+     */
+    constructor(theStatus = Door.STATUS.closed) {
+        if (typeof theStatus !== "boolean") {
+            throw new TypeError("Door expects a boolean type to be passed");
+        }
         this.#myStatus = theStatus;
     }
 
+    /**
+     * Checks if the door is open.
+     * @returns true if the door is open false otherwise.
+     */
     isOpen() {
         return this.#myStatus;
     }
 
+    /**
+     * Opens the door.
+     */
     open() {
-        this.#myStatus = true;
+        this.#myStatus = Door.STATUS.open;
+    }
+
+    toJSON() {
+        return {
+            __type: Door.name,
+            status: this.#myStatus
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || !theJSON.__type === Door.type) {
+            throw new TypeError("The JSON is not of door type");
+        }
+        return new Door(theJSON.status);
     }
 }

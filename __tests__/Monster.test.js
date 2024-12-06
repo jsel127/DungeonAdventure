@@ -4,7 +4,9 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
-import Monster from "../characters/Monster";
+import Monster from "../characters/Monster.js";
+import Hero from "../characters/Hero.js";
+import Warrior from "../characters/Warrior.js";
 // TODO: test attack method
 describe('Tests Monster Character instanciated to Name: Gremlin, HP: 70, DPMin: 15, DPMax: 30, AttackSpeed: 5, HitChange: 80, HealChance: 40, MinHeal: 20, MaxHeal: 40', () => {
     const gremlin = new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);  
@@ -85,6 +87,47 @@ describe('Tests Monster Character instanciated to Name: Gremlin, HP: 70, DPMin: 
     });
 });
 
+describe("Testing attack and heal method of Monster class.", () => {
+    test('Attack lands when HitChance is 100', () => {
+        const oneHundredHitChanceGremlin = new Monster("Gremlin", 10, 2, 2, 1, 100, 100, 1, 5);
+        const warrior = new Warrior("Bob", 12, 1, 1, 1, 1, 10);
+        oneHundredHitChanceGremlin.attack(warrior);
+        expect(warrior.getHP()).toBe(10);
+    });
+
+    test('Attack lands does not land when HitChance is 0', () => {
+        const oneHundredHitChanceGremlin = new Monster("Gremlin", 10, 10, 10, 1, 0, 100, 1, 5);
+        const warrior = new Warrior("Bob", 12, 1, 1, 1, 1, 10);
+        for (let i = 0; i < 20; i++) {
+            oneHundredHitChanceGremlin.attack(warrior);        
+        }        
+        expect(warrior.getHP()).toBe(12);
+    });
+
+    test("Heals when HealChance is 100 min and max heal is 5HP", () => {
+        const oneHundredHealChanceGremlin = new Monster("Gremlin", 10, 10, 10, 1, 0, 100, 5, 5);
+        oneHundredHealChanceGremlin.heal();
+        expect(oneHundredHealChanceGremlin.getHP()).toBe(15);
+        oneHundredHealChanceGremlin.heal();
+        expect(oneHundredHealChanceGremlin.getHP()).toBe(20);
+    });
+
+    test("Does not heal when heal chance is zero", () => {
+        const gremlin0HealChance = new Monster("Gremlin", 10, 1, 2, 10, 100, 0, 10, 11);
+        
+        expect(gremlin0HealChance.getHP()).toBe(10);
+    });
+
+    test("Fail to heal when HP is 0", () => {
+        const warrior100HitRate = new Warrior("Bob", 10, 5, 5, 10, 100, 100);
+        warrior100HitRate.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+        const fatedToDieGremlin = new Monster("Gremlin", 5, 10, 10, 10, 100, 100, 1, 1);
+        warrior100HitRate.attack(fatedToDieGremlin);
+        expect(fatedToDieGremlin.isDead()).toBeTruthy();
+        expect(() => fatedToDieGremlin.heal()).toThrow();
+    });
+});
+
 describe('Tests Monster Character constructor instanciated with invalid arguments.', () => {  
     test('Creating the character with no name', () => {
         expect(() => new Monster(null, 70, 15, 30, 5, 80, 40, 20, 40)).toThrow();
@@ -137,5 +180,17 @@ describe("Tests Monster's setter methods with invalid data", () => {
             const gremlin = new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);  
             gremlin.setHP(-1);
         }).toThrow();
+    });
+});
+
+describe("Tests Saves and Loads Monster class", () => {
+    test("Saves and Loads Monster class properly (No chances made from initialization)", () => {
+        const monsterToSave = new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);  
+        const monsterFromSave = Monster.fromJSON(JSON.parse(JSON.stringify(monsterToSave)));
+        expect(monsterFromSave.toString()).toBe(monsterToSave.toString());
+    });
+
+    test("Save and Load on invalid data", () => {
+        expect(() => Monster.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
     });
 });

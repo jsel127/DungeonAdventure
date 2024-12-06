@@ -39,6 +39,7 @@ export default class Warrior extends Hero {
      * @returns true if a successful attack was made and false otherwise.
      */
     specialAttack(theOpponent) {
+        super.specialAttack(theOpponent);
         if (!this.isDead() && Math.random() * 100 < Warrior.#HIT_RATE_CRUSHING_BLOW) {
             const rangeDP = this.getDPMax() - this.getDPMin();
             const attackDP = Warrior.#MULTIPLIER_CRUSHING_BLOW * 
@@ -51,5 +52,22 @@ export default class Warrior extends Hero {
             return true;
         }
         return false;
+    }
+
+    toJSON() {
+        return {
+            __type: Warrior.name, 
+            hero: super.toJSON()
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || theJSON.__type !== Warrior.name) {
+            throw new TypeError("The JSON is not of warrior type.");
+        }
+        return new Warrior(theJSON.hero.dungeon_character.name, theJSON.hero.dungeon_character.hp, 
+                           theJSON.hero.dungeon_character.dp_min, theJSON.hero.dungeon_character.dp_max, 
+                           theJSON.hero.dungeon_character.attack_speed, theJSON.hero.dungeon_character.hit_chance,
+                           theJSON.hero.block_chance, theJSON.hero.inventory, theJSON.hero.fighting_status);
     }
 }

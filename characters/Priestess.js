@@ -41,6 +41,7 @@ export default class Priestess extends Hero {
      * and false if no HP was gained.
      */
     specialAttack(theOpponent) {
+        super.specialAttack(theOpponent);
         const minHeal = Math.round(this.getHP() * Priestess.#HEAL_MIN_PERCENT / 100);
         const maxHeal = Math.round(this.getHP() * Priestess.#HEAL_MAX_PERCENT / 100);
         const rangeHeal = maxHeal - minHeal;
@@ -50,5 +51,22 @@ export default class Priestess extends Hero {
             return true;
         }
         return false;
+    }
+
+    toJSON() {
+        return {
+            __type: Priestess.name,
+            hero: super.toJSON()
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || theJSON.__type !== Priestess.name) {
+            throw new TypeError("The JSON is not of priestess type.");
+        }
+        return new Priestess(theJSON.hero.dungeon_character.name, theJSON.hero.dungeon_character.hp, 
+                             theJSON.hero.dungeon_character.dp_min, theJSON.hero.dungeon_character.dp_max, 
+                             theJSON.hero.dungeon_character.attack_speed, theJSON.hero.dungeon_character.hit_chance,
+                             theJSON.hero.block_chance, theJSON.hero.inventory, theJSON.hero.fighting_status);
     }
 }

@@ -2,8 +2,9 @@ export default class Coordinate {
     #myX
     #myY
     constructor(theX, theY) {
-        if (theX < 0 || theY < 0) {
-            throw new RangeError("Negative coordinates are not supported");
+        if (!Number.isInteger(theX) || !Number.isInteger(theY) 
+            || theX < 0 || theY < 0) {
+            throw new RangeError("Non-integer and negative coordinates are not supported");
         }
         this.#myX = theX;
         this.#myY = theY;
@@ -23,14 +24,29 @@ export default class Coordinate {
         this.#myX = theX;
     }
 
-    setY() {
+    setY(theY) {
         if (!Number.isInteger(theY) || theY < 0) {
             throw new RangeError("Negative coordinates are not supported");
         }
         this.#myY = theY;
+    }    
+    
+    toString() {
+        return `${this.#myX} ${this.#myY}`;
     }
 
-    toString() {
-        return this.#myX;
+    toJSON() {
+        return {
+            __type: Coordinate.name,
+            x: this.#myX,
+            y: this.#myY
+        };
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || theJSON.__type !== Coordinate.name) {
+            throw new TypeError("The JSON is not of coordinate type.");
+        }
+        return new Coordinate(theJSON.x, theJSON.y);
     }
 }

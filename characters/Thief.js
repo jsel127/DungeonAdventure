@@ -41,6 +41,7 @@ export default class Thief extends Hero {
      * @returns true if a successful attack was made and false otherwise.
      */
     specialAttack(theOpponent) {
+        super.specialAttack(theOpponent);
         const randomInt = Math.round(Math.random() * 100);
         if (!this.isDead()) {
             if (randomInt < Thief.#HIT_RATE_SUPRISE_ATTACK) {
@@ -56,5 +57,22 @@ export default class Thief extends Hero {
             }
         }
         return false;
+    }
+
+    toJSON() {
+        return {
+            __type: Thief.name, 
+            hero: super.toJSON()
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || theJSON.__type !== Thief.name) {
+            throw new TypeError("The JSON is not of thief type.");
+        }
+        return new Thief(theJSON.hero.dungeon_character.name, theJSON.hero.dungeon_character.hp, 
+                         theJSON.hero.dungeon_character.dp_min, theJSON.hero.dungeon_character.dp_max, 
+                         theJSON.hero.dungeon_character.attack_speed, theJSON.hero.dungeon_character.hit_chance,
+                         theJSON.hero.block_chance, theJSON.hero.inventory, theJSON.hero.fighting_status);
     }
 }

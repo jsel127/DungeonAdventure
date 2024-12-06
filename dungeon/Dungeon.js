@@ -8,6 +8,8 @@ export default class Dungeon {
        Medium: 2,
        Easy: 1
     });
+    /** The buffer size of the room array */
+    static BUFFER = 1;
     /** Multiplier to determine the size of the room given the difficulty level */
     static #DIFFICULTY_MULTIPLIER = 5;
     /** Probability that a room contains a healing potion */
@@ -22,100 +24,247 @@ export default class Dungeon {
     static #PROB_GREMLIN = 0.3;
     /** Probability that a monster is a skeleton */
     static #PROB_SKELETON = 0.3;
+    
     /** Holds the information for the rooms in the dungeon. */
-    #myRooms
+    #myRooms;
     /** The entrance for the dungeon. */
-    #myEntrance
+    #myEntrance;
     /** The exit for the dungeon. */
-    #myExit
+    #myExit;
     /** The dimension of the maze. */
-    #myDimension
-    constructor(theDifficulty) {
-        if (!Number.isInteger(theDifficulty) || theDifficulty < Dungeon.DIFFICULTY.Easy || theDifficulty > Dungeon.DIFFICULTY.Hard) {
-            throw new RangeError(`${theDifficulty} is not a valid difficulty level. Select for the DIFFICULTY object.`);
-        }
+    #myDimension;
+    /** The 2D array of east doors. */
+    #myEastDoors;
+    /** The 2D array of south doors. */
+    #mySouthDoors;
+    /** 
+     * Creates a Dungeon that stores the entrance, exit, dimensions, and rooms of the game.
+     */
+
+    constructor(theDifficulty, theRoomContent = null, theEastDoors = null, 
+                theSouthDoors = null, theEntranceCoordinate = null, 
+                theExitCoordinate = null) {
+        if (!Number.isInteger(theDifficulty) 
+            || theDifficulty < Dungeon.DIFFICULTY.Easy 
+            || theDifficulty > Dungeon.DIFFICULTY.Hard) {
+            throw new RangeError(`${theDifficulty} is not a valid difficulty level."
+                                 + "Select for the DIFFICULTY object.`);
+        } 
         this.#myDimension = theDifficulty * Dungeon.#DIFFICULTY_MULTIPLIER;
-        this.makeDungeon();
+
+        if (theRoomContent === null || theEastDoors === null || theSouthDoors === null
+            || theEntranceCoordinate === null || theExitCoordinate === null) {
+            this.#makeDungeon();
+        } else {
+            if (!theEntranceCoordinate instanceof Coordinate 
+                || !theExitCoordinate instanceof Coordinate) {
+                throw new TypeError("The exit and entrance must be coordinates");
+            }
+            for (let row = 0; row < this.#myDimension + 1; row++) {
+                for (let col = 0; col < this.#myDimension + 1; col++) {
+                    if (!theSouthDoors[row][col] instanceof Door 
+                        || !theEastDoors[row][col] instanceof Door) {
+                        throw new TypeError("The east and south array of doors must contain all doors.");
+                    }
+                }
+            }
+            this.#myEastDoors = theEastDoors;
+            this.#mySouthDoors = theSouthDoors;
+            this.#createRooms(theRoomContent);
+// POTENTIAL SWAPPING ERROR (Y, X) V (X, Y)
+            this.#myEntrance = this.#myRooms[theEntranceCoordinate.getY()][theEntranceCoordinate.getX()]; 
+            this.#myExit = this.#myRooms[theExitCoordinate.getY()][theExitCoordinate.getX()];
+        }
     }
 
-    makeDungeon() {
-        const doors = this.#createDoors();
-        this.#generateTraversableMaze(doors);
-        this.#createRooms(doors);
+    toString() {
+        let str = " ";
+        let currentRoom;
+        for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {
+            currentRoom = this.getRoomWithRowCol(Dungeon.BUFFER, col);
+            str += (currentRoom.isNorthDoorOpen()) ? "  " : "- ";
+        }
+        str += "\n";
+        for (let row = Dungeon.BUFFER; row < this.#myDimension + Dungeon.BUFFER; row++) {
+            for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {
+                currentRoom = this.getRoomWithRowCol(row, col);
+                str += (currentRoom.isWestDoorOpen()) ? "\\" : "|";
+                str += currentRoom.getContent();
+            }
+            str += (currentRoom.isEastDoorOpen()) ? "\\" : "|";
+            str += "\n ";
+            for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {                
+                currentRoom = this.getRoomWithRowCol(row, col);
+                str += (currentRoom.isSouthDoorOpen()) ? "  " : "- ";
+            }
+            str += "\n";
+        }
+        return str;
+    }
+
+    getEntrance() {
+        return this.#myEntrance;
+    }
+
+    getExit() {
+        return this.#myExit;
+    }
+
+    getDimensions() {
+        return this.#myDimension;
+    }
+    /**
+     * 
+     * @param {*} theCoordinate the Coordinate of the room to get.
+     * @returns 
+     */
+    getRoom(theCoordinate) {
+        if (!theCoordinate instanceof Coordinate) {
+            throw TypeError("The given coordinate was not a Coordinate type.");
+        }
+        return this.#myRooms[theCoordinate.getX()][theCoordinate.getY()];
+    }
+
+    getRoomWithRowCol(theRow, theCol) {
+        if (!Number.isInteger(theRow) || !Number.isInteger(theCol)) {
+            throw new TypeError("The row and/or the column is not of integer type");
+        }
+        if (theRow > this.#myDimension || theRow < Dungeon.BUFFER
+            || theCol > this.#myDimension || theCol < Dungeon.BUFFER) {
+            throw new RangeError("The row and/or column are not valid");
+        }
+        return this.#myRooms[theRow][theCol];
+    }
+
+    getAdjacentRooms(theRoom) {
+        if (!theRoom instanceof Room) {
+            throw new TypeError("The given value is not a room");
+        }
+        const coordinate = theRoom.getCoordinate();
+        const curX = coordinate.getX();
+        const curY = coordinate.getY();
+
+        const adjacentRooms = new Array(3);
+        for (let row = -1; row <= 1; row++) {
+            adjacentRooms[row + 1] = new Array(3);
+            for (let col = -1; col <= 1; col++) {
+                adjacentRooms[row + 1][col + 1] = this.#myRooms[curX + row][curY + col];
+            }
+        }
+        return adjacentRooms;
+    }
+
+    #makeDungeon() {
+        this.#createDoors();
+        this.#generateTraversableMaze();
+        this.#createRooms();
         this.#fillRooms();
     }
 
     #createDoors() {
-        const eastDoors = [];
-        const southDoors = [];
-        eastDoors[0] = [];
-        southDoors[0] = []
-        for (let buffer = 0; buffer <= this.#myDimension; buffer++) {
-            eastDoors[0][buffer] = null;
-            southDoors[0][buffer] = new Door();
-        }
-        for (let row = 1; row <= this.#myDimension; row++) {
-            //buffer
-            eastDoors[row] = [new Door()];
-            southDoors[row] = [null];
-            for (let col = 1; col <= this.#myDimension; col++) {
-                eastDoors[row][col] = new Door();
-                southDoors[row][col] = new Door();
+        this.#myEastDoors =new Array(this.#myDimension + Dungeon.BUFFER);
+        this.#mySouthDoors = new Array(this.#myDimension + Dungeon.BUFFER);
+        for (let row = 0; row < this.#myDimension + Dungeon.BUFFER; row++) {
+            this.#myEastDoors[row] = new Array(this.#myDimension + Dungeon.BUFFER);
+            this.#mySouthDoors[row] = new Array(this.#myDimension + Dungeon.BUFFER);
+            for (let col = 0; col < this.#myDimension + Dungeon.BUFFER; col++) {
+                this.#myEastDoors[row][col] = new Door();
+                this.#mySouthDoors[row][col] = new Door();
             }
         }
-        return {east: eastDoors, south: southDoors};
     }
 
-    /** 
-     * Sets the dimensions of the maze and the access points of the maze (entrance and exit).
-     */
     #generateTraversableMaze() {
-
+        const visited = this.#createBufferedBooleanArray();
+        const row = Math.floor(Math.random() * this.#myDimension) + 1;
+        const col = Math.floor(Math.random() * this.#myDimension) + 1;
+        this.#createPath(visited, row, col);
     }
 
-    /**
-     * Creates rooms with the appropriate doors.
-     * @param {*} Doors 
-     */
-    #createRooms(Doors) {
-        const eastDoors = Doors.east;
-        const southDoors = Doors.south;
-        this.#myRooms = [];
-        for (let row = 0; row < this.#myDimension; row++) {
-            this.#myRooms[row] = [];
-            for (let col = 0; col < this.#myDimension; col++) {
+    #createBufferedBooleanArray() {
+        const dimensionArray = this.#myDimension + Dungeon.BUFFER * 2;
+        const visitedArray = new Array(dimensionArray);
+        visitedArray[0] = new Array(dimensionArray).fill(true);
+        visitedArray[dimensionArray - 1] = new Array(dimensionArray).fill(true);
+        for (let row = Dungeon.BUFFER; row < dimensionArray - Dungeon.BUFFER; row++) {
+            visitedArray[row] = new Array(dimensionArray);
+            visitedArray[row][0] = true;
+            visitedArray[row][dimensionArray - Dungeon.BUFFER] = true;
+            for (let col = Dungeon.BUFFER; col < dimensionArray - Dungeon.BUFFER; col++) {
+                visitedArray[row][col] = false;
+            }
+        }
+        return visitedArray;
+    }
+
+    #createPath(theVisited, theRow, theCol) {
+        theVisited[theRow][theCol] = true;
+        if (theVisited[theRow - 1][theCol] === false) {
+            this.#mySouthDoors[theRow - 1][theCol].open();
+            this.#createPath(theVisited, theRow - 1, theCol);
+        } 
+        if (theVisited[theRow][theCol + 1] === false) {
+            this.#myEastDoors[theRow][theCol].open();
+            this.#createPath(theVisited, theRow, theCol + 1);
+        } 
+        if (theVisited[theRow + 1][theCol] === false) {
+            this.#mySouthDoors[theRow][theCol].open();
+            this.#createPath(theVisited, theRow + 1, theCol);
+        } 
+        if (theVisited[theRow][theCol - 1] === false) {
+            this.#myEastDoors[theRow][theCol - 1].open();
+            this.#createPath(theVisited, theRow, theCol - 1);
+        }
+    }
+
+    #createRooms(theRoomContent = false) {
+        const dimensionArray = this.#myDimension + Dungeon.BUFFER * 2;
+        this.#myRooms = new Array(dimensionArray);
+        this.#myRooms[0] = new Array(dimensionArray).fill(null);
+        this.#myRooms[dimensionArray - Dungeon.BUFFER] = new Array(dimensionArray).fill(null);
+        let content;
+        for (let row = Dungeon.BUFFER; row < dimensionArray - Dungeon.BUFFER; row++) {
+            this.#myRooms[row] = new Array(dimensionArray);
+            this.#myRooms[row][0] = null;
+            this.#myRooms[row][dimensionArray - Dungeon.BUFFER] = null;
+            for (let col = Dungeon.BUFFER; col < dimensionArray - Dungeon.BUFFER; col++) {
+                content = theRoomContent ? theRoomContent[row][col] : Room.CONTENT.empty;
                 this.#myRooms[row][col] = new Room(new Coordinate(row, col),
-                                                   southDoors[row][col + 1], 
-                                                   eastDoors[row + 1][col + 1], 
-                                                   southDoors[row + 1][col + 1], 
-                                                   eastDoors[row + 1][col]);
+                                                   this.#mySouthDoors[row - 1][col], 
+                                                   this.#myEastDoors[row][col],
+                                                   this.#mySouthDoors[row][col],
+                                                   this.#myEastDoors[row][col - 1],
+                                                   content);
+
             }
         }
     }
 
     #fillRooms() {
-        this.#placeRequiredItems();
+        this.#placeRequiredContent();
         this.#placeRepeatedItems();
     }
 
-    #placeRequiredItems() {
-        let occupiedRooms = [];
+    #placeRequiredContent() {
         let roomLocation;
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.exit, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.entrance);
+        this.#myEntrance = this.#myRooms[roomLocation[0]][roomLocation[1]];
+
+        roomLocation = this.#placeSingleContent(Room.CONTENT.exit);
         this.#myExit = this.#myRooms[roomLocation[0]][roomLocation[1]];
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.abstractionPillar, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.abstractionPillar);
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.encapsulationPillar, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.encapsulationPillar);
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.inheritancePillar, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.inheritancePillar);
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
 
-        roomLocation = this.#placeSingleContent(Room.CONTENT.polymorphismPillar, occupiedRooms);
+        roomLocation = this.#placeSingleContent(Room.CONTENT.polymorphismPillar);
         this.#surroundWithMonsters(roomLocation[0], roomLocation[1]);
     }
 
@@ -123,16 +272,16 @@ export default class Dungeon {
      * Finds a random, unoccupied room and places the given content there. 
      * 
      * @param {*} theContent content (item, monster, etc) to be placed in a room
-     * @param {*} theOccupiedRooms array of coordinates of occupied rooms
      * @return an array containing the row and col of the room the content was placed in
      */
-    #placeSingleContent(theContent, theOccupiedRooms) {
+    #placeSingleContent(theContent) {
+        let row;
+        let col;
         do { 
-            var row = Math.floor(Math.random() * this.#myDimension);
-            var col = Math.floor(Math.random() * this.#myDimension);
-        } while (theOccupiedRooms.includes([row, col])); 
+            row = Math.floor(Math.random() * this.#myDimension) + Dungeon.BUFFER;
+            col = Math.floor(Math.random() * this.#myDimension) + Dungeon.BUFFER;
+        } while (!this.#myRooms[row][col].isEmpty()); 
         this.#myRooms[row][col].setContent(theContent);
-        theOccupiedRooms.push([row, col]);
         return [row, col];
     }
 
@@ -141,17 +290,22 @@ export default class Dungeon {
      */
     #placeRepeatedItems() {
         let rand;
-        for (let row = 0; row < this.#myDimension; row++) {
-            for (let col = 0; col < this.#myDimension; col++) {
+        for (let row = Dungeon.BUFFER; row < this.#myDimension + Dungeon.BUFFER; row++) {
+            for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {
                 if (this.#myRooms[row][col].isEmpty()) {
+                    let placed = false;
                     rand = Math.random();
                     if (rand < Dungeon.#PROB_HEALING_POTION) {
                         this.#myRooms[row][col].setContent(Room.CONTENT.healingPotion);
+                        placed = true;
                     }
-                    else if (rand < Dungeon.#PROB_VISION_POTION + Dungeon.#PROB_HEALING_POTION) {
+                    rand = Math.random();
+                    if (!placed && rand < Dungeon.#PROB_VISION_POTION) {
                         this.#myRooms[row][col].setContent(Room.CONTENT.visionPotion);
+                        placed = true;
                     }
-                    else if (rand < Dungeon.#PROB_MONSTER + Dungeon.#PROB_VISION_POTION + Dungeon.#PROB_HEALING_POTION) {
+                    rand = Math.random();
+                    if (!placed && rand < Dungeon.#PROB_MONSTER) {
                         this.#placeMonster(row, col);
                     }
                 }
@@ -168,16 +322,16 @@ export default class Dungeon {
      */
     #surroundWithMonsters(theRow, theCol) {
         let room = this.#myRooms[theRow][theCol];
-        if (room.isNorthDoorOpen()) {
+        if (room.isNorthDoorOpen() && room.isEmpty(theRow - 1, theCol)) {
             this.#placeMonster(theRow - 1, theCol);
         }
-        if (room.isSouthDoorOpen()) {
+        if (room.isSouthDoorOpen() && room.isEmpty(theRow + 1, theCol)) {
             this.#placeMonster(theRow + 1, theCol);
         }
-        if (room.isWestDoorOpen()) {
+        if (room.isWestDoorOpen() && room.isEmpty(theRow, theCol - 1)){
             this.#placeMonster(theRow, theCol - 1);
         }
-        if (room.isEastDoorOpen()) {
+        if (room.isEastDoorOpen() && room.isEmpty(theRow, theCol + 1)) {
             this.#placeMonster(theRow, theCol + 1);
         }
     }
@@ -198,39 +352,40 @@ export default class Dungeon {
         }
     }
 
-    getEntrance() {
-        return this.#myEntrance;
-    }
-
-    getExit() {
-        return this.#myExit;
-    }
-
-    getRoom(theCoordinate) {
-        if (!theCoordinate instanceof Coordinate) {
-            throw TypeError("The given coordinate was not a Coordinate type.");
-        }
-        return this.#myRooms[theCoordinate.getX()][theCoordinate.getY()];
-    }
-
-    /**
-     * A string of the current state of the dungeon.
-     * @returns a string of the contents of the rooms in the dungeon.
-     */
-    /*
-    toString() {
-        // TODO: make the string also print the state of the doors (open/closed) and the walls.
-        let str = '';
-        for (let row = 0; row < this.#myDimension; row++) {
-            for (let col = 0; col < this.#myDimension; col++) {
-                str += this.#myRooms[row][col].getContent();
+    toJSON() {
+        const content = new Array(this.#myDimension);
+        for (let row = Dungeon.BUFFER; row < this.#myDimension + Dungeon.BUFFER; row++) {
+            content[row] = new Array(this.#myDimension);
+            for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {
+                content[row][col] = this.#myRooms[row][col].getContent();
             }
-            str += '\n';
         }
-        return str;
+        return {
+            __type: Dungeon.name,            
+            room_content: content,
+            east_doors: this.#myEastDoors,
+            south_doors: this.#mySouthDoors,
+            entrance_coordinate: this.#myEntrance.getCoordinate(),
+            exit_coordinate: this.#myExit.getCoordinate(),
+            dimension: this.#myDimension
+        }
     }
-        */
-}
 
-const d = new Dungeon(Dungeon.DIFFICULTY.Easy);
-console.log(d.toString());
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || theJSON.__type !== Dungeon.name) {
+            throw new TypeError("The JSON is not a dungeon type");
+        }
+        for (let row = 0; row < theJSON.dimension + Dungeon.BUFFER; row++) {
+            for (let col = 0; col < theJSON.dimension + Dungeon.BUFFER; col++) {
+                theJSON.east_doors[row][col] = Door.fromJSON(theJSON.east_doors[row][col]);
+                theJSON.south_doors[row][col] = Door.fromJSON(theJSON.south_doors[row][col]);
+            }
+        }
+        return new Dungeon(theJSON.dimension/Dungeon.#DIFFICULTY_MULTIPLIER,
+                           theJSON.room_content,
+                           theJSON.east_doors, 
+                           theJSON.south_doors,
+                           Coordinate.fromJSON(theJSON.entrance_coordinate), 
+                           Coordinate.fromJSON(theJSON.exit_coordinate));
+    }
+}

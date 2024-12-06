@@ -43,6 +43,7 @@ export default class DungeonCharacter {
         }
         if (!(Number.isInteger(theHP) && Number.isInteger(theDPMax) && Number.isInteger(theAttackSpeed) &&
             Number.isInteger(theDPMin) && Number.isInteger(theHitChance) && typeof theName === "string")) {
+            console.error(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance);
             throw new TypeError("The argument(s) do not match the expected type of data.");
         }
         if (theHP <= 0 || theDPMax <= 0 || theAttackSpeed <= 0) {
@@ -157,5 +158,16 @@ export default class DungeonCharacter {
      */
     toString() {
         return `${this.#myName} ${this.#myHP} ${this.#myDPMin} ${this.#myDPMax} ${this.#myAttackSpeed} ${this.#myHitChance}`;
+    }
+
+    toJSON() {
+        return {
+            name: this.#myName,
+            hp: this.#myHP,
+            dp_min: this.#myDPMin,
+            dp_max: this.#myDPMax,
+            attack_speed: this.#myAttackSpeed,
+            hit_chance: this.#myHitChance
+        }
     }
 }

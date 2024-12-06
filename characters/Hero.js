@@ -5,15 +5,23 @@
  */
 
 import DungeonCharacter from "./DungeonCharacter.js";
-
+import Inventory from "./Inventory.js";
 /**
  * Class containing common methods and data for all hero character. 
  * @author Jasmine Sellers
  * @version 1.0
  */
-export default class Hero extends DungeonCharacter{
+export default class Hero extends DungeonCharacter {
+    static FIGHTING_STATUS = Object.freeze({
+        fighting: true,
+        notFighting: false
+    })
     /** The chance the hero has to block an attack */
     #myChanceToBlock
+    /** The inventory storing the items the adventurer will pick up. */
+    #myInventory
+    /** Tracks if the hero is currently fighting an opponent. */
+    #myFightingStatus
     /**
      * Constructor that will store the given arguments in the corresponding 
      * instance fields.
@@ -27,7 +35,8 @@ export default class Hero extends DungeonCharacter{
      * @param {*} theChanceToBlock the block chance of the hero.
      */
     constructor(theName, theHP, theDPMin, theDPMax,
-                theAttackSpeed, theHitChance, theChanceToBlock) {       
+                theAttackSpeed, theHitChance, theChanceToBlock,
+                theFightingStatus = Hero.FIGHTING_STATUS.notFighting) {       
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance);
         if (this.constructor === Hero) {
             throw new TypeError("Hero cannot be instanciated directly.");
@@ -38,7 +47,12 @@ export default class Hero extends DungeonCharacter{
         if (theChanceToBlock < 0 || theChanceToBlock > 100 ) {
             throw new RangeError("The Block Chance is not within the valid range [0,100].");
         }     
+        if (typeof theFightingStatus !== "boolean") {
+            throw new TypeError("Invalid fighting status. Must be of boolean type.");
+        }
         this.#myChanceToBlock = theChanceToBlock;
+        this.#myInventory = new Inventory();
+        this.#myFightingStatus = theFightingStatus;
     }
 
     /**
@@ -48,17 +62,53 @@ export default class Hero extends DungeonCharacter{
      * @return true if the attack was successfully blocked and false otherwise.
      */
     block() {
+        if (this.#myFightingStatus !== Hero.FIGHTING_STATUS.fighting) {
+            throw new EvalError("The hero is not currently fighting any monster. Blocks are not allowed.");
+        }
         if (Math.random() < this.#myChanceToBlock/100) {
-            return false;
+            return true;
         } 
-        return true;
+        return false;
+    }
+
+    attack(theOpponent) {
+        if (this.#myFightingStatus !== Hero.FIGHTING_STATUS.fighting) {
+            throw new EvalError("The hero is not currently fighting any monster. Attacks are not allowed.");
+        }
+        super.attack(theOpponent);
     }
 
     /**
      * Carries out the special attack specific to the Heroes. This is an abstract method.
      */
     specialAttack(theOpponent) {
-        throw new Error("specialAttack() Must be implemented by derived class");
+        if (this.#myFightingStatus !== Hero.FIGHTING_STATUS.fighting) {
+            throw new EvalError("The hero is not currently fighting any monster. Special attacks are not allowed.");
+        }
+    }
+
+    /**
+     * Sets the fighting status of the hero.
+     * @throw TypeError if the given parameter is not of boolean type
+     * @param {*} theFightingStatus Sets the fighting status of the hero to true if the hero is fighting and false if they are not fighting. 
+     */
+    setFightingStatus(theFightingStatus) {
+        if (typeof theFightingStatus !== "boolean") {
+            throw new TypeError("Invalid fighting status. Must be of boolean type.");
+        }
+        this.#myFightingStatus = theFightingStatus;
+    }
+
+    /**
+     * Returns if the hero is currently fighting or not. 
+     * @returns true if the hero is fighting and false otherwise.
+     */
+    getFightingStatus() {
+        return this.#myFightingStatus;
+    }
+
+    getInventory() {
+        return this.#myInventory;
     }
 
     /**
@@ -67,5 +117,14 @@ export default class Hero extends DungeonCharacter{
      */
     toString() {
         return super.toString() + ` ${this.#myChanceToBlock}`
+    }
+
+    toJSON() {
+        return {
+            dungeon_character: super.toJSON(),
+            block_chance: this.#myChanceToBlock,
+            inventory: this.#myInventory,
+            fighting_status: this.#myFightingStatus
+        }
     }
 }
