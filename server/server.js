@@ -30,4 +30,9 @@ app.get("/api/difficulties", (req, res) => {
     res.json(DungeonAdventure.getDifficulties())
 })
 
+app.post("/api/selected-difficulty", (req, res) => {
+    console.log('Server: recieved selected difficulty from react:', req.body.difficulty)
+    model.setDifficulty(req.body.difficulty)
+})
+
 app.listen(5001, () => { console.log("Server started on port 5001") }) 

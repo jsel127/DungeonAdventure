@@ -78,7 +78,7 @@ const CharacterSelection = () => {
                 return res.json()
               }).catch(error => console.log('ERROR: select character post request'))
             }}>
-              Start Game
+              Next
             </button>
           </Link>
         </div>

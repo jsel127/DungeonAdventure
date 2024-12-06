@@ -48,6 +48,7 @@ export default class DungeonAdventure {
             throw new TypeError("The given difficulty was invalid");
         }
         this.#myDifficulty = difficulty;
+        console.log('DungeonAdventure: difficulty set:', this.#myDifficulty)
     }
 
     setAdventurer(theHeroType, theName) {
