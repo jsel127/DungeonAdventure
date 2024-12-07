@@ -237,18 +237,6 @@ export default class DungeonAdventure {
         return this.#myDungeon.getAdjacentRooms(this.#myCurrentRoom);
     }
 
-    saveGame() {
-        this.#checkStarted();
-        //TODO: implement saving game
-        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify (convert data to a string)
-        //https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage (store savedState in browser)
-    }
-
-    loadGame() {
-        //TODO: implement loading game
-        //https://stackoverflow.com/questions/6487699/best-way-to-serialize-unserialize-objects-in-javascript
-    }
-
     #processMove() {
         this.#processContent();
         return this.#hasWonGame();
