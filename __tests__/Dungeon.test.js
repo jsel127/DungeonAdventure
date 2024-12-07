@@ -33,21 +33,21 @@ describe("Test basic setup of the Dungeon", () => {
         }
         function checkExitReached(theVisited, theDungeon, theRoom) {
             const coordinate = theRoom.getCoordinate();
-            theVisited[coordinate.getY()][coordinate.getX()] = true;
+            theVisited[coordinate.getRow()][coordinate.getCol()] = true;
             if (theRoom.isExit()) {
                 return true;
             } 
-            if (theRoom.isNorthDoorOpen() && theVisited[coordinate.getY() - 1][coordinate.getX()]) {
-                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY() - 1, coordinate.getX()));
+            if (theRoom.isNorthDoorOpen() && theVisited[coordinate.getRow() - 1][coordinate.getCol()]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getRow() - 1, coordinate.getCol()));
             }
-            if (theRoom.isEastDoorOpen() && theVisited[coordinate.getY()][coordinate.getX() + 1]) {
-                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY(), coordinate.getX() + 1));
+            if (theRoom.isEastDoorOpen() && theVisited[coordinate.getRow()][coordinate.getCol() + 1]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getRow(), coordinate.getCol() + 1));
             }
-            if (theRoom.isSouthDoorOpen() && theVisited[coordinate.getY() + 1][coordinate.getX() ]) {
-                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY() + 1, coordinate.getX()));
+            if (theRoom.isSouthDoorOpen() && theVisited[coordinate.getRow() + 1][coordinate.getCol() ]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getRow() + 1, coordinate.getCol()));
             }
-            if (theRoom.isWestDoorOpen() && theVisited[coordinate.getY()][coordinate.getX() - 1]) {
-                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getY(), coordinate.getX() - 1));
+            if (theRoom.isWestDoorOpen() && theVisited[coordinate.getRow()][coordinate.getCol() - 1]) {
+                return checkExitReached(theVisited, theDungeon, theDungeon.getRoomWithRowCol(coordinate.getRow(), coordinate.getCol() - 1));
             } 
             return false;
         };
@@ -90,13 +90,13 @@ describe("Test basic setup of the Dungeon", () => {
         let roomClosedWest;
         const edge = dungeonEasy.getDimensions();
         for (let i = Dungeon.BUFFER; i < dungeonEasy.getDimensions() + Dungeon.BUFFER; i++) {
-            roomClosedNorth = dungeonEasy.getRoom(new Coordinate(Dungeon.BUFFER, i));
+            roomClosedNorth = dungeonEasy.getRoomWithRowCol(Dungeon.BUFFER, i);
             expect(roomClosedNorth.isNorthDoorOpen()).toBeFalsy();
-            roomClosedEast = dungeonEasy.getRoom(new Coordinate(i, edge));
+            roomClosedEast = dungeonEasy.getRoomWithRowCol(i, edge);
             expect(roomClosedEast.isEastDoorOpen()).toBeFalsy();
-            roomClosedSouth = dungeonEasy.getRoom(new Coordinate(edge, i));
+            roomClosedSouth = dungeonEasy.getRoomWithRowCol(edge, i);
             expect(roomClosedSouth.isSouthDoorOpen()).toBeFalsy();
-            roomClosedWest = dungeonEasy.getRoom(new Coordinate(i, Dungeon.BUFFER));
+            roomClosedWest = dungeonEasy.getRoomWithRowCol(i, Dungeon.BUFFER);
             expect(roomClosedWest.isWestDoorOpen()).toBeFalsy();
         }
     });

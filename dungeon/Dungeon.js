@@ -72,8 +72,8 @@ export default class Dungeon {
             this.#mySouthDoors = theSouthDoors;
             this.#createRooms(theRoomContent);
 // POTENTIAL SWAPPING ERROR (Y, X) V (X, Y)
-            this.#myEntrance = this.#myRooms[theEntranceCoordinate.getY()][theEntranceCoordinate.getX()]; 
-            this.#myExit = this.#myRooms[theExitCoordinate.getY()][theExitCoordinate.getX()];
+            this.#myEntrance = this.#myRooms[theEntranceCoordinate.getRow()][theEntranceCoordinate.getCol()]; 
+            this.#myExit = this.#myRooms[theExitCoordinate.getRow()][theExitCoordinate.getCol()];
         }
     }
 
@@ -122,7 +122,7 @@ export default class Dungeon {
         if (!theCoordinate instanceof Coordinate) {
             throw TypeError("The given coordinate was not a Coordinate type.");
         }
-        return this.#myRooms[theCoordinate.getX()][theCoordinate.getY()];
+        return this.#myRooms[theCoordinate.getCol()][theCoordinate.getRow()];
     }
 
     getRoomWithRowCol(theRow, theCol) {
@@ -141,14 +141,14 @@ export default class Dungeon {
             throw new TypeError("The given value is not a room");
         }
         const coordinate = theRoom.getCoordinate();
-        const curX = coordinate.getX();
-        const curY = coordinate.getY();
+        const curRow = coordinate.getCol();
+        const curCol = coordinate.getRow();
 
         const adjacentRooms = new Array(3);
         for (let row = -1; row <= 1; row++) {
             adjacentRooms[row + 1] = new Array(3);
             for (let col = -1; col <= 1; col++) {
-                adjacentRooms[row + 1][col + 1] = this.#myRooms[curX + row][curY + col];
+                adjacentRooms[row + 1][col + 1] = this.#myRooms[curRow + row][curCol + col];
             }
         }
         return adjacentRooms;

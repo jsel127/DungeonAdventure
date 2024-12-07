@@ -8,18 +8,18 @@ import Coordinate from "../dungeon/Coordinate.js";
 describe("Basic behavior of a coordinate no invalid input", () => {
     const coord = new Coordinate(1, 2);
     test("Creating a coordinate", () => {
-        expect(coord.getX()).toBe(1);
-        expect(coord.getY()).toBe(2);
+        expect(coord.getRow()).toBe(1);
+        expect(coord.getCol()).toBe(2);
     });
 
-    test("Changing x coordinate 1 -> 2", () => {
-        coord.setX(2);
-        expect(coord.getX()).toBe(2);
+    test("Changing col coordinate 1 -> 2", () => {
+        coord.setCol(2);
+        expect(coord.getCol()).toBe(2);
     });
 
-    test("Changing y coordinate 2 -> 5", () => {
-        coord.setY(5);
-        expect(coord.getY()).toBe(5);
+    test("Changing row coordinate 2 -> 5", () => {
+        coord.setRow(5);
+        expect(coord.getRow()).toBe(5);
     });
 });
 
@@ -39,13 +39,13 @@ describe("Invalid input constructor and setter methods", () => {
     test("Setting valid coordinate to a negative x", () => {
         expect(() => {
             const coord = new Coordinate(1, 2);
-            coord.setX(-1)
+            coord.setCol(-1)
         }).toThrow(RangeError);
     });
     test("Setting valid coordinate to a negative y", () => {
         expect(() => {
             const coord = new Coordinate(1, 2);
-            coord.setY(-1)
+            coord.setRow(-1)
         }).toThrow(RangeError);
     });
 });

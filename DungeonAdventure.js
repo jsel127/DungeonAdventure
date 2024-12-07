@@ -3,6 +3,7 @@ import Hero from "./characters/Hero.js";
 import HeroFactory from "./characters/HeroFactory.js";
 import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
+import Coordinate from "./dungeon/Coordinate.js";
 export default class DungeonAdventure {
     static #PIT_MAX_DAMAGE = 20;
     #myDungeon
@@ -300,7 +301,7 @@ export default class DungeonAdventure {
     }
     
     viewDungeon() {
-        console.log(this.#myDungeon.toString());
+        return this.#myDungeon.toString();
     }
 
     getAdventurer() {
@@ -325,3 +326,16 @@ export default class DungeonAdventure {
         }
     }
 }
+
+
+// const d = new DungeonAdventure();
+// d.setDifficulty("Easy");
+// d.setAdventurer("Warrior", "Jasmine");
+// d.startGame();
+// console.log(d.viewDungeon());
+// console.log(d.getCurrentRoom().getCoordinate().toString());
+// console.log(d.getValidMoves());
+// console.log(d.moveNorth());
+// console.log(d.viewDungeon());
+// console.log(d.getCurrentRoom().getCoordinate().toString());
+// console.log(d.getValidMoves());

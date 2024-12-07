@@ -1,45 +1,45 @@
 export default class Coordinate {
-    #myX
-    #myY
-    constructor(theX, theY) {
-        if (!Number.isInteger(theX) || !Number.isInteger(theY) 
-            || theX < 0 || theY < 0) {
+    #myRow
+    #myCol
+    constructor(theRow, theCol) {
+        if (!Number.isInteger(theRow) || !Number.isInteger(theCol) 
+            || theRow < 0 || theCol < 0) {
             throw new RangeError("Non-integer and negative coordinates are not supported");
         }
-        this.#myX = theX;
-        this.#myY = theY;
+        this.#myRow = theRow;
+        this.#myCol = theCol;
     }
-    getX() {
-        return this.#myX;
-    }
-
-    getY() {
-        return this.#myY;
+    getRow() {
+        return this.#myRow;
     }
 
-    setX(theX) {
-        if (!Number.isInteger(theX) || theX < 0) {
+    getCol() {
+        return this.#myCol;
+    }
+
+    setRow(theRow) {
+        if (!Number.isInteger(theRow) || theRow < 0) {
             throw new RangeError("Negative coordinates are not supported");
         }
-        this.#myX = theX;
+        this.#myRow = theRow;
     }
 
-    setY(theY) {
-        if (!Number.isInteger(theY) || theY < 0) {
+    setCol(theCol) {
+        if (!Number.isInteger(theCol) || theCol < 0) {
             throw new RangeError("Negative coordinates are not supported");
         }
-        this.#myY = theY;
+        this.#myCol = theCol;
     }    
     
     toString() {
-        return `${this.#myX} ${this.#myY}`;
+        return `${this.#myRow} ${this.#myCol}`;
     }
 
     toJSON() {
         return {
             __type: Coordinate.name,
-            x: this.#myX,
-            y: this.#myY
+            row: this.#myRow,
+            col: this.#myCol
         };
     }
 
@@ -47,6 +47,6 @@ export default class Coordinate {
         if (theJSON.__type === undefined || theJSON.__type !== Coordinate.name) {
             throw new TypeError("The JSON is not of coordinate type.");
         }
-        return new Coordinate(theJSON.x, theJSON.y);
+        return new Coordinate(theJSON.row, theJSON.col);
     }
 }

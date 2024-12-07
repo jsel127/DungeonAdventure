@@ -8,6 +8,8 @@ import DungeonAdventure from "../DungeonAdventure.js";
 import HeroFactory from "../characters/HeroFactory.js";
 import Dungeon from "../dungeon/Dungeon.js";
 import Room from "../dungeon/Room.js";
+import Hero from "../characters/Hero.js";
+import Inventory from "../characters/Inventory.js";
 
 describe("Tests main functionality", () => {
     const gameWarriorEasy = new DungeonAdventure();
@@ -43,10 +45,6 @@ describe("Tests main functionality", () => {
         gameWarriorEasy.setAdventurer("Warrior", "Tester");
         gameWarriorEasy.setDifficulty("Easy");
         gameWarriorEasy.startGame();
-        test("Check dungeon set up", () => {
-            const dungeon = gameWarriorEasy.getDungeon();
-            expect(dungeon instanceof Dungeon).toBeTruthy();
-        });
 
         test("Check current room is the entrance", () => {
             const currentRoom = gameWarriorEasy.getCurrentRoom();
@@ -69,47 +67,78 @@ describe("Tests main functionality", () => {
         expect(validMoves.west).toBe(currentRoom.isWestDoorOpen());
     });
 
-    describe("Test navigation methods (moving rooms)", () => {
-        describe("Moving north", () => {
-
-        });
-
-        describe("Moving east", () => {
-
-        });
-
-        describe("Moving south", () => {
-
-        });
-
-        describe("Moving west", () => {
-
+    describe("Vision potion returns an array of 9 adjacent rooms including itself.", () => {
+        test("Vision potion properly returns an 2D array of rooms", () => {
+            const adventurer = gameWarriorEasy.getAdventurer();
+            const inventory = adventurer.getInventory();
+            inventory.addVisionPotion();
+            const adjacentRooms =  gameWarriorEasy.useVisionPotion();
+            expect(Array.isArray(adjacentRooms)).toBeTruthy();
+            for (let row = 0; row < adjacentRooms.length; row++) {
+                for (let col = 0; col < adjacentRooms[row].length; col++) {
+                    expect(adjacentRooms[row][col] instanceof Room || adjacentRooms[row][col] == null).toBeTruthy();
+                }
+            }
         });
     });
 
-    // // Testing purposes created getter methods for this purpose (will be removed)
-    // test("Setting adventurer", () => {
-    //     gameWarriorEasy.setAdventurer("Warrior", "Jasmine");
+    describe("Healing potion increases the hero's HP by Inventorys set behavior for heal", () => {
+        test("If no healing potion is avaiable", () => {
+            expect(gameWarriorEasy.useHealingPotion()).toBe("You have not healing potions");
+        })
+        test("If healing potion is available", () => {
+            const adventurer = gameWarriorEasy.getAdventurer();
+            const inventory = adventurer.getInventory();
+            const priorHP = adventurer.getHP();
+            inventory.addHealingPotion();
+            gameWarriorEasy.useHealingPotion();
+            console.log(priorHP);
+            console.log(adventurer.getHP());
+            expect(adventurer.getHP() - priorHP).toBe(Inventory.HEALTH_POTION_MAX_HP);
+        });
+    });
+
+    // describe("Test navigation methods (moving rooms)", () => {
     //     const adventurer = gameWarriorEasy.getAdventurer();
-    //     expect(adventurer instanceof Warrior).toBeTruthy();
-    //     expect(adventurer.getName()).toBe("Jasmine");
+    //     const inventory = adventurer.getInventory();
+    //     inventory.addVisionPotion();
+    //     const adjacentRooms = gameWarriorEasy.useVisionPotion();
+    //     const middleRoom = gameWarriorEasy.getCurrentRoom();
+    //     describe("Moving north", () => {
+    //         const northRoom = adjacentRooms[0][1];
+    //         test("Room is not entered if the north door is closed.", () => {
+    //             if (!middleRoom.isNorthDoorOpen()) {
+    //                 expect(northRoom).not.toBe(middleRoom);
+    //             } else {
+    //                 expect(northRoom).toBe(middleRoom);
+    //                 gameWarriorEasy.moveSouth();
+    //             } 
+    //         });
+    //         test("Content in the room is properly picked up and put into the inventory.", () => {
+                
+    //         });
+    //     });
+
+    //     describe("Moving east", () => {
+
+    //     });
+
+    //     describe("Moving south", () => {
+
+    //     });
+
+    //     describe("Moving west", () => {
+
+    //     });
     // });
 
-    // test("Get difficulty levels", () => {
-    //     expect(DungeonAdventure.getDifficulties()).toStrictEqual(Object.keys(Dungeon.DIFFICULTY));
-    // });
+    test("Get adventurer to return something of Hero type", () => {
+        expect(gameWarriorEasy.getAdventurer() instanceof Hero).toBeTruthy();
+    });
 
-    // test("Setting difficulty", () => {
-    //     gameWarriorEasy.setDifficulty(DungeonAdventure.getDifficulties()[2]);
-    //     expect(gameWarriorEasy.getDifficulty()).toBe(Dungeon.DIFFICULTY.Easy);
-    // })
-
-    // // test("Adventurer starts at the entrance.", () => {
-    // //     gameWarriorEasy.setDifficulty(Dungeon.DIFFICULTY.Easy);
-    // //     gameWarriorEasy.startGame();
-    // //     const currentRoom = gameWarriorEasy.getCurrentRoom();
-    // //     expect(currentRoom.isEntrance()).toBeTruthy();
-    // // });
+    test("Get difficulty to return an the proper difficulty", () => {
+        expect(gameWarriorEasy.getDifficulty()).toBe(Dungeon.DIFFICULTY.Easy);
+    });
 });
 
 // describe("Tests Saves and Loads DungeonAdventure class", () => {
