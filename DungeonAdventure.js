@@ -92,11 +92,8 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() - 1));
-            console.log(this.#myCurrentRoom.getCoordinate().toString())
-            //return this.#processMove();
-        } else {
-            console.log('DungeonAdventure: moveNorth failed')
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY() - 1, location.getX()));
+            return this.#processMove();
         }
             */
         DungeonAdventure.locationY--
@@ -107,11 +104,8 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() + 1, location.getY()));
-            console.log(this.#myCurrentRoom.getCoordinate().toString())
-            //return this.#processMove();
-        } else {
-            console.log('DungeonAdventure: moveEast failed')
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY(), location.getX() + 1));
+            return this.#processMove();
         }
             */
         DungeonAdventure.locationX++
@@ -122,11 +116,8 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() + 1));
-            console.log(this.#myCurrentRoom.getCoordinate().toString())
-            //return this.#processMove();
-        } else {
-            console.log('DungeonAdventure: moveSouth failed')
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY() + 1, location.getX()));
+            return this.#processMove();
         }
             */
         DungeonAdventure.locationY++
@@ -137,11 +128,8 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() - 1, location.getY()));
-            console.log(this.#myCurrentRoom.getCoordinate().toString())
-            //return this.#processMove();
-        } else {
-            console.log('DungeonAdventure: moveWedt failed')
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY(), location.getX() - 1));
+            return this.#processMove();
         }
             */
         DungeonAdventure.locationX--
@@ -220,7 +208,7 @@ export default class DungeonAdventure {
         if (!inventory.hasHealingPotion()) {
             return "You have not healing potions";
         }
-        this.#myAdventurer.setHP(Inventory.getHealingPotionHP());
+        this.#myAdventurer.setHP(this.#myAdventurer.getHP() + Inventory.getHealingPotionHP());
     }
 
     /**
@@ -345,16 +333,16 @@ export default class DungeonAdventure {
         return this.#myAdventurer;
     }
 
-    getDungeon() {
-        return this.#myDungeon;
-    }
-
     getDifficulty() {
         return this.#myDifficulty;
     }
 
     getCurrentRoom() {
         return this.#myCurrentRoom;
+    }
+
+    getStartStatus() {
+        return this.#myStarted;
     }
 
     #checkStarted() {
