@@ -4,6 +4,7 @@ import HeroFactory from "./characters/HeroFactory.js";
 import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
 import Coordinate from "./dungeon/Coordinate.js";
+import Room from './dungeon/Room.js';
 export default class DungeonAdventure {
     static #PIT_MAX_DAMAGE = 20;
     #myDungeon
@@ -62,6 +63,9 @@ export default class DungeonAdventure {
         this.#myDungeon = new Dungeon(this.#myDifficulty);
         this.#myCurrentRoom = this.#myDungeon.getEntrance();    
         this.#myStarted = true;
+// TESTING PURPOSES ONLY
+        // const cur = this.#myCurrentRoom.getCoordinate();
+        // this.#myDungeon.getRoomWithRowCol(cur.getRow() - 1, cur.getCol()).setContent(Room.CONTENT.ogre);
     }
 
     getValidMoves() {
@@ -96,7 +100,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoomWithRoomCol(location.getRow() + 1, location.getCol());
+            this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow() + 1, location.getCol());
             return this.#processMove();
         }
     }
@@ -328,14 +332,21 @@ export default class DungeonAdventure {
 }
 
 
-const d = new DungeonAdventure();
-d.setDifficulty("Easy");
-d.setAdventurer("Warrior", "Jasmine");
-d.startGame();
-console.log(d.viewDungeon());
-console.log(d.getCurrentRoom().getCoordinate().toString());
-console.log(d.getValidMoves());
-console.log(d.moveNorth());
-console.log(d.viewDungeon());
-console.log(d.getCurrentRoom().getCoordinate().toString());
-console.log(d.getValidMoves());
+// const d = new DungeonAdventure();
+// d.setDifficulty("Easy");
+// d.setAdventurer("Warrior", "Jasmine");
+// d.startGame();
+// console.log(d.viewDungeon());
+// console.log(d.getCurrentRoom().getCoordinate().toString());
+// console.log(d.getValidMoves());
+// console.log(d.getAdventurer().getInventory().toString());
+// console.log("Adventure Fighting: " + d.getAdventurer().getFightingStatus());
+// console.log(d.moveNorth());
+// // console.log(d.moveEast());
+// // console.log(d.moveSouth());
+// //  console.log(d.moveWest());
+// console.log(d.viewDungeon());
+// console.log(d.getCurrentRoom().getCoordinate().toString());
+// console.log(d.getValidMoves());
+// console.log(d.getAdventurer().getInventory().toString());
+// console.log("Adventure Fighting: " + d.getAdventurer().getFightingStatus());

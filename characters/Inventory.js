@@ -41,7 +41,7 @@ export default class Inventory {
         } else if (content === Room.CONTENT.inheritancePillar) {
             this.addInheritancePillar();
         } else if (content === Room.CONTENT.polymorphismPillar) {
-            this.addPolymorphismPillar;
+            this.addPolymorphismPillar();
         } else {
             return false;
         }
