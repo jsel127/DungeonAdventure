@@ -122,6 +122,14 @@ export default class Room {
     }
 
     /**
+     * Checks if the room is the entrance.
+     * @returns true if the room is the entrance.
+     */
+    isEntrance() {
+        return this.#myContent === Room.CONTENT.entrance;
+    }
+
+    /**
      * Checks if the room is a pit.
      * @returns true if the room is a pit.
      */

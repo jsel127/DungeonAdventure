@@ -77,7 +77,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() - 1));
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY() - 1, location.getX()));
             return this.#processMove();
         }
     }
@@ -86,7 +86,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() + 1, location.getY()));
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY(), location.getX() + 1));
             return this.#processMove();
         }
     }
@@ -95,7 +95,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX(), location.getY() + 1));
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY() + 1, location.getX()));
             return this.#processMove();
         }
     }
@@ -104,7 +104,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getX() - 1, location.getY()));
+            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY(), location.getX() - 1));
             return this.#processMove();
         }
     }
@@ -182,7 +182,7 @@ export default class DungeonAdventure {
         if (!inventory.hasHealingPotion()) {
             return "You have not healing potions";
         }
-        this.#myAdventurer.setHP(Inventory.getHealingPotionHP());
+        this.#myAdventurer.setHP(this.#myAdventurer.getHP() + Inventory.getHealingPotionHP());
     }
 
     /**
@@ -307,16 +307,16 @@ export default class DungeonAdventure {
         return this.#myAdventurer;
     }
 
-    getDungeon() {
-        return this.#myDungeon;
-    }
-
     getDifficulty() {
         return this.#myDifficulty;
     }
 
     getCurrentRoom() {
         return this.#myCurrentRoom;
+    }
+
+    getStartStatus() {
+        return this.#myStarted;
     }
 
     #checkStarted() {
