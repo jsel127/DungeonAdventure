@@ -5,6 +5,7 @@
  */
 
 import Hero from './Hero.js';
+import Inventory from './Inventory.js';
 
 /**
  * Class containing common methods and data for all warrior character. 
@@ -26,11 +27,13 @@ export default class Warrior extends Hero {
      * @param {*} theAttackSpeed the attack speed of the Warrior.
      * @param {*} theHitChance the hit chance of the Warrior.
      * @param {*} theChanceToBlock the block chance of the Warrior.
+     * @param {*} theInventory the inventory of the Warrior.
+     * @param {*} theFightingStatus the fighting status indicating if the Warrior is currently fighting.
      */
     constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
-                theHitChance, theChanceToBlock) {
+        theHitChance, theChanceToBlock, theInventory, theFightingStatus) {
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
-              theHitChance, theChanceToBlock);
+            theHitChance, theChanceToBlock, theInventory, theFightingStatus);
     }
 
     /**
@@ -68,6 +71,6 @@ export default class Warrior extends Hero {
         return new Warrior(theJSON.hero.dungeon_character.name, theJSON.hero.dungeon_character.hp, 
                            theJSON.hero.dungeon_character.dp_min, theJSON.hero.dungeon_character.dp_max, 
                            theJSON.hero.dungeon_character.attack_speed, theJSON.hero.dungeon_character.hit_chance,
-                           theJSON.hero.block_chance, theJSON.hero.inventory, theJSON.hero.fighting_status);
+                           theJSON.hero.block_chance, Inventory.fromJSON(theJSON.hero.inventory), theJSON.hero.fighting_status);
     }
 }

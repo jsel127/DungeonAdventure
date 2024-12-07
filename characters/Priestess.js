@@ -5,6 +5,8 @@
  */
 
 import Hero from './Hero.js';
+import Inventory from './Inventory.js';
+
 /**
  * Class containing common methods and data for all priestess character. 
  * @author Jasmine Sellers
@@ -25,11 +27,13 @@ export default class Priestess extends Hero {
      * @param {*} theAttackSpeed the attack speed of the Priestess.
      * @param {*} theHitChance the hit chance of the Priestess.
      * @param {*} theChanceToBlock the block chance of the Priestess.
+     * @param {*} theInventory the inventory of the Warrior.
+     * @param {*} theFightingStatus the fighting status indicating if the Warrior is currently fighting.
      */
     constructor(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
-                theHitChance, theChanceToBlock) {
+        theHitChance, theChanceToBlock, theInventory, theFightingStatus) {
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, 
-              theHitChance, theChanceToBlock);
+            theHitChance, theChanceToBlock, theInventory, theFightingStatus);
     }
 
     /**
@@ -57,6 +61,14 @@ export default class Priestess extends Hero {
         return {
             __type: Priestess.name,
             hero: super.toJSON()
+            // toJSON() {
+            //     return {
+            //         dungeon_character: super.toJSON(),
+            //         block_chance: this.#myChanceToBlock,
+            //         inventory: this.#myInventory,
+            //         fighting_status: this.#myFightingStatus
+            //     }
+            // }
         }
     }
 
@@ -67,6 +79,6 @@ export default class Priestess extends Hero {
         return new Priestess(theJSON.hero.dungeon_character.name, theJSON.hero.dungeon_character.hp, 
                              theJSON.hero.dungeon_character.dp_min, theJSON.hero.dungeon_character.dp_max, 
                              theJSON.hero.dungeon_character.attack_speed, theJSON.hero.dungeon_character.hit_chance,
-                             theJSON.hero.block_chance, theJSON.hero.inventory, theJSON.hero.fighting_status);
+                             theJSON.hero.block_chance, Inventory.fromJSON(theJSON.hero.inventory), theJSON.hero.fighting_status);
     }
 }

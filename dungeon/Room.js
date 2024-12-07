@@ -7,6 +7,7 @@
 import MonsterFactory from "../characters/MonsterFactory.js";
 import Coordinate from "./Coordinate.js";
 import Door from "./Door.js";
+import Dungeon from "./Dungeon.js";
 export default class Room {
     /** Object of content in the room and their corresponding symbol */
     static CONTENT = Object.freeze({
@@ -50,8 +51,9 @@ export default class Room {
      * @param {*} theWestDoor the west door shared with the room west to it (if present).
      * @param {*} theContent 
      */
-    constructor(theCoordinate = new Coordinate(0,0), theNorthDoor = new Door(), theEastDoor = new Door(), 
-                theSouthDoor = new Door(), theWestDoor = new Door(), theContent = Room.CONTENT.empty) {
+    constructor(theCoordinate = new Coordinate(Dungeon.BUFFER, Dungeon.BUFFER), theNorthDoor = new Door(), 
+                theEastDoor = new Door(), theSouthDoor = new Door(), theWestDoor = new Door(), 
+                theContent = Room.CONTENT.empty) {
         if (theCoordinate === undefined || !theCoordinate instanceof Coordinate) {
             throw TypeError("The given coordinate was not a Coordinate type.");
         }
@@ -245,6 +247,7 @@ export default class Room {
                         Door.fromJSON(theJSON.north_door), 
                         Door.fromJSON(theJSON.east_door), 
                         Door.fromJSON(theJSON.south_door),
-                        Door.fromJSON(theJSON.west_door), theJSON.content);
+                        Door.fromJSON(theJSON.west_door), 
+                        theJSON.content);
     }
 }

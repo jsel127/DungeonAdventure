@@ -1,9 +1,10 @@
+import Dungeon from "./Dungeon.js";
 export default class Coordinate {
     #myRow
     #myCol
     constructor(theRow, theCol) {
         if (!Number.isInteger(theRow) || !Number.isInteger(theCol) 
-            || theRow < 0 || theCol < 0) {
+            || theRow < Dungeon.BUFFER || theCol < Dungeon.BUFFER) {
             throw new RangeError("Non-integer and negative coordinates are not supported");
         }
         this.#myRow = theRow;

@@ -71,7 +71,6 @@ export default class Dungeon {
             this.#myEastDoors = theEastDoors;
             this.#mySouthDoors = theSouthDoors;
             this.#createRooms(theRoomContent);
-// POTENTIAL SWAPPING ERROR (Y, X) V (X, Y)
             this.#myEntrance = this.#myRooms[theEntranceCoordinate.getRow()][theEntranceCoordinate.getCol()]; 
             this.#myExit = this.#myRooms[theExitCoordinate.getRow()][theExitCoordinate.getCol()];
         }
@@ -235,7 +234,6 @@ export default class Dungeon {
                                                    this.#mySouthDoors[row][col],
                                                    this.#myEastDoors[row][col - 1],
                                                    content);
-
             }
         }
     }

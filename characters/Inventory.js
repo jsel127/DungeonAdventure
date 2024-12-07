@@ -17,8 +17,8 @@ export default class Inventory {
             throw new RangeError("The quantity of healing and/or vision potions cannot be negative.");
         }
         this.#myItems = {
-            healingPotion: theHealingPotionQuantity,
-            visionPotion: theVisionPotionQuantity,
+            healing_potion: theHealingPotionQuantity,
+            vision_potion: theVisionPotionQuantity,
             pillars: thePillars
         }
     }
@@ -53,42 +53,42 @@ export default class Inventory {
         if (theJSON.__type === undefined || theJSON.__type !== Inventory.name) {
             throw new TypeError("The JSON is not of inventory type.");
         }
-        return new Inventory(theJSON.items.healing_potion, theJSON.items.vision_potion, theJSON.pillars);
+        return new Inventory(theJSON.items.healing_potion, theJSON.items.vision_potion, theJSON.items.pillars);
     }
 
     hasHealingPotion() {
-        return this.#myItems.healingPotion > 0;
+        return this.#myItems.healing_potion > 0;
     }
 
     getHealingPotionQuantity() {
-        return this.#myItems.healingPotion;
+        return this.#myItems.healing_potion;
     }
 
     addHealingPotion() {
-        this.#myItems.healingPotion += 1;
+        this.#myItems.healing_potion += 1;
     }
 
     useHealingPotion() {
         if (this.hasHealingPotion()) {
-            this.#myItems.healingPotion -= 1;
+            this.#myItems.healing_potion -= 1;
         }
     }
 
     hasVisionPotion() {
-        return this.#myItems.visionPotion > 0;
+        return this.#myItems.vision_potion > 0;
     }
 
     getVisionPotionQuantity() {
-        return this.#myItems.visionPotion;
+        return this.#myItems.vision_potion;
     }
 
     addVisionPotion() {
-        this.#myItems.visionPotion += 1;
+        this.#myItems.vision_potion += 1;
     }
 
     useVisionPotion() {
         if (this.hasVisionPotion()) {
-            this.#myItems.visionPotion -= 1;
+            this.#myItems.vision_potion -= 1;
         }
     }
 
@@ -132,7 +132,7 @@ export default class Inventory {
     }
 
     toString() {
-        return `Healing Potions: ${this.#myItems.healingPotion} \nVision Potions: ${this.#myItems.visionPotion}`
+        return `Healing Potions: ${this.#myItems.healing_potion} \nVision Potions: ${this.#myItems.vision_potion}`
                 + `\nPillars:\n\tAbstraction: ${this.#myItems.pillars.abstraction}`
                 + `\n\tEncapsulation: ${this.#myItems.pillars.encapsulation}`
                 + `\n\tInheritance: ${this.#myItems.pillars.inheritance}`
