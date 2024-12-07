@@ -5,6 +5,7 @@ import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
 import Coordinate from "./dungeon/Coordinate.js";
 import Room from './dungeon/Room.js';
+import Monster from "./characters/Monster.js";
 export default class DungeonAdventure {
     static #PIT_MAX_DAMAGE = 20;
     #myDungeon
@@ -14,8 +15,38 @@ export default class DungeonAdventure {
     #myCurrentOpponent
     #myStarted;
     
-    constructor() {
-        
+    constructor(theLoading = false, theDungeon = null, theAdventurer = null, 
+                theCurrentRoomCoordinate = null, theDifficulty = null, theCurrentOpponent = null) {
+        if (theLoading) {
+            if (!Number.isInteger(theDifficulty) || theDifficulty < Dungeon.DIFFICULTY.Easy || theDifficulty > Dungeon.DIFFICULTY.Hard) {
+                throw new RangeError("The difficulty must be between easy and hard.");
+            }
+            if (!(theDungeon instanceof Dungeon && theAdventurer instanceof Hero
+                && theCurrentRoomCoordinate instanceof Coordinate 
+                && (theCurrentOpponent === null || theCurrentOpponent instanceof Monster))) {
+                throw new TypeError("Invalid data was passed when loading. Actual types do not match expected ones.");
+            }
+            this.#myDungeon = theDungeon;
+            this.#myAdventurer = theAdventurer;
+            this.#myCurrentRoom = theDungeon.getRoom(theCurrentRoomCoordinate);
+            this.#myDifficulty = theDifficulty;
+            this.#myCurrentOpponent = theCurrentOpponent;
+            this.#myStarted = true;
+        } else {
+            this.#myStarted = false;
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || theJSON.__type !== DungeonAdventure.name) {
+            throw new TypeError("The JSON is not a dungeon adventure type");
+        }
+        const opponent = (theJSON.opponent === "null") ? Monster.fromJSON(theJSON.opponent) : null
+        return new DungeonAdventure(true, Dungeon.fromJSON(theJSON.dungeon), 
+                                    HeroFactory.loadHero(theJSON.adventurer.__type, theJSON.adventurer),
+                                    Coordinate.fromJSON(theJSON.current_room_coordinate),
+                                    theJSON.difficulty,
+                                    opponent);
     }
     
     toJSON() {
@@ -288,7 +319,7 @@ export default class DungeonAdventure {
      */
     #setOpponentToFight(theOpponent) {
         if (!theOpponent instanceof DungeonCharacter) {
-            throw new TypeError("The given opponenet was not a dungeon character.");
+            throw new TypeError("The given opponent was not a dungeon character.");
         }
         this.#myAdventurer.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
         this.#myCurrentOpponent = theOpponent;

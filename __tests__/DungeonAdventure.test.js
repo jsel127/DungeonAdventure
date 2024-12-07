@@ -92,8 +92,6 @@ describe("Tests main functionality", () => {
             const priorHP = adventurer.getHP();
             inventory.addHealingPotion();
             gameWarriorEasy.useHealingPotion();
-            console.log(priorHP);
-            console.log(adventurer.getHP());
             expect(adventurer.getHP() - priorHP).toBe(Inventory.HEALTH_POTION_MAX_HP);
         });
     });
@@ -141,15 +139,22 @@ describe("Tests main functionality", () => {
     });
 });
 
-// describe("Tests Saves and Loads DungeonAdventure class", () => {
-//     test("Saves and Loads Thief DungeonAdventure properly (No chances made from initialization)", () => {
-//         const dungeonAdventureToSave = new DungeonAdventure();
-//         const dungeonAdventureFromSave = DungeonAdventure.fromJSON(JSON.parse(JSON.stringify(dungeonAdventureToSave)));
-//         expect(dungeonAdventureFromSave.toString()).toBe(dungeonAdventureToSave.toString());
-//     });
+describe("Tests Saves and Loads DungeonAdventure class", () => {
+    test("Saves and Loads DungeonAdventure properly (No chances made from initialization)", () => {
+        const dungeonAdventureToSave = new DungeonAdventure();
+        dungeonAdventureToSave.setDifficulty("Easy");
+        dungeonAdventureToSave.setAdventurer("Warrior", "Jasmine");
+        dungeonAdventureToSave.startGame();
+        const dungeonAdventureFromSave = DungeonAdventure.fromJSON(JSON.parse(JSON.stringify(dungeonAdventureToSave)));
+        expect(dungeonAdventureFromSave.viewDungeon()).toBe(dungeonAdventureToSave.viewDungeon());
+        expect(dungeonAdventureFromSave.getAdventurer()).toStrictEqual(dungeonAdventureToSave.getAdventurer());
+        expect(dungeonAdventureFromSave.getCurrentRoom()).toStrictEqual(dungeonAdventureToSave.getCurrentRoom());
+        expect(dungeonAdventureFromSave.getDifficulty()).toBe(dungeonAdventureToSave.getDifficulty());
+        expect(dungeonAdventureFromSave.getStartStatus()).toBeTruthy();
+    });
 
-//     test("Save and Load on invalid data", () => {
-//         expect(() => DungeonAdventure.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
-//     });
-// });
+    test("Save and Load on invalid data", () => {
+        expect(() => DungeonAdventure.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
+});
 
