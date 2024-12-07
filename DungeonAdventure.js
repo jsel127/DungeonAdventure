@@ -78,7 +78,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY() - 1, location.getX()));
+            this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow() - 1, location.getCol());
             return this.#processMove();
         }
     }
@@ -87,7 +87,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY(), location.getX() + 1));
+            this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow(), location.getCol() + 1);
             return this.#processMove();
         }
     }
@@ -96,7 +96,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY() + 1, location.getX()));
+            this.#myCurrentRoom = this.#myDungeon.getRoomWithRoomCol(location.getRow() + 1, location.getCol());
             return this.#processMove();
         }
     }
@@ -105,7 +105,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY(), location.getX() - 1));
+            this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow(), location.getCol() - 1);
             return this.#processMove();
         }
     }
@@ -328,14 +328,14 @@ export default class DungeonAdventure {
 }
 
 
-// const d = new DungeonAdventure();
-// d.setDifficulty("Easy");
-// d.setAdventurer("Warrior", "Jasmine");
-// d.startGame();
-// console.log(d.viewDungeon());
-// console.log(d.getCurrentRoom().getCoordinate().toString());
-// console.log(d.getValidMoves());
-// console.log(d.moveNorth());
-// console.log(d.viewDungeon());
-// console.log(d.getCurrentRoom().getCoordinate().toString());
-// console.log(d.getValidMoves());
+const d = new DungeonAdventure();
+d.setDifficulty("Easy");
+d.setAdventurer("Warrior", "Jasmine");
+d.startGame();
+console.log(d.viewDungeon());
+console.log(d.getCurrentRoom().getCoordinate().toString());
+console.log(d.getValidMoves());
+console.log(d.moveNorth());
+console.log(d.viewDungeon());
+console.log(d.getCurrentRoom().getCoordinate().toString());
+console.log(d.getValidMoves());
