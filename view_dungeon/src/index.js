@@ -5,14 +5,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Import your components correctly
 import HomePage from './Homepage'; // Adjust if necessary
-import AboutGamePage from './pages/AboutGamePage'; 
-import HowToPlayPage from './pages/HowtoPlayPage'; 
-import FAQPage from './pages/FAQPage'; 
-import AboutCreatorsPage from './pages/AboutCreatorsPage'; 
-import CharacterSelection from './pages/CharacterSelection'; 
-import NameSelection from './pages/NameSelection';
-import DifficultySelection from './pages/DifficultySelection';
-import DisplayDungeon from './pages/DisplayDungeon'
+import AboutGamePage from './pages/AboutGamePage.js'; 
+import HowToPlayPage from './pages/HowtoPlayPage.js'; 
+import FAQPage from './pages/FAQPage.js'; 
+import AboutCreatorsPage from './pages/AboutCreatorsPage.js'; 
+import CharacterSelection from './pages/CharacterSelection.js'; 
+import NameSelection from './pages/NameSelection.js';
+import DifficultySelection from './pages/DifficultySelection.js';
+import DisplayDungeon from './pages/DisplayDungeon.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

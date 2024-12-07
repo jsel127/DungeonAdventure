@@ -21,7 +21,7 @@ app.get("/api/characters", (req, res) => {
     res.json(DungeonAdventure.getHeroes())
 })  
 
-app.post("/api/selected-character", (req, res) => { 
+app.post("/api/selected-character", (req, res) => {  
     selectedCharacter = req.body.character
     console.log("Server: request to /api/selected-character:", selectedCharacter.name)
 })
@@ -45,7 +45,7 @@ app.post("/api/selected-difficulty", (req, res) => {
 app.get("/api/valid-moves", (req, res) => {   
     console.log('Server: request to /api/valid-moves', model.getValidMoves())
     res.set('Cache-Control', 'no-store'); 
-    res.json(model.getValidMoves())   
+    res.json(model.getValidMoves())  
 })
  
 app.post("/api/move-north", (req, res) => {
