@@ -12,22 +12,48 @@ const DisplayDungeon = () => {
 
     const [validMoves, setValidMoves] = useState(null)
 
-    const fetchValidMoves = () => {
-        console.log('DisplayDungeon: fetchValidMoves method called')
-        fetch('/api/valid-moves')
-            .then((response) => response.json())
-            .then((data) => {
-                setValidMoves(data)
-                console.log('DisplayDungeon: data', data, validMoves)
-            })
-            .catch((error) => console.error('Error fetching valid moves:', error))
-    }
+    const fetchValidMoves = async () => {
+        try {
+          const response = await fetch('/api/valid-moves', {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+          });
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          setValidMoves(data)
+        } catch (error) {
+          console.error('Fetch error: ', error);
+        }
+      }
 
     const handleClick = (direction) => {
-        fetch('/api/move-direction', {
+        console.log('DisplayDungeon:  handleClick called', direction)
+        console.log(validMoves)
+        let url
+        switch (direction) {
+            case 'North':
+                url = '/api/move-north'
+                break
+            case 'East':
+                url = '/api/move-east'
+                break
+            case 'South':
+                url = '/api/move-south'
+                break
+            case 'West': 
+                url = '/api/move-west'
+                break
+            default:
+                throw new Error('DisplayDungeon: direction must be North, East, South, West')
+        }
+        fetch(url, { 
             method: 'POST', 
-            headers: {
-              'content-type': 'application/json'
+            headers: {  
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache'
             },
             body: JSON.stringify({
               dir: direction
@@ -35,6 +61,10 @@ const DisplayDungeon = () => {
           }).then(res => {
             return res.json()
           }).catch(error => console.log('ERROR: handle movement post request'))
+
+        // this is for testing
+        setValidMoves(null)
+
         fetchValidMoves()
     }
 
