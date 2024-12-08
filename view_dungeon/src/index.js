@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Import your components correctly
 import HomePage from './Homepage'; // Adjust if necessary
-import AboutGamePage from './pages/AboutGamePage.js'; 
+import AboutGamePage from './pages/AboutGamePage.js';  
 import HowToPlayPage from './pages/HowtoPlayPage.js'; 
 import FAQPage from './pages/FAQPage.js'; 
 import AboutCreatorsPage from './pages/AboutCreatorsPage.js'; 

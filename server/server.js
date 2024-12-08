@@ -27,7 +27,7 @@ app.post("/api/selected-character", (req, res) => {
 })
 
 app.post("/api/selected-name", (req, res) => { 
-    console.log('Server: post request to /api/selected-name', req.body.heroName)
+    console.log('Server: post request to /api/selected-name', req.body.heroName)  
     model.setAdventurer(selectedCharacter.name, req.body.heroName) 
 })
 
@@ -44,37 +44,42 @@ app.post("/api/selected-difficulty", (req, res) => {
 
 app.get("/api/valid-moves", (req, res) => {   
     console.log('Server: request to /api/valid-moves', model.getValidMoves())
-    res.set('Cache-Control', 'no-store'); 
+    //res.set('Cache-Control', 'no-store');     
+
     res.json(model.getValidMoves())    
 })
  
 app.post("/api/move-north", (req, res) => {
     console.log('Server: post request to /api/move-north')        
     model.moveNorth()
+    res.json({fromServer:'north'}) 
 })
 
 app.post("/api/move-east", (req, res) => {
     console.log('Server: post request to /api/move-east')  
-    model.moveEast()
+    model.moveEast()  
+    res.json({fromServer:'east'})
 })
 
-app.post("/api/move-south", (req, res) => {
-    console.log('Server: post request to /api/move-south')  
+app.post("/api/move-south", (req, res) => { 
+    console.log('Server: post request to /api/move-south')   
     model.moveSouth()
+    res.json({fromServer:'south'})
 })
 
 app.post("/api/move-west", (req, res) => {
     console.log('Server: post request to /api/move-west') 
     model.moveWest()
+    res.json({fromServer:'west'})
 })
 
 app.post("/api/move-direction", (req, res) => {
     console.log('Server: request to /api/move-direction')
     switch(req.body.dir) {  
         case 'North':
-            model.moveNorth()
+            model.moveNorth()  
             break
-        case 'East':
+        case 'East': 
             model.moveEast()
             break
         case 'South':
@@ -91,3 +96,9 @@ app.post("/api/move-direction", (req, res) => {
      
 
 app.listen(5001, () => { console.log("Server started on port 5001") }) 
+
+/*
+
+the buttons are updating a move behind the actual location in the dungeon
+
+*/ 

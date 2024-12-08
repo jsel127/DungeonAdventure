@@ -5,16 +5,18 @@ import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
 import Coordinate from "./dungeon/Coordinate.js";
 import Monster from "./characters/Monster.js";
-export default class DungeonAdventure {
+export default class DungeonAdventure {   
+
+    static locX = 2
+    static locY = 2
+
     static #PIT_MAX_DAMAGE = 20;
     #myDungeon
     #myAdventurer
     #myCurrentRoom
     #myDifficulty
     #myCurrentOpponent
-    #myStarted
-    static locationX = 2 
-    static locationY = 2        
+    #myStarted;
     
     constructor(theLoading = false, theDungeon = null, theAdventurer = null, 
                 theCurrentRoomCoordinate = null, theDifficulty = null, theCurrentOpponent = null) {
@@ -87,7 +89,6 @@ export default class DungeonAdventure {
             throw new TypeError("The given difficulty was invalid");
         }
         this.#myDifficulty = difficulty;
-        console.log('DungeonAdventure: difficulty set:', this.#myDifficulty)
     }
 
     setAdventurer(theHeroType, theName) {
@@ -95,7 +96,6 @@ export default class DungeonAdventure {
             throw new TypeError("Invalid name provided");
         }
         this.#myAdventurer = HeroFactory.createHero(theHeroType, theName);
-        console.log('DungeonAdventure: hero created successfully', this.#myAdventurer.toString());
     }
 
     startGame() {
@@ -107,23 +107,23 @@ export default class DungeonAdventure {
         // this.#myDungeon.getRoomWithRowCol(cur.getRow() - 1, cur.getCol()).setContent(Room.CONTENT.ogre);
     }
 
-    getValidMoves() { 
+    getValidMoves() {
         /*
         this.#checkStarted();
-        console.log(this.#myCurrentRoom)
         return {
             north: this.#myCurrentRoom.isNorthDoorOpen(),
             east: this.#myCurrentRoom.isEastDoorOpen(),
             south: this.#myCurrentRoom.isSouthDoorOpen(),
             west: this.#myCurrentRoom.isWestDoorOpen()
-        }  
+        }
             */
+        
         const mini = [ [0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 1, 1, 1, 0], [0, 1, 1, 1, 0], [0, 0, 0, 0, 0] ]
         return {
-            north: mini[DungeonAdventure.locationX][DungeonAdventure.locationY - 1] === 1,
-            east: mini[DungeonAdventure.locationX + 1][DungeonAdventure.locationY] === 1,
-            south: mini[DungeonAdventure.locationX][DungeonAdventure.locationY + 1] === 1,
-            west: mini[DungeonAdventure.locationX - 1][DungeonAdventure.locationY] === 1
+            north: mini[DungeonAdventure.locX][DungeonAdventure.locY - 1] === 1,
+            east: mini[DungeonAdventure.locX + 1][DungeonAdventure.locY] === 1,
+            south: mini[DungeonAdventure.locX][DungeonAdventure.locY + 1] === 1,
+            west: mini[DungeonAdventure.locX - 1][DungeonAdventure.locY] === 1,
         }
     }
 
@@ -136,7 +136,7 @@ export default class DungeonAdventure {
             return this.#processMove();
         }
             */
-        DungeonAdventure.locationY--
+        DungeonAdventure.locY--  
     }
 
     moveEast() {
@@ -148,7 +148,7 @@ export default class DungeonAdventure {
             return this.#processMove();
         }
             */
-        DungeonAdventure.locationX++
+        DungeonAdventure.locX++
     }
 
     moveSouth() {
@@ -160,7 +160,7 @@ export default class DungeonAdventure {
             return this.#processMove();
         }
             */
-        DungeonAdventure.locationY++
+        DungeonAdventure.locY++
     }
 
     moveWest() {
@@ -172,7 +172,7 @@ export default class DungeonAdventure {
             return this.#processMove();
         }
             */
-           DungeonAdventure.locationX--
+        DungeonAdventure.locX--
     }
 
     attackOpponent() { 
@@ -277,7 +277,7 @@ export default class DungeonAdventure {
      */
     #processContent() {
         this.#pickUpItem();
-        this.#processMonster(); 
+        this.#processMonster();
         this.#processPit();
     }
 

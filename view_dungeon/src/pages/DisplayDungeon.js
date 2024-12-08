@@ -36,15 +36,19 @@ const DisplayDungeon = () => {
         switch (direction) {
             case 'North':
                 url = '/api/move-north'
+                console.log('DisplayDungeon: switch north')
                 break
             case 'East':
                 url = '/api/move-east'
+                console.log('DisplayDungeon: switch east')
                 break
             case 'South':
                 url = '/api/move-south'
+                console.log('DisplayDungeon: switch south')
                 break
             case 'West': 
                 url = '/api/move-west'
+                console.log('DisplayDungeon: switch west')
                 break
             default:
                 throw new Error('DisplayDungeon: direction must be North, East, South, West')
@@ -58,9 +62,11 @@ const DisplayDungeon = () => {
             body: JSON.stringify({
               dir: direction
             })
-          }).then(res => {
-            return res.json()
-          }).catch(error => console.log('ERROR: handle movement post request'))
+          }).then((res) => {
+            const someJson = res.json()
+            console.log('LOOK AT MEEE', someJson) 
+            return someJson
+          }).catch(error => console.log('ERROR: handle movement post request', error))
 
         // this is for testing
         setValidMoves(null)
