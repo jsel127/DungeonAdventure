@@ -250,20 +250,13 @@ export default class DungeonAdventure {
     #processPit() {
         if (this.#myCurrentRoom.isPit()) {
             const damage = Math.round(Math.random() * DungeonAdventure.#PIT_MAX_DAMAGE);
-            console.log("damage", damage);
-            console.log("oldHP", this.#myAdventurer.getHP());
-
             const newHP = this.#myAdventurer.getHP() - damage;
-            console.log("newHP", newHP);
 
             if (newHP < 1) {
-                console.log("entered dead");
                 this.#myAdventurer.setHP(0);
                 return "You fell into a pit. Player has died";
             } else {
-                console.log("entered alive");
                 this.#myAdventurer.setHP(newHP);
-                console.log("setHP", this.#myAdventurer.getHP());
                 return `You fell into a pit and lost ${damage}HP.`
             }
         }
@@ -282,7 +275,7 @@ export default class DungeonAdventure {
         if (monster) {
             this.#myAdventurer.setFightingStatus(true);
             this.#setOpponentToFight(monster);
-            return `You ran into a ${monster.constructor.name}.`
+            return `You ran into a ${monster.getName()}.`
         }
     }
 
