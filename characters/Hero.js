@@ -59,16 +59,19 @@ export default class Hero extends DungeonCharacter {
     }
 
     /**
-     * Determines if the hero successfully blocked an attack. The success is random based on the 
-     * chance to block of the hero. If the attack is successfully block no damange will be take
-     * else the damage will be applied and the hero may die. 
-     * @return true if the attack was successfully blocked and false otherwise.
+     * Will take in an amount of damage point to be inflicted if block
+     * is unsucessful.
+     * @return true if the damage is successfully inflicted and false otherwise.
      */
-    block() {
+    applyHPChange(theDamagePoints) {
         if (this.#myFightingStatus !== Hero.FIGHTING_STATUS.fighting) {
             throw new EvalError("The hero is not currently fighting any monster. Blocks are not allowed.");
         }
-        if (Math.random() < this.#myChanceToBlock/100) {
+        if (!Number.isInteger(theDamagePoints)) {
+            throw new TypeError("The given damage point is not an integer type");
+        }
+        if (!(Math.random() * 100 < this.#myChanceToBlock)) {
+            super.applyHPChange(theDamagePoints);
             return true;
         } 
         return false;

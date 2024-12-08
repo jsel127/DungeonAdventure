@@ -29,23 +29,30 @@ export default class Inventory {
 
     collectItemFromRoom(theRoom) {
         const content = theRoom.getContent();
+        let item;
         if (content === Room.CONTENT.healingPotion) {
             this.addHealingPotion();
+            item = "Healing Potion";
         } else if (content === Room.CONTENT.visionPotion) {
             this.addVisionPotion();
+            item = "Vision Potion";
         } else if (content === Room.CONTENT.abstractionPillar) {
             this.addAbstractionPillar();
+            item = "Abstraction Pillar";
         } else if (content === Room.CONTENT.encapsulationPillar) {
             this.addEncapsulationPillar();
+            item = "Encapsulation Pillar";
         } else if (content === Room.CONTENT.inheritancePillar) {
             this.addInheritancePillar();
+            item = "Inheritance Pillar";
         } else if (content === Room.CONTENT.polymorphismPillar) {
             this.addPolymorphismPillar();
+            item = "Polymorphism Pillar";
         } else {
             return false;
         }
         theRoom.clearContent();
-        return true;
+        return item;
     }
     
     static fromJSON(theJSON) {
