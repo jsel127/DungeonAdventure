@@ -79,7 +79,7 @@ describe("Tests Saves and Loads DungeonAdventure class", () => {
 });
 
 
-describe("Tests DungeonAdventure on Dungeon where move straight until you reach a wall then move down (top [entrance] to bottom [exit])", () => {
+describe("Tests DungeonAdventure on 5x5 Dungeon where move straight until you reach a wall then move down (top [entrance] to bottom [exit])", () => {
     const fileEasyDungeon = fs.readFileSync('easyDA.txt');
     const easyDungeonTopLeftBottomRight = DungeonAdventure.fromJSON(JSON.parse(fileEasyDungeon.toString().trim()));
     
@@ -94,7 +94,18 @@ describe("Tests DungeonAdventure on Dungeon where move straight until you reach 
         });
     }
 
-    function testMoveSouth() {
+    function testMoveWestEdge() {
+        test("Moving west", () => {
+            easyDungeonTopLeftBottomRight.moveWest();
+            const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
+            expect(validMoves.north).toBeFalsy();
+            expect(validMoves.east).toBeTruthy();
+            expect(validMoves.south).toBeTruthy();
+            expect(validMoves.west).toBeFalsy();
+        });
+    }
+
+    function testMoveSouthEastEdge() {
         test("Moving south", () => {
             easyDungeonTopLeftBottomRight.moveSouth();
             const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
@@ -102,6 +113,17 @@ describe("Tests DungeonAdventure on Dungeon where move straight until you reach 
             expect(validMoves.east).toBeFalsy();
             expect(validMoves.south).toBeFalsy();
             expect(validMoves.west).toBeTruthy();
+        });
+    }
+
+    function testMoveSouthWestEdge() {
+        test("Moving south", () => {
+            easyDungeonTopLeftBottomRight.moveSouth();
+            const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
+            expect(validMoves.north).toBeTruthy();
+            expect(validMoves.east).toBeTruthy();
+            expect(validMoves.south).toBeFalsy();
+            expect(validMoves.west).toBeFalsy();
         });
     }
 
@@ -116,6 +138,17 @@ describe("Tests DungeonAdventure on Dungeon where move straight until you reach 
         });
     }
 
+    function testMoveEastEdge() {
+        test("Moving east", () => {
+            easyDungeonTopLeftBottomRight.moveEast();
+            const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
+            expect(validMoves.north).toBeFalsy();
+            expect(validMoves.east).toBeFalsy();
+            expect(validMoves.south).toBeTruthy();
+            expect(validMoves.west).toBeTruthy();
+        });
+    }
+
     function testCoordinates(theExpectedRow, theExpectedCol) {
         test("Room has coordinates updated", () => {
             const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());
@@ -124,10 +157,10 @@ describe("Tests DungeonAdventure on Dungeon where move straight until you reach 
         });
     }
 
-    function testContents(theExpectedContents) {
+    function testContentsAfterMove(theExpectedContents) {
         test("Room has contents updated appropriately.", () => {
             const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());
-            expect(currRoomInfo.content).toBe(Room.CONTENT.empty);
+            expect(currRoomInfo.content).toBe(theExpectedContents);
         });
     }
 
@@ -161,7 +194,7 @@ describe("Tests DungeonAdventure on Dungeon where move straight until you reach 
         describe("Process moving east (1,2) Abstraction Pillar to pick up", () => {
             testMoveEast();
             testCoordinates(1,2);
-            testContents(Room.CONTENT.empty);
+            testContentsAfterMove(Room.CONTENT.empty);
             testInventory(0, 0, true, false, false, false);
             testNotWonYet();
         });
@@ -169,7 +202,7 @@ describe("Tests DungeonAdventure on Dungeon where move straight until you reach 
         describe("Process moving east (1,3) Encapsulation Pillar to pick up", () => {
             testMoveEast();
             testCoordinates(1,3)
-            testContents(Room.CONTENT.empty);
+            testContentsAfterMove(Room.CONTENT.empty);
             testInventory(0, 0, true, true, false, false);
             testNotWonYet();
         });
@@ -177,70 +210,26 @@ describe("Tests DungeonAdventure on Dungeon where move straight until you reach 
         describe("Process moving east (1,4) Inheritance Pillar to pick up", () => {
             testMoveEast();
             testCoordinates(1,4)
-            testContents(Room.CONTENT.empty);
+            testContentsAfterMove(Room.CONTENT.empty);
             testInventory(0, 0, true, true, true, false);
             testNotWonYet();
         });
 
         describe("Process moving east (1,5) Polymorphism Pillar to pick up", () => {
-            test("Moving east", () => {
-                easyDungeonTopLeftBottomRight.moveEast();
-                const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
-                expect(validMoves.north).toBeFalsy();
-                expect(validMoves.east).toBeFalsy();
-                expect(validMoves.south).toBeTruthy();
-                expect(validMoves.west).toBeTruthy();
-            });
-
-            test("Room has been updated properly (emptied, coordinates updated)", () => {
-                const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());
-                expect(currRoomInfo.content).toBe(Room.CONTENT.empty);                
-                expect(currRoomInfo.coordinate.row).toBe(1);
-                expect(currRoomInfo.coordinate.col).toBe(5);
-            });
-
-            test("Polymorphism pillar has been properly added to the inventory class", () => {
-                const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-                expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
-                expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
-                expect(adventurer.hero.inventory.items.pillars.abstraction).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.encapsulation).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.inheritance).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.polymorphism).toBeTruthy();
-            });
-
-            test("Has not won yet", () => {
-                expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeFalsy();
-            });
+            testMoveEastEdge();
+            testCoordinates(1, 5);
+            testContentsAfterMove(Room.CONTENT.empty);
+            testInventory(0, 0, true, true, true, true);
+            testNotWonYet();
         });
 
         describe("Process moving east (2,5) Healing Potion to pick up", () => {
-            test("Moving south", () => {
-                easyDungeonTopLeftBottomRight.moveSouth();
-                const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
-                expect(validMoves.north).toBeTruthy();
-                expect(validMoves.east).toBeFalsy();
-                expect(validMoves.south).toBeFalsy();
-                expect(validMoves.west).toBeTruthy();
-            });
-    
-            test("Room has been updated properly (emptied, coordinates updated)", () => {
-                const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());             
-                expect(currRoomInfo.content).toBe(Room.CONTENT.empty);
-                expect(currRoomInfo.coordinate.row).toBe(2);
-                expect(currRoomInfo.coordinate.col).toBe(5);
-            });
-    
-            test("Healing potion has been properly added to the inventory class", () => {
-                const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-                expect(adventurer.hero.inventory.items.healing_potion).toBe(1);
-                expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
-                expect(adventurer.hero.inventory.items.pillars.abstraction).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.encapsulation).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.inheritance).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.polymorphism).toBeTruthy();
-            });
-    
+            testMoveSouthEastEdge();
+            testCoordinates(2, 5);
+            testContentsAfterMove(Room.CONTENT.empty);
+            testInventory(1, 0, true, true, true, true);
+            testNotWonYet();
+            
             describe("Using healing potion (expected to add 10 HP)", () => {
                 test("Use healing potion adds 10HP to adventurer", () => {
                     let adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
@@ -261,38 +250,13 @@ describe("Tests DungeonAdventure on Dungeon where move straight until you reach 
                     expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
                 });
             });
-
-            test("Has not won yet", () => {
-                expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeFalsy();
-            });
         });
     
         describe("Process moving east (2,4) Vision Potion to pick up", () => {
-            test("Moving west", () => {
-                easyDungeonTopLeftBottomRight.moveWest();
-                const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
-                expect(validMoves.north).toBeFalsy();
-                expect(validMoves.east).toBeTruthy();
-                expect(validMoves.south).toBeFalsy();
-                expect(validMoves.west).toBeTruthy();
-            });
-    
-            test("Room has been updated properly (emptied, coordinates updated)", () => {
-                const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());
-                expect(currRoomInfo.content).toBe(Room.CONTENT.empty);
-                expect(currRoomInfo.coordinate.row).toBe(2);
-                expect(currRoomInfo.coordinate.col).toBe(4);
-            });
-    
-            test("Vision potion has been properly added to the inventory class", () => {
-                const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-                expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
-                expect(adventurer.hero.inventory.items.vision_potion).toBe(1);
-                expect(adventurer.hero.inventory.items.pillars.abstraction).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.encapsulation).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.inheritance).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.polymorphism).toBeTruthy();
-            });
+            testMoveWest();
+            testCoordinates(2, 4);
+            testContentsAfterMove(Room.CONTENT.empty);
+            testInventory(0, 1, true, true, true, true);
 // FIX TEST
             
             describe("Using vision potion (expected to return the 9 adjacent rooms) unless no room is present in which case nulls is set", () => {
@@ -321,40 +285,15 @@ describe("Tests DungeonAdventure on Dungeon where move straight until you reach 
                     // expect(result).toBe("You have no vision potions");
                 });
             });
-
-            test("Has not won yet", () => {
-                expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeFalsy();
-            });
+            testNotWonYet();
         });
 
         describe("Process moving east (2, 3) Pit to fall in", () => {
             let priorPitAdventurerInfo = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-            test("Moving west", () => {
-                easyDungeonTopLeftBottomRight.moveWest();
-                const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
-                expect(validMoves.north).toBeFalsy();
-                expect(validMoves.east).toBeTruthy();
-                expect(validMoves.south).toBeFalsy();
-                expect(validMoves.west).toBeTruthy();
-            });
-
-            test("Room has been updated properly (coordinates updated, pit is not cleared)", () => {
-                const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());
-                expect(currRoomInfo.content).toBe(Room.CONTENT.pit);                
-                expect(currRoomInfo.coordinate.row).toBe(2);
-                expect(currRoomInfo.coordinate.col).toBe(3);
-            });
-
-            test("Nothing has been added to the inventory class", () => {
-                const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-                expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
-                expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
-                expect(adventurer.hero.inventory.items.pillars.abstraction).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.encapsulation).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.inheritance).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.polymorphism).toBeTruthy();
-            });
-
+            testMoveWest();
+            testCoordinates(2, 3);
+            testContentsAfterMove(Room.CONTENT.pit);
+            testInventory(0, 0, true, true, true, true);
             test("Adventurer has lost min 1HP and max 20HP for falling in pit", () => {
                 const priorHP = priorPitAdventurerInfo.hero.dungeon_character.hp;
                 const adventurerr = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
@@ -362,77 +301,92 @@ describe("Tests DungeonAdventure on Dungeon where move straight until you reach 
                 expect(lostHP).toBeGreaterThan(0);
                 expect(lostHP).toBeLessThan(21);
             });
-
-            test("Has not won yet", () => {
-                expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeFalsy();
-            });
+            testNotWonYet();
         });
         
         describe(`Process moving to (2, 2) No content to process.` , () => {
-            test("Moving west", () => {
-                easyDungeonTopLeftBottomRight.moveWest();
-                const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
-                expect(validMoves.north).toBeFalsy();
-                expect(validMoves.east).toBeTruthy();
-                expect(validMoves.south).toBeFalsy();
-                expect(validMoves.west).toBeTruthy();
-            });
-
-            test("Room has been updated properly (coordinates updated)", () => {
-                const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());
-                expect(currRoomInfo.content).toBe(Room.CONTENT.empty);                
-                expect(currRoomInfo.coordinate.row).toBe(2);
-                expect(currRoomInfo.coordinate.col).toBe(2);
-            });
-
-            test("Nothing has been added to the inventory class", () => {
-                const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-                expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
-                expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
-                expect(adventurer.hero.inventory.items.pillars.abstraction).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.encapsulation).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.inheritance).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.polymorphism).toBeTruthy();
-            });
-
-            test("Has not won yet", () => {
-                expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeFalsy();
-            });
+            testMoveWest();
+            testCoordinates(2, 2);
+            testContentsAfterMove(Room.CONTENT.empty);
+            testInventory(0, 0, true, true, true, true);
+            testNotWonYet();
         });
 
         describe(`Process moving to (2, 1) No content to process.` , () => {
-            test("Moving west", () => {
-                easyDungeonTopLeftBottomRight.moveWest();
-                const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
-                expect(validMoves.north).toBeFalsy();
-                expect(validMoves.east).toBeTruthy();
-                expect(validMoves.south).toBeTruthy();
-                expect(validMoves.west).toBeFalsy();
-            });
-
-            test("Room has been updated properly (coordinates updated)", () => {
-                const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());
-                expect(currRoomInfo.content).toBe(Room.CONTENT.empty);                
-                expect(currRoomInfo.coordinate.row).toBe(2);
-                expect(currRoomInfo.coordinate.col).toBe(1);
-            });
-
-            test("Nothing has been added to the inventory class", () => {
-                const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-                expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
-                expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
-                expect(adventurer.hero.inventory.items.pillars.abstraction).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.encapsulation).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.inheritance).toBeTruthy();
-                expect(adventurer.hero.inventory.items.pillars.polymorphism).toBeTruthy();
-            });
-
-            test("Has not won yet", () => {
-                expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeFalsy();
-            });
+            testMoveWestEdge();
+            testCoordinates(2, 1);
+            testContentsAfterMove(Room.CONTENT.empty);
+            testInventory(0, 0, true, true, true, true);
+            testNotWonYet();
         });
         
-        
+        describe("Navigating rest of maze of known structure top to bottom (east or west until reach edge then moves south)", () => {
+            for (let row = 3; row <= 5; row++) {
+                if (row % 2 === 0) {
+                    describe(`Process moving to (${row}, 5) No content to process.`, () => {
+                        testMoveSouthEastEdge();
+                        testCoordinates(row, 5);
+                        testContentsAfterMove(Room.CONTENT.empty);
+                        testInventory(0, 0, true, true, true, true);
+                        testNotWonYet();
+                    })
+                    for (let col = 4; col > 1; col--) {
+                        describe(`Process moving to (${row}, ${col}) No content to process.`, () => {
+                            testMoveWest();
+                            testCoordinates(row, col);
+                            testContentsAfterMove(Room.CONTENT.empty);
+                            testInventory(0, 0, true, true, true, true);
+                            testNotWonYet();
+                        });
+                    } 
+                    describe(`Process moving to (${row}, 1) No content to process.`, () => {
+                        testMoveWestEdge();
+                        testCoordinates(row, 1);
+                        testContentsAfterMove(Room.CONTENT.empty);
+                        testInventory(0, 0, true, true, true, true);
+                        testNotWonYet();
+                    });
+                } else {
+                    describe(`Process moving to (${row}, 1) No content to process.`, () => {
+                        testMoveSouthWestEdge();
+                        testCoordinates(row, 1);
+                        testContentsAfterMove(Room.CONTENT.empty);
+                        testInventory(0, 0, true, true, true, true);
+                        testNotWonYet();
+                    })
+                    for (let col = 2; col < 5; col++) {
+                        describe(`Process moving to (${row}, ${col}) No content to process.`, () => {
+                            testMoveEast();
+                            testCoordinates(row, col);
+                            testContentsAfterMove(Room.CONTENT.empty);
+                            testInventory(0, 0, true, true, true, true);
+                            testNotWonYet();
+                        });
+                    } 
+                    describe(`Process moving to (${row}, ${5}) No content to process.`, () => {
+                        if (row !== 5) {
+                            testMoveEastEdge();
+                            testNotWonYet();
+                        } else {
+                            test("Tests valid moves in bottom right corner.", () => {
+                                easyDungeonTopLeftBottomRight.moveEast();
+                                const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
+                                expect(validMoves.north).toBeFalsy();
+                                expect(validMoves.east).toBeFalsy();
+                                expect(validMoves.south).toBeFalsy();
+                                expect(validMoves.west).toBeTruthy();
+                            });
+                            testContentsAfterMove(Room.CONTENT.exit);
+                            test("Has reached the exit with all pillars (has won)", () => {
+                                expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeTruthy();
+                            });
+                        }
+                        testCoordinates(row, 5);
+                        testInventory(0, 0, true, true, true, true);
+                    });
+                }
+            }
+        });
 
         // describe("Navigating rest of maze of known structure top to bottom (east or west until reach edge then moves south)", () => {
         //     for (let row = 3; row < 5; row++) {
