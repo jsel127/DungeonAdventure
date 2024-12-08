@@ -64,14 +64,11 @@ const DisplayDungeon = () => {
             })
           }).then((res) => {
             const someJson = res.json()
-            console.log('LOOK AT MEEE', someJson) 
+            console.log('DisplayDungeon: after post fetch completes', someJson) 
+            fetchValidMoves()
             return someJson
           }).catch(error => console.log('ERROR: handle movement post request', error))
 
-        // this is for testing
-        setValidMoves(null)
-
-        fetchValidMoves()
     }
 
     useEffect(() => {
@@ -101,7 +98,7 @@ const DisplayDungeon = () => {
                 </p>
             )}
         </>
-    )
+    ) 
 
 }
 

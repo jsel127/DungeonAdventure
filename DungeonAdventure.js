@@ -76,7 +76,7 @@ export default class DungeonAdventure {
         const heroes = [HeroFactory.getWarriorData(), 
                        HeroFactory.getPriestessData(), 
                        HeroFactory.getThiefData()];
-        return heroes;
+        return heroes; 
     }
 
     static getDifficulties() {
@@ -127,7 +127,7 @@ export default class DungeonAdventure {
         }
     }
 
-    moveNorth() {
+    moveNorth() {  
         /*
         this.#checkStarted();
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
@@ -136,7 +136,7 @@ export default class DungeonAdventure {
             return this.#processMove();
         }
             */
-        DungeonAdventure.locY--  
+        DungeonAdventure.locY--   
     }
 
     moveEast() {

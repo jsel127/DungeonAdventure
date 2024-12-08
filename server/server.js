@@ -3,17 +3,17 @@ import cors from 'cors'
 import DungeonAdventure from "../DungeonAdventure.js"
 
 const app = express()
-const model = new DungeonAdventure()    
+const model = new DungeonAdventure()      
 
 // stores the character type selected on the CharacterSelection screen, 
 // to be used in a call to the model once the character name is recieved. 
 let selectedCharacter
 
-app.use(express.json())      
+app.use(express.json()) 
 app.use(cors())
 
 app.get("/", (req, res) => {  
-    res.send("Welcome to the Dungeon Adventure server!");     
+    res.send("Welcome to the Dungeon Adventure server!");      
 }); 
 
 app.get("/api/characters", (req, res) => { 
@@ -96,9 +96,3 @@ app.post("/api/move-direction", (req, res) => {
      
 
 app.listen(5001, () => { console.log("Server started on port 5001") }) 
-
-/*
-
-the buttons are updating a move behind the actual location in the dungeon
-
-*/ 
