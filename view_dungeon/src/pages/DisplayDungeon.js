@@ -63,9 +63,9 @@ const DisplayDungeon = () => {
           }).catch(error => console.log('ERROR: handle movement post request'))
 
         // this is for testing
-        //setValidMoves(null)
+        setValidMoves(null)
 
-        setTimeout(fetchValidMoves(), 500)
+        fetchValidMoves()
     }
 
     useEffect(() => {

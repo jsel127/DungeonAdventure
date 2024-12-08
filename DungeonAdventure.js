@@ -68,22 +68,23 @@ export default class DungeonAdventure {
         this.#myStarted = true;
     }
 
-    getValidMoves() {
+    getValidMoves() { 
         /*
         this.#checkStarted();
+        console.log(this.#myCurrentRoom)
         return {
             north: this.#myCurrentRoom.isNorthDoorOpen(),
             east: this.#myCurrentRoom.isEastDoorOpen(),
             south: this.#myCurrentRoom.isSouthDoorOpen(),
             west: this.#myCurrentRoom.isWestDoorOpen()
-        }
+        }  
             */
-        const testDungeon = [ [0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 1, 1, 1, 0], [0, 1, 1, 1, 0], [0, 0, 0, 0, 0] ]
+        const mini = [ [0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 1, 1, 1, 0], [0, 1, 1, 1, 0], [0, 0, 0, 0, 0] ]
         return {
-            north: testDungeon[DungeonAdventure.locationX][DungeonAdventure.locationY - 1] === 1,
-            east: testDungeon[DungeonAdventure.locationX + 1][DungeonAdventure.locationY] === 1,
-            south: testDungeon[DungeonAdventure.locationX][DungeonAdventure.locationY + 1] === 1,
-            west: testDungeon[DungeonAdventure.locationX - 1][DungeonAdventure.locationY] === 1
+            north: mini[DungeonAdventure.locationX][DungeonAdventure.locationY - 1] === 1,
+            east: mini[DungeonAdventure.locationX + 1][DungeonAdventure.locationY] === 1,
+            south: mini[DungeonAdventure.locationX][DungeonAdventure.locationY + 1] === 1,
+            west: mini[DungeonAdventure.locationX - 1][DungeonAdventure.locationY] === 1
         }
     }
 
@@ -93,7 +94,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY() - 1, location.getX()));
-            return this.#processMove();
+            //return this.#processMove();
         }
             */
         DungeonAdventure.locationY--
@@ -105,7 +106,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY(), location.getX() + 1));
-            return this.#processMove();
+            //return this.#processMove();
         }
             */
         DungeonAdventure.locationX++
@@ -117,7 +118,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY() + 1, location.getX()));
-            return this.#processMove();
+            //return this.#processMove();
         }
             */
         DungeonAdventure.locationY++
@@ -129,10 +130,10 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY(), location.getX() - 1));
-            return this.#processMove();
+            //return this.#processMove();
         }
             */
-        DungeonAdventure.locationX--
+           DungeonAdventure.locationX--
     }
 
     attackOpponent() { 
@@ -351,6 +352,3 @@ export default class DungeonAdventure {
         }
     }
 }
-
-const model = new DungeonAdventure()
-model.getValidMoves()

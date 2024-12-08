@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get("/", (req, res) => {  
-    res.send("Welcome to the Dungeon Adventure server!");   
+    res.send("Welcome to the Dungeon Adventure server!");     
 }); 
 
 app.get("/api/characters", (req, res) => { 
@@ -34,18 +34,18 @@ app.post("/api/selected-name", (req, res) => {
 app.get("/api/difficulties", (req, res) => {
     console.log("Server: request to /api/difficulties")  
     res.json(DungeonAdventure.getDifficulties())
-}) 
+})   
 
 app.post("/api/selected-difficulty", (req, res) => {
     console.log('Server: recieved selected difficulty from react:', req.body.difficulty)
     model.setDifficulty(req.body.difficulty) 
-    model.startGame()
+    model.startGame() 
 })
 
 app.get("/api/valid-moves", (req, res) => {   
     console.log('Server: request to /api/valid-moves', model.getValidMoves())
     res.set('Cache-Control', 'no-store'); 
-    res.json(model.getValidMoves())  
+    res.json(model.getValidMoves())    
 })
  
 app.post("/api/move-north", (req, res) => {
@@ -79,11 +79,11 @@ app.post("/api/move-direction", (req, res) => {
             model.moveEast()
             break
         case 'South':
-            model.moveSouth()
-            break
-        case 'West':
-            model.moveWest() 
-            break
+            model.moveSouth()     
+            break 
+        case 'West':  
+            model.moveWest()   
+            break  
         default:
             throw new Error('ERROR Server: direction must be North, East, South, West')
     }
