@@ -12,6 +12,19 @@ const DisplayDungeon = () => {
 
     const [validMoves, setValidMoves] = useState(null)
 
+    const displayMap = () => {
+      fetch('/api/dungeon-map')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => {
+          console.log('DisplayDungeon: MAP\n', data)
+        })
+        .catch(error => console.log('DisplayDungeon: error displayMap fetch', error))
+    }
+
     const fetchValidMoves = async () => {
         try {
           const response = await fetch('http://localhost:5001/api/valid-moves', {
@@ -84,6 +97,7 @@ const DisplayDungeon = () => {
                 <p>
                     {console.log('DisplayDungeon: RERENDER')}
                     {console.log('DisplayDungeon: validMoves', validMoves)}
+                    {displayMap()}
                     North: { validMoves.north.toString() }
                     <MovementButton direction='North' doorOpen={validMoves.north} onButtonClick={() => handleClick('North')} />
                     <br/>

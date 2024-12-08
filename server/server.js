@@ -9,10 +9,10 @@ const model = new DungeonAdventure()
 // to be used in a call to the model once the character name is recieved. 
 let selectedCharacter
 
-app.use(express.json()) 
+app.use(express.json())  
 app.use(cors())
 
-app.get("/", (req, res) => {  
+app.get("/", (req, res) => {    
     res.send("Welcome to the Dungeon Adventure server!");      
 }); 
 
@@ -32,7 +32,7 @@ app.post("/api/selected-name", (req, res) => {
 })
 
 app.get("/api/difficulties", (req, res) => {
-    console.log("Server: request to /api/difficulties")  
+    console.log("Server: request to /api/difficulties")   
     res.json(DungeonAdventure.getDifficulties())
 })   
 
@@ -42,7 +42,7 @@ app.post("/api/selected-difficulty", (req, res) => {
     model.startGame() 
 })
 
-app.get("/api/valid-moves", (req, res) => {   
+app.get("/api/valid-moves", (req, res) => {    
     console.log('Server: request to /api/valid-moves', model.getValidMoves())
     //res.set('Cache-Control', 'no-store');     
 
@@ -84,7 +84,7 @@ app.post("/api/move-direction", (req, res) => {
             break
         case 'South':
             model.moveSouth()     
-            break 
+            break  
         case 'West':  
             model.moveWest()   
             break   
@@ -92,6 +92,11 @@ app.post("/api/move-direction", (req, res) => {
             throw new Error('ERROR Server: direction must be North, East, South, West')
     }
     console.log(model.getDungeon().toString())
+})
+
+app.get("/api/dungeon-map", (req, res) => {
+    console.log('Server: get request to /api/dungeon-map')
+    res.json(model.viewDungeon())
 })
      
 
