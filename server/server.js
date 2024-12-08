@@ -54,24 +54,23 @@ app.post("/api/move-north", (req, res) => {
 })
 
 app.post("/api/move-east", (req, res) => {
-    console.log('Server: post request to /api/move-east')
+    console.log('Server: post request to /api/move-east')  
     model.moveEast()
 })
 
 app.post("/api/move-south", (req, res) => {
-    console.log('Server: post request to /api/move-south')
+    console.log('Server: post request to /api/move-south')  
     model.moveSouth()
 })
 
 app.post("/api/move-west", (req, res) => {
-    console.log('Server: post request to /api/move-west')
+    console.log('Server: post request to /api/move-west') 
     model.moveWest()
 })
 
-/*
 app.post("/api/move-direction", (req, res) => {
     console.log('Server: request to /api/move-direction')
-    switch(req.body.dir) { 
+    switch(req.body.dir) {  
         case 'North':
             model.moveNorth()
             break
@@ -83,12 +82,12 @@ app.post("/api/move-direction", (req, res) => {
             break 
         case 'West':  
             model.moveWest()   
-            break  
+            break   
         default:
             throw new Error('ERROR Server: direction must be North, East, South, West')
     }
     console.log(model.getDungeon().toString())
 })
-    */
+     
 
 app.listen(5001, () => { console.log("Server started on port 5001") }) 

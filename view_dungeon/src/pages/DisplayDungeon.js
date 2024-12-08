@@ -14,7 +14,7 @@ const DisplayDungeon = () => {
 
     const fetchValidMoves = async () => {
         try {
-          const response = await fetch('/api/valid-moves', {
+          const response = await fetch('http://localhost:5001/api/valid-moves', {
             headers: {
                 'Content-Type': 'application/json'
             }
