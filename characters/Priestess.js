@@ -49,7 +49,7 @@ export default class Priestess extends Hero {
         const minHeal = Math.round(this.getHP() * Priestess.#HEAL_MIN_PERCENT / 100);
         const maxHeal = Math.round(this.getHP() * Priestess.#HEAL_MAX_PERCENT / 100);
         const rangeHeal = maxHeal - minHeal;
-        const gainedHP = Math.round(Math.random() * rangeHeal);
+        const gainedHP = Math.round(Math.random() * rangeHeal) + minHeal;
         if (gainedHP > 0) {
             this.setHP(this.getHP() + gainedHP);
             return true;
@@ -61,14 +61,6 @@ export default class Priestess extends Hero {
         return {
             __type: Priestess.name,
             hero: super.toJSON()
-            // toJSON() {
-            //     return {
-            //         dungeon_character: super.toJSON(),
-            //         block_chance: this.#myChanceToBlock,
-            //         inventory: this.#myInventory,
-            //         fighting_status: this.#myFightingStatus
-            //     }
-            // }
         }
     }
 
