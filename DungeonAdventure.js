@@ -220,9 +220,12 @@ export default class DungeonAdventure {
         this.#checkStarted();
         const inventory = this.#myAdventurer.getInventory();
         if (!inventory.hasHealingPotion()) {
-            return "You have not healing potions";
+            return "You have no healing potions";
         }
-        this.#myAdventurer.setHP(this.#myAdventurer.getHP() + Inventory.getHealingPotionHP());
+        inventory.useHealingPotion();
+        const gainedHP =  Inventory.getHealingPotionHP();
+        this.#myAdventurer.setHP(this.#myAdventurer.getHP() + gainedHP);
+        return gainedHP;
     }
 
     /**
@@ -243,7 +246,6 @@ export default class DungeonAdventure {
 
     #processMove() {
         this.#processContent();
-        return this.#hasWonGame();
     }
 
     /**
@@ -317,7 +319,7 @@ export default class DungeonAdventure {
         this.#myCurrentOpponent = theOpponent;
     }
 
-    #hasWonGame() {
+    hasWonGame() {
         if (this.#myCurrentRoom.isExit()) {
             const inventory = this.#myAdventurer.getInventory();
             if (inventory.hasAllPillars()) {
@@ -340,11 +342,11 @@ export default class DungeonAdventure {
     }
 
     getAdventurerInfo() {
-        return this.#myAdventurer.toJSON();
+        return JSON.stringify(this.#myAdventurer.toJSON());
     }
 
     getCurrentRoomInfo() {
-        return this.#myCurrentRoom.toJSON();
+        return JSON.stringify(this.#myCurrentRoom.toJSON());
     }
 
     #checkStarted() {
