@@ -35,7 +35,7 @@ export default class Hero extends DungeonCharacter {
      * @param {*} theChanceToBlock the block chance of the hero.
      */
     constructor(theName, theHP, theDPMin, theDPMax,
-                theAttackSpeed, theHitChance, theChanceToBlock,
+                theAttackSpeed, theHitChance, theChanceToBlock, theInventory = new Inventory(),
                 theFightingStatus = Hero.FIGHTING_STATUS.notFighting) {       
         super(theName, theHP, theDPMin, theDPMax, theAttackSpeed, theHitChance);
         if (this.constructor === Hero) {
@@ -50,8 +50,11 @@ export default class Hero extends DungeonCharacter {
         if (typeof theFightingStatus !== "boolean") {
             throw new TypeError("Invalid fighting status. Must be of boolean type.");
         }
+        if (!theInventory instanceof Inventory) {
+            throw new TypeError("The inventory in not of Inventory type.");
+        }
         this.#myChanceToBlock = theChanceToBlock;
-        this.#myInventory = new Inventory();
+        this.#myInventory = theInventory;
         this.#myFightingStatus = theFightingStatus;
     }
 
@@ -123,7 +126,7 @@ export default class Hero extends DungeonCharacter {
         return {
             dungeon_character: super.toJSON(),
             block_chance: this.#myChanceToBlock,
-            inventory: this.#myInventory,
+            inventory: this.#myInventory.toJSON(),
             fighting_status: this.#myFightingStatus
         }
     }
