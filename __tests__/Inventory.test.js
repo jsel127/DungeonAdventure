@@ -1,5 +1,5 @@
-import Inventory from "../characters/Inventory";
-
+import Inventory from "../characters/Inventory.js";
+import Room from "../dungeon/Room.js";
 describe("Instanciates an empty inventory and checks basic functionality", () => {
     const inventory = new Inventory();
     const potionsAdd = 10;
@@ -63,6 +63,52 @@ describe("Instanciates an empty inventory and checks basic functionality", () =>
 
     test("Check has all pillars works", () => {
         expect(inventory.hasAllPillars()).toBeTruthy();
+    });
+});
+
+describe("Tests collecting items properly", () => {
+    const inventory = new Inventory();
+    const room = new Room();
+    test("Collects healing potion", () => {
+        room.setContent(Room.CONTENT.healingPotion);
+        inventory.collectItemFromRoom(room);
+        expect(inventory.getHealingPotionQuantity()).toBe(1);
+        expect(room.getContent()).toBe(Room.CONTENT.empty);
+    });
+
+    test("Collects vision potion", () => {
+        room.setContent(Room.CONTENT.visionPotion);
+        inventory.collectItemFromRoom(room);
+        expect(inventory.getVisionPotionQuantity()).toBe(1);
+        expect(room.getContent()).toBe(Room.CONTENT.empty);
+    });
+
+    test("Collects abstraction pillar", () => {
+        room.setContent(Room.CONTENT.abstractionPillar);
+        inventory.collectItemFromRoom(room);
+        expect(inventory.hasAbstractionPillar()).toBeTruthy();
+        expect(room.getContent()).toBe(Room.CONTENT.empty);
+    });
+
+    test("Collects encapsulation pillar", () => {
+        room.setContent(Room.CONTENT.encapsulationPillar);
+        inventory.collectItemFromRoom(room);
+        expect(inventory.hasEncapsulationPillar()).toBeTruthy();
+        expect(room.getContent()).toBe(Room.CONTENT.empty);
+    });
+
+    test("Collects inheritance pillar", () => {
+        room.setContent(Room.CONTENT.inheritancePillar);
+        inventory.collectItemFromRoom(room);
+        expect(inventory.hasInheritancePillar()).toBeTruthy();
+        expect(room.getContent()).toBe(Room.CONTENT.empty);
+    });
+
+    test("Collects polymorphism pillar", () => {
+        room.setContent(Room.CONTENT.polymorphismPillar);
+        inventory.collectItemFromRoom(room);
+        expect(inventory.hasPolymorphismPillar()).toBeTruthy();
+        expect(room.getContent()).toBe(Room.CONTENT.empty);
     });
 });
 

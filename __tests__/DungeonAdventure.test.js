@@ -3,13 +3,13 @@
  * Fall 2024
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
-
+import fs from 'fs';
 import DungeonAdventure from "../DungeonAdventure.js";
 import HeroFactory from "../characters/HeroFactory.js";
 import Dungeon from "../dungeon/Dungeon.js";
 import Room from "../dungeon/Room.js";
 
-describe("Tests main functionality", () => {
+describe("Tests main starting functionality", () => {
     const gameWarriorEasy = new DungeonAdventure();
 
     test("Getting available heros", () => {
@@ -35,7 +35,8 @@ describe("Tests main functionality", () => {
         const heroes = DungeonAdventure.getHeroes();
         for (let i = 0; i < heroes.length; i++) {
             gameWarriorEasy.setAdventurer(heroes[i].name, "Bob");
-            expect(gameWarriorEasy.getAdventurer()).toStrictEqual(HeroFactory.createHero(heroes[i].name, "Bob"));
+            const defaultHero = HeroFactory.createHero(heroes[i].name, "Bob");
+            expect(gameWarriorEasy.getAdventurerInfo()).toStrictEqual(defaultHero.toJSON());
         }
     });
 
@@ -43,84 +44,71 @@ describe("Tests main functionality", () => {
         gameWarriorEasy.setAdventurer("Warrior", "Tester");
         gameWarriorEasy.setDifficulty("Easy");
         gameWarriorEasy.startGame();
-        test("Check dungeon set up", () => {
-            const dungeon = gameWarriorEasy.getDungeon();
-            expect(dungeon instanceof Dungeon).toBeTruthy();
-        });
 
         test("Check current room is the entrance", () => {
-            const currentRoom = gameWarriorEasy.getCurrentRoom();
-            expect(currentRoom instanceof Room).toBeTruthy();
-            expect(currentRoom.isEntrance()).toBeTruthy();
+            const currentRoom = gameWarriorEasy.getCurrentRoomInfo();
+            expect(currentRoom.__type === Room.name).toBeTruthy();
+            expect(currentRoom.content).toBeTruthy();
         });
 
         test("Check status of game is now started", () => {
             expect(gameWarriorEasy.getStartStatus()).toBeTruthy();
         });
     });
-   
 
-    test("Getting valid moves (makes sure getting status of correct door.", () => {
-        const validMoves = gameWarriorEasy.getValidMoves();
-        const currentRoom = gameWarriorEasy.getCurrentRoom();
-        expect(validMoves.north).toBe(currentRoom.isNorthDoorOpen());
-        expect(validMoves.east).toBe(currentRoom.isEastDoorOpen());
-        expect(validMoves.south).toBe(currentRoom.isSouthDoorOpen());
-        expect(validMoves.west).toBe(currentRoom.isWestDoorOpen());
+    test("Get difficulty to return an the proper difficulty", () => {
+        expect(gameWarriorEasy.getDifficulty()).toBe(Dungeon.DIFFICULTY.Easy);
     });
-
-    describe("Test navigation methods (moving rooms)", () => {
-        describe("Moving north", () => {
-
-        });
-
-        describe("Moving east", () => {
-
-        });
-
-        describe("Moving south", () => {
-
-        });
-
-        describe("Moving west", () => {
-
-        });
-    });
-
-    // // Testing purposes created getter methods for this purpose (will be removed)
-    // test("Setting adventurer", () => {
-    //     gameWarriorEasy.setAdventurer("Warrior", "Jasmine");
-    //     const adventurer = gameWarriorEasy.getAdventurer();
-    //     expect(adventurer instanceof Warrior).toBeTruthy();
-    //     expect(adventurer.getName()).toBe("Jasmine");
-    // });
-
-    // test("Get difficulty levels", () => {
-    //     expect(DungeonAdventure.getDifficulties()).toStrictEqual(Object.keys(Dungeon.DIFFICULTY));
-    // });
-
-    // test("Setting difficulty", () => {
-    //     gameWarriorEasy.setDifficulty(DungeonAdventure.getDifficulties()[2]);
-    //     expect(gameWarriorEasy.getDifficulty()).toBe(Dungeon.DIFFICULTY.Easy);
-    // })
-
-    // // test("Adventurer starts at the entrance.", () => {
-    // //     gameWarriorEasy.setDifficulty(Dungeon.DIFFICULTY.Easy);
-    // //     gameWarriorEasy.startGame();
-    // //     const currentRoom = gameWarriorEasy.getCurrentRoom();
-    // //     expect(currentRoom.isEntrance()).toBeTruthy();
-    // // });
 });
 
-// describe("Tests Saves and Loads DungeonAdventure class", () => {
-//     test("Saves and Loads Thief DungeonAdventure properly (No chances made from initialization)", () => {
-//         const dungeonAdventureToSave = new DungeonAdventure();
-//         const dungeonAdventureFromSave = DungeonAdventure.fromJSON(JSON.parse(JSON.stringify(dungeonAdventureToSave)));
-//         expect(dungeonAdventureFromSave.toString()).toBe(dungeonAdventureToSave.toString());
-//     });
+describe("Tests Saves and Loads DungeonAdventure class", () => {
+    test("Saves and Loads DungeonAdventure properly (No chances made from initialization)", () => {
+        const dungeonAdventureToSave = new DungeonAdventure();
+        dungeonAdventureToSave.setDifficulty("Easy");
+        dungeonAdventureToSave.setAdventurer("Warrior", "Jasmine");
+        dungeonAdventureToSave.startGame();
 
-//     test("Save and Load on invalid data", () => {
-//         expect(() => DungeonAdventure.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
-//     });
-// });
+        const dungeonAdventureFromSave = DungeonAdventure.fromJSON(JSON.parse(JSON.stringify(dungeonAdventureToSave)));
+        expect(dungeonAdventureFromSave.toJSON()).toStrictEqual(dungeonAdventureToSave.toJSON());
+    });
 
+    test("Save and Load on invalid data", () => {
+        expect(() => DungeonAdventure.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+    });
+});
+
+
+describe("Tests DungeonAdventure on Dungeon where move straight until you reach a wall then move down (top [entrance] to bottom [exit])", () => {
+    const fileEasyDungeon = fs.readFileSync('easyDA.txt');
+    const easyDungeonTopLeftBottomRight = DungeonAdventure.fromJSON(JSON.parse(fileEasyDungeon.toString().trim()));
+
+    describe("Traverse maze until reach end of maze. Check functionality of DungeonAdventure navigation and parsing move (e.g. picking up items).", () => {
+        test("Get valid starting moves", () => {
+            const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
+            expect(validMoves.north).toBeFalsy();
+            expect(validMoves.east).toBeTruthy();
+            expect(validMoves.south).toBeFalsy();
+            expect(validMoves.west).toBeFalsy();
+        });
+        describe("Process moving east (1,2)", () => {
+            test("Moving east", () => {
+                easyDungeonTopLeftBottomRight.moveEast();
+                const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
+                expect(validMoves.north).toBeFalsy();
+                expect(validMoves.east).toBeTruthy();
+                expect(validMoves.south).toBeFalsy();
+                expect(validMoves.west).toBeTruthy();
+            });
+
+            test("Abstraction pillar has been properly added to the inventory class", () => {
+                const adventure = easyDungeonTopLeftBottomRight.getAdventurerInfo();
+                expect(adventure.hero.inventory.items.healing_potion).toBe(0);
+                expect(adventure.hero.inventory.items.vision_potion).toBe(0);
+                expect(adventure.hero.inventory.items.pillars.abstraction).toBeTruthy();
+                expect(adventure.hero.inventory.items.pillars.encapsulation).toBeFalsy();
+                expect(adventure.hero.inventory.items.pillars.inheritance).toBeFalsy();
+                expect(adventure.hero.inventory.items.pillars.polymorphism).toBeFalsy();
+            });
+        });
+    });
+});

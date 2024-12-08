@@ -3,6 +3,8 @@ import Hero from "./characters/Hero.js";
 import HeroFactory from "./characters/HeroFactory.js";
 import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
+import Coordinate from "./dungeon/Coordinate.js";
+import Monster from "./characters/Monster.js";
 export default class DungeonAdventure {
     static #PIT_MAX_DAMAGE = 20;
     #myDungeon
@@ -12,8 +14,43 @@ export default class DungeonAdventure {
     #myCurrentOpponent
     #myStarted;
     
-    constructor() {
-        
+    constructor(theLoading = false, theDungeon = null, theAdventurer = null, 
+                theCurrentRoomCoordinate = null, theDifficulty = null, theCurrentOpponent = null) {
+        if (theLoading) {
+            if (!Number.isInteger(theDifficulty) || theDifficulty < Dungeon.DIFFICULTY.Easy || theDifficulty > Dungeon.DIFFICULTY.Hard) {
+                throw new RangeError("The difficulty must be between easy and hard.");
+            }
+            if (!(theDungeon instanceof Dungeon && theAdventurer instanceof Hero
+                && theCurrentRoomCoordinate instanceof Coordinate 
+                && (theCurrentOpponent === null || theCurrentOpponent instanceof Monster))) {
+                throw new TypeError("Invalid data was passed when loading. Actual types do not match expected ones.");
+            }
+            this.#myDungeon = theDungeon;
+            this.#myAdventurer = theAdventurer;
+            this.#myCurrentRoom = theDungeon.getRoom(theCurrentRoomCoordinate);
+            this.#myDifficulty = theDifficulty;
+            this.#myCurrentOpponent = theCurrentOpponent;
+            this.#myStarted = true;
+        } else {
+            this.#myDungeon = null;
+            this.#myAdventurer = null;
+            this.#myCurrentRoom = null;
+            this.#myDifficulty = Dungeon.DIFFICULTY.Easy;
+            this.#myCurrentOpponent = null;
+            this.#myStarted = false;
+        }
+    }
+
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || theJSON.__type !== DungeonAdventure.name) {
+            throw new TypeError("The JSON is not a dungeon adventure type");
+        }
+        const opponent = (theJSON.opponent === "null") ? Monster.fromJSON(theJSON.opponent) : null
+        return new DungeonAdventure(true, Dungeon.fromJSON(theJSON.dungeon), 
+                                    HeroFactory.loadHero(theJSON.adventurer.__type, theJSON.adventurer),
+                                    Coordinate.fromJSON(theJSON.current_room_coordinate),
+                                    theJSON.difficulty,
+                                    opponent);
     }
     
     toJSON() {
@@ -61,6 +98,9 @@ export default class DungeonAdventure {
         this.#myDungeon = new Dungeon(this.#myDifficulty);
         this.#myCurrentRoom = this.#myDungeon.getEntrance();    
         this.#myStarted = true;
+// TESTING PURPOSES ONLY
+        // const cur = this.#myCurrentRoom.getCoordinate();
+        // this.#myDungeon.getRoomWithRowCol(cur.getRow() - 1, cur.getCol()).setContent(Room.CONTENT.ogre);
     }
 
     getValidMoves() {
@@ -77,7 +117,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY() - 1, location.getX()));
+            this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow() - 1, location.getCol());
             return this.#processMove();
         }
     }
@@ -86,7 +126,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY(), location.getX() + 1));
+            this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow(), location.getCol() + 1);
             return this.#processMove();
         }
     }
@@ -95,7 +135,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY() + 1, location.getX()));
+            this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow() + 1, location.getCol());
             return this.#processMove();
         }
     }
@@ -104,7 +144,7 @@ export default class DungeonAdventure {
         this.#checkStarted();
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
-            this.#myCurrentRoom = this.#myDungeon.getRoom(new Coordinate(location.getY(), location.getX() - 1));
+            this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow(), location.getCol() - 1);
             return this.#processMove();
         }
     }
@@ -201,18 +241,6 @@ export default class DungeonAdventure {
         return this.#myDungeon.getAdjacentRooms(this.#myCurrentRoom);
     }
 
-    saveGame() {
-        this.#checkStarted();
-        //TODO: implement saving game
-        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify (convert data to a string)
-        //https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage (store savedState in browser)
-    }
-
-    loadGame() {
-        //TODO: implement loading game
-        //https://stackoverflow.com/questions/6487699/best-way-to-serialize-unserialize-objects-in-javascript
-    }
-
     #processMove() {
         this.#processContent();
         return this.#hasWonGame();
@@ -283,7 +311,7 @@ export default class DungeonAdventure {
      */
     #setOpponentToFight(theOpponent) {
         if (!theOpponent instanceof DungeonCharacter) {
-            throw new TypeError("The given opponenet was not a dungeon character.");
+            throw new TypeError("The given opponent was not a dungeon character.");
         }
         this.#myAdventurer.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
         this.#myCurrentOpponent = theOpponent;
@@ -300,23 +328,23 @@ export default class DungeonAdventure {
     }
     
     viewDungeon() {
-        console.log(this.#myDungeon.toString());
-    }
-
-    getAdventurer() {
-        return this.#myAdventurer;
+        return this.#myDungeon.toString();
     }
 
     getDifficulty() {
         return this.#myDifficulty;
     }
 
-    getCurrentRoom() {
-        return this.#myCurrentRoom;
-    }
-
     getStartStatus() {
         return this.#myStarted;
+    }
+
+    getAdventurerInfo() {
+        return this.#myAdventurer.toJSON();
+    }
+
+    getCurrentRoomInfo() {
+        return this.#myCurrentRoom.toJSON();
     }
 
     #checkStarted() {

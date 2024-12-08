@@ -75,6 +75,18 @@ export default class HeroFactory {
         }
     }
 
+    static loadHero(theHeroType, theJSON) {
+        if (theHeroType === "Warrior") {
+            return Warrior.fromJSON(theJSON);
+        } else if (theHeroType === "Priestess") {
+            return Priestess.fromJSON(theJSON);
+        } else if (theHeroType === "Thief") {
+            return Thief.fromJSON(theJSON)
+        } else {
+            throw new UndefinedValueError("The given hero type does not exist.");
+        }
+    }
+
     static getWarriorData() {
         return HeroFactory.#HERO_TYPES[HeroFactory.#WARRIOR_INDEX];
     }
