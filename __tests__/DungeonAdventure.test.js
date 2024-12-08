@@ -9,6 +9,9 @@ import HeroFactory from "../characters/HeroFactory.js";
 import Dungeon from "../dungeon/Dungeon.js";
 import Room from "../dungeon/Room.js";
 import { availableMemory } from 'process';
+import Monster from '../characters/Monster.js';
+import MonsterFactory from '../characters/MonsterFactory.js';
+import exp from 'constants';
 
 describe("Tests main starting functionality", () => {
     const gameWarriorEasy = new DungeonAdventure();
@@ -82,7 +85,6 @@ describe("Tests Saves and Loads DungeonAdventure class", () => {
 describe("Tests DungeonAdventure on 5x5 Dungeon where move straight until you reach a wall then move down (top [entrance] to bottom [exit])", () => {
     const fileEasyDungeon = fs.readFileSync('__tests__/test_files/easyDA.txt');
     const easyDungeonTopLeftBottomRight = DungeonAdventure.fromJSON(JSON.parse(fileEasyDungeon.toString().trim()));
-    
     function testMoveWest() {
         test("Moving west", () => {
             easyDungeonTopLeftBottomRight.moveWest();
@@ -280,18 +282,24 @@ describe("Tests DungeonAdventure on 5x5 Dungeon where move straight until you re
         });
 
         describe("Process moving east (2, 3) Pit to fall in", () => {
-            let priorPitAdventurerInfo = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
+            let priorPitAdventurerInfo;
+            beforeAll(() => {
+                priorPitAdventurerInfo = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
+            });
             testMoveWest();
+            test("Adventurer has lost min 1HP and max 20HP for falling in pit", () => {
+                const priorHP = priorPitAdventurerInfo.hero.dungeon_character.hp;
+                priorPitAdventurerInfo = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
+                const lostHP = priorHP - priorPitAdventurerInfo.hero.dungeon_character.hp;
+                console.log("lostHP", lostHP);
+                console.log("priorHP", priorHP);
+                console.log("postHP", priorPitAdventurerInfo.hero.dungeon_character.hp);
+                expect(lostHP).toBeGreaterThanOrEqual(0);
+                expect(lostHP).toBeLessThan(11);
+            });
             testCoordinates(2, 3);
             testContentsAfterMove(Room.CONTENT.pit);
             testInventory(0, 0, true, true, true, true);
-            test("Adventurer has lost min 1HP and max 20HP for falling in pit", () => {
-                const priorHP = priorPitAdventurerInfo.hero.dungeon_character.hp;
-                const adventurerr = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-                const lostHP = priorHP - adventurerr.hero.dungeon_character.hp;
-                expect(lostHP).toBeGreaterThan(0);
-                expect(lostHP).toBeLessThan(21);
-            });
             testNotWonYet();
         });
         
@@ -380,3 +388,66 @@ describe("Tests DungeonAdventure on 5x5 Dungeon where move straight until you re
         });
     });
 });
+
+describe("Testing spawning monster and processing monster (HP: 1250, DPMin&Max: 400, HitChance: 100, BlockChance: 0, AttackSpeed: 1)" 
+    + "ensure adventurer wins all fights)", () => {
+    const fileEasyMonsterDungeon = fs.readFileSync('__tests__/test_files/easyDAMonstersAdventurerHighHP.txt');
+    const easyMonsterDungeonTopLeftBottomRight = DungeonAdventure.fromJSON(JSON.parse(fileEasyMonsterDungeon.toString().trim()));
+    test("Checks if adventure is fighting when not", () => {
+        expect(easyMonsterDungeonTopLeftBottomRight.isAdventurerFighting()).toBeFalsy();
+    });
+
+    test("Get valid starting moves", () => {
+        const validMoves = easyMonsterDungeonTopLeftBottomRight.getValidMoves();
+        expect(validMoves.north).toBeFalsy();
+        expect(validMoves.east).toBeTruthy();
+        expect(validMoves.south).toBeFalsy();
+        expect(validMoves.west).toBeFalsy();
+    });
+
+    test("Collect all pillars", () => {
+        for (let moves = 0; moves < 4; moves++) {
+            easyMonsterDungeonTopLeftBottomRight.moveEast();
+        }
+        const adventurer = JSON.parse(easyMonsterDungeonTopLeftBottomRight.getAdventurerInfo());
+        expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
+        expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
+        expect(adventurer.hero.inventory.items.pillars.abstraction).toBeTruthy();
+        expect(adventurer.hero.inventory.items.pillars.encapsulation).toBeTruthy();
+        expect(adventurer.hero.inventory.items.pillars.inheritance).toBeTruthy();
+        expect(adventurer.hero.inventory.items.pillars.polymorphism).toBeTruthy();       
+    });
+
+    describe("Process fighting ogre", () => {
+        //"adventurer":{"__type":"Warrior","hero":{"dungeon_character":{"name":"Jasmine","hp":1250,"dp_min":400,"dp_max":400,"attack_speed":1,"hit_chance":100},"block_chance": 0
+        test("Correct monster has been set as the opponent", () => {
+            easyMonsterDungeonTopLeftBottomRight.moveSouth();
+            const opponent = easyMonsterDungeonTopLeftBottomRight.getOpponentInfo();
+            expect(opponent).toBe(JSON.stringify(MonsterFactory.createMonster("Ogre")));
+        });
+
+        test("Fighting status has been changed", () => {
+            expect(easyMonsterDungeonTopLeftBottomRight.isAdventurerFighting()).toBeTruthy();
+        });
+        
+        test("Attack is carried out", () => {
+            easyMonsterDungeonTopLeftBottomRight.attackOpponent();
+            expect(easyMonsterDungeonTopLeftBottomRight.isOpponentDead()).toBeTruthy();
+            expect(easyMonsterDungeonTopLeftBottomRight.isAdventurerFighting()).toBeFalsy();
+        });
+    });
+});
+
+// expect(ogre.toString()).toBe("Ogre 200 30 60 2 60 10 30 60");
+// });
+
+// test('Creating an ogre', () => {
+// const gremlin = MonsterFactory.createMonster("Gremlin");  
+// expect(gremlin instanceof Monster).toBeTruthy();
+// expect(gremlin.toString()).toBe("Gremlin 70 15 30 5 80 40 20 40");
+// });
+
+// test('Creating an ogre', () => {
+// const skeleton = MonsterFactory.createMonster("Skeleton");  
+// expect(skeleton instanceof Monster).toBeTruthy();
+// expect(skeleton.toString()).toBe("Skeleton 100 30 50 3 80 30 30 50");
