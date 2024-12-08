@@ -80,7 +80,7 @@ describe("Tests Saves and Loads DungeonAdventure class", () => {
 
 
 describe("Tests DungeonAdventure on 5x5 Dungeon where move straight until you reach a wall then move down (top [entrance] to bottom [exit])", () => {
-    const fileEasyDungeon = fs.readFileSync('easyDA.txt');
+    const fileEasyDungeon = fs.readFileSync('__tests__/test_files/easyDA.txt');
     const easyDungeonTopLeftBottomRight = DungeonAdventure.fromJSON(JSON.parse(fileEasyDungeon.toString().trim()));
     
     function testMoveWest() {
@@ -256,36 +256,27 @@ describe("Tests DungeonAdventure on 5x5 Dungeon where move straight until you re
             testMoveWest();
             testCoordinates(2, 4);
             testContentsAfterMove(Room.CONTENT.empty);
-            testInventory(0, 1, true, true, true, true);
-// FIX TEST
-            
-            describe("Using vision potion (expected to return the 9 adjacent rooms) unless no room is present in which case nulls is set", () => {
-                describe("Use vision potion gives person ability to know what are in the 9 adjacent rooms (including itself) adventurer", () => {
-                    const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-                    const result = easyDungeonTopLeftBottomRight.useVisionPotion();
-                    expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
-                    // const currCoordinate = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo()).coordinate;
-                    // console.log(currCoordinate);
-                    // test("Checks if coordinates of returned rooms are correct", () => {
-                    //     // for (let i = 0; i < 3; i++) {
-                    //     //     for (let j = 0; j < 3; j++) {
-                    //     //         const coordinate = result[i][j].getCoordinate();
-                    //     //         expect(coordinate.row).toBe(currCoordinate.row - 1 + i);
-                    //     //         expect(coordinate.col).toBe(currCoordinate.col - 1 + j);
-                    //     //     }
-                    //     // }
-                    // });
-                });
-// FIX TEST
-                test("Vision potion is not applied if vision potion if not available", () => {
-                    const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-                    const result = easyDungeonTopLeftBottomRight.useVisionPotion();
-                    expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
-
-                    // expect(result).toBe("You have no vision potions");
-                });
-            });
+            testInventory(0, 1, true, true, true, true);            
             testNotWonYet();
+            test("Use Vision Potion and should return 8 adjacent rooms including itself", () => {
+                const adjacentRooms = easyDungeonTopLeftBottomRight.useVisionPotion();
+                const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
+                const currentCoordinate = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo()).coordinate;
+                expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        const room = adjacentRooms[i][j];
+                        const coordinate = room.getCoordinate();
+                        expect(coordinate.getRow()).toBe(currentCoordinate.row - 1 + i);
+                        expect(coordinate.getCol()).toBe(currentCoordinate.col - 1 + j);
+                        if (i === 1 && j === 0) {
+                            expect(room.getContent()).toBe(Room.CONTENT.pit);
+                        } else {
+                            expect(room.getContent()).toBe(Room.CONTENT.empty);
+                        }
+                    }
+                }
+            });
         });
 
         describe("Process moving east (2, 3) Pit to fall in", () => {
@@ -387,107 +378,5 @@ describe("Tests DungeonAdventure on 5x5 Dungeon where move straight until you re
                 }
             }
         });
-
-        // describe("Navigating rest of maze of known structure top to bottom (east or west until reach edge then moves south)", () => {
-        //     for (let row = 3; row < 5; row++) {
-        //         if (row % 2 === 0) {
-        //             for (let col = 5; col > 1; col++) {
-        //                 describe(`Process moving to (${col}, ${row}) No content to process.` , () => {
-        //                     
-                
-        //                     test("Room has been updated properly (coordinates updated)", () => {
-        //                         const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());
-        //                         expect(currRoomInfo.content).toBe(Room.CONTENT.empty);                
-        //                         expect(currRoomInfo.coordinate.row).toBe(row);
-        //                         expect(currRoomInfo.coordinate.col).toBe(col);
-        //                     });
-                
-        //                     test("Nothing has been added to the inventory class", () => {
-        //                         const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-        //                         expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
-        //                         expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
-        //                         expect(adventurer.hero.inventory.items.pillars.abstraction).toBeTruthy();
-        //                         expect(adventurer.hero.inventory.items.pillars.encapsulation).toBeTruthy();
-        //                         expect(adventurer.hero.inventory.items.pillars.inheritance).toBeTruthy();
-        //                         expect(adventurer.hero.inventory.items.pillars.polymorphism).toBeTruthy();
-        //                     });
-                
-        //                     test("Has not won yet", () => {
-        //                         expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeFalsy();
-        //                     });
-        //                 });                    
-        //             }
-        //         } else {
-        //             for (col = 1; col < 5; col++) {
-        //                 describe(`Process moving to (${col}, ${row}) No content to process.` , () => {
-        //                     test("Moving east", () => {
-        //                         easyDungeonTopLeftBottomRight.moveEast();
-        //                         const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
-        //                         expect(validMoves.north).toBeFalsy();
-        //                         expect(validMoves.east).toBeTruthy();
-        //                         expect(validMoves.south).toBeFalsy();
-        //                         expect(validMoves.west).toBeTruthy();
-        //                     });
-                
-        //                     test("Room has been updated properly (coordinates updated)", () => {
-        //                         const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());
-        //                         expect(currRoomInfo.content).toBe(Room.CONTENT.empty);                
-        //                         expect(currRoomInfo.coordinate.row).toBe(2);
-        //                         expect(currRoomInfo.coordinate.col).toBe(3);
-        //                     });
-                
-        //                     test("Nothing has been added to the inventory class", () => {
-        //                         const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-        //                         expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
-        //                         expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
-        //                         expect(adventurer.hero.inventory.items.pillars.abstraction).toBeTruthy();
-        //                         expect(adventurer.hero.inventory.items.pillars.encapsulation).toBeTruthy();
-        //                         expect(adventurer.hero.inventory.items.pillars.inheritance).toBeTruthy();
-        //                         expect(adventurer.hero.inventory.items.pillars.polymorphism).toBeTruthy();
-        //                     });
-                
-        //                     test("Has not won yet", () => {
-        //                         if (row === 5 && col === 5) {
-        //                             expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeTruthy();
-        //                         } else {
-        //                             expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeFalsy();
-        //                         }
-        //                     });
-        //                 });
-        //             }
-        //             describe(`Process moving to (${col}, ${row}) No content to process.` , () => {
-        //                 test("", () => {
-        //                     easyDungeonTopLeftBottomRight.moveWest();
-        //                     const validMoves = easyDungeonTopLeftBottomRight.getValidMoves();
-        //                     expect(validMoves.north).toBeFalsy();
-        //                     expect(validMoves.east).toBeTruthy();
-        //                     expect(validMoves.south).toBeFalsy();
-        //                     expect(validMoves.west).toBeTruthy();
-        //                 });
-            
-        //                 test("Room has been updated properly (coordinates updated)", () => {
-        //                     const currRoomInfo = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo());
-        //                     expect(currRoomInfo.content).toBe(Room.CONTENT.empty);                
-        //                     expect(currRoomInfo.coordinate.row).toBe(2);
-        //                     expect(currRoomInfo.coordinate.col).toBe(3);
-        //                 });
-            
-        //                 test("Nothing has been added to the inventory class", () => {
-        //                     const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-        //                     expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
-        //                     expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
-        //                     expect(adventurer.hero.inventory.items.pillars.abstraction).toBeTruthy();
-        //                     expect(adventurer.hero.inventory.items.pillars.encapsulation).toBeTruthy();
-        //                     expect(adventurer.hero.inventory.items.pillars.inheritance).toBeTruthy();
-        //                     expect(adventurer.hero.inventory.items.pillars.polymorphism).toBeTruthy();
-        //                 });
-            
-        //                 test("Has not won yet", () => {
-        //                     expect(easyDungeonTopLeftBottomRight.hasWonGame()).toBeFalsy();
-        //                 });
-        //             });    
-        //         }
-        //     }
-        // });
     });
 });
