@@ -5,8 +5,10 @@ import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
 import Coordinate from "./dungeon/Coordinate.js";
 import Monster from "./characters/Monster.js";
+// source: https://stackoverflow.com/questions/20572016/javascript-string-concatenation-behavior-with-null-or-undefined-values 
+
 export default class DungeonAdventure {
-    static #PIT_MAX_DAMAGE = 20;
+    static #PIT_MAX_DAMAGE = 10;
     #myDungeon
     #myAdventurer
     #myCurrentRoom
@@ -98,9 +100,6 @@ export default class DungeonAdventure {
         this.#myDungeon = new Dungeon(this.#myDifficulty);
         this.#myCurrentRoom = this.#myDungeon.getEntrance();    
         this.#myStarted = true;
-// TESTING PURPOSES ONLY
-        // const cur = this.#myCurrentRoom.getCoordinate();
-        // this.#myDungeon.getRoomWithRowCol(cur.getRow() - 1, cur.getCol()).setContent(Room.CONTENT.ogre);
     }
 
     getValidMoves() {
@@ -118,7 +117,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow() - 1, location.getCol());
-            return this.#processMove();
+            return this.#processContent();
         }
     }
 
@@ -127,7 +126,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isEastDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow(), location.getCol() + 1);
-            return this.#processMove();
+            return this.#processContent();
         }
     }
 
@@ -136,7 +135,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isSouthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow() + 1, location.getCol());
-            return this.#processMove();
+            return this.#processContent();
         }
     }
 
@@ -145,7 +144,7 @@ export default class DungeonAdventure {
         if (this.#myCurrentRoom.isWestDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
             this.#myCurrentRoom = this.#myDungeon.getRoomWithRowCol(location.getRow(), location.getCol() - 1);
-            return this.#processMove();
+            return this.#processContent();
         }
     }
 
@@ -188,19 +187,9 @@ export default class DungeonAdventure {
             }
         }
     }
-
-    blockOpponent() {   
-        this.#checkStarted();
-        if (!this.#myAdventurer.getFightingStatus()) {
-            throw new EvalError("The adventurer is not currently fighting so it cannot block.");
-        }
-        const blockResult = this.#myAdventurer.block();
-        this.#myCurrentOpponent.attack(this.#myAdventurer.getHero(), blockResult);
-        if (blockResult) {
-            return "Successful Block";
-        } else {
-            this.#processAttack();
-        };    
+    
+    isAdventurerFighting() {
+        return this.#myAdventurer.getFightingStatus();
     }
 
     isAdventurerDead() {
@@ -244,34 +233,48 @@ export default class DungeonAdventure {
         return this.#myDungeon.getAdjacentRooms(this.#myCurrentRoom);
     }
 
-    #processMove() {
-        this.#processContent();
-    }
-
     /**
      * This method will check what is in the room and call the appropriate methods.
      */
     #processContent() {
-        this.#pickUpItem();
-        this.#processMonster();
-        this.#processPit();
+        function addEmptyString(theValue) {
+            return theValue || "";
+        }
+        let resultOfMove = "";
+        resultOfMove += addEmptyString(this.#pickUpItem());
+        resultOfMove += addEmptyString(this.#processMonster());
+        resultOfMove += addEmptyString(this.#processPit());
+        return resultOfMove;
     }
 
     #processPit() {
         if (this.#myCurrentRoom.isPit()) {
             const damage = Math.round(Math.random() * DungeonAdventure.#PIT_MAX_DAMAGE);
+            console.log("damage", damage);
+            console.log("oldHP", this.#myAdventurer.getHP());
+
             const newHP = this.#myAdventurer.getHP() - damage;
+            console.log("newHP", newHP);
+
             if (newHP < 1) {
-                return "Player has died";
+                console.log("entered dead");
+                this.#myAdventurer.setHP(0);
+                return "You fell into a pit. Player has died";
             } else {
+                console.log("entered alive");
                 this.#myAdventurer.setHP(newHP);
+                console.log("setHP", this.#myAdventurer.getHP());
+                return `You fell into a pit and lost ${damage}HP.`
             }
         }
     }
 
     #pickUpItem() {
         const inventory = this.#myAdventurer.getInventory();
-        inventory.collectItemFromRoom(this.#myCurrentRoom);
+        const item = inventory.collectItemFromRoom(this.#myCurrentRoom);
+        if (item) {
+            return `You picked up a ${item}`;
+        }
     }
 
     #processMonster() {
@@ -279,6 +282,7 @@ export default class DungeonAdventure {
         if (monster) {
             this.#myAdventurer.setFightingStatus(true);
             this.#setOpponentToFight(monster);
+            return `You ran into a ${monster.constructor.name}.`
         }
     }
 
@@ -301,7 +305,7 @@ export default class DungeonAdventure {
     }
     
     #doesAdventurerAttackFirst() {
-        if (!this.#myCurrentOpponent instanceof DungeonCharacter) {
+        if (!this.#myCurrentOpponent instanceof Monster) {
             throw new EvalError("There is not opponent to fight.");
         }
         return this.#myAdventurer.getAttackSpeed() - this.#myCurrentOpponent.getAttackSpeed() >= 0;
@@ -312,7 +316,7 @@ export default class DungeonAdventure {
      * @param {*} theOpponent 
      */
     #setOpponentToFight(theOpponent) {
-        if (!theOpponent instanceof DungeonCharacter) {
+        if (!theOpponent instanceof Monster) {
             throw new TypeError("The given opponent was not a dungeon character.");
         }
         this.#myAdventurer.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
@@ -347,6 +351,14 @@ export default class DungeonAdventure {
 
     getCurrentRoomInfo() {
         return JSON.stringify(this.#myCurrentRoom.toJSON());
+    }
+
+    getOpponentInfo() {
+        if (!this.isAdventurerFighting()) {
+            throw EvalError("There is not opponent to fight currently.");
+        } else {
+            return JSON.stringify(this.#myCurrentOpponent.toJSON());
+        }
     }
 
     #checkStarted() {
