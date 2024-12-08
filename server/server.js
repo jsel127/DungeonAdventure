@@ -32,7 +32,7 @@ app.post("/api/selected-name", (req, res) => {
 })
 
 app.get("/api/difficulties", (req, res) => {
-    console.log("Server: request to /api/difficulties")   
+    console.log("Server: request to /api/difficulties")     
     res.json(DungeonAdventure.getDifficulties())
 })   
 
@@ -94,9 +94,15 @@ app.post("/api/move-direction", (req, res) => {
     console.log(model.getDungeon().toString())
 })
 
-app.get("/api/dungeon-map", (req, res) => {
-    console.log('Server: get request to /api/dungeon-map')
+app.get("/api/dungeon-map", (req, res) => { 
+    console.log('Server: get request to /api/dungeon-map')     
     res.json(model.viewDungeon())
+})
+
+app.get("/api/inventory", (req, res) => {
+    console.log('Server: get request to /api/inventory')  
+    const adventurer = model.toJSON().adventurer
+    res.json(adventurer.getInventory())
 })
      
 

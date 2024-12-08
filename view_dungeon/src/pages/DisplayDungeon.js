@@ -11,6 +11,21 @@ const MovementButton = ({ direction, doorOpen, onButtonClick }) => {
 const DisplayDungeon = () => {
 
     const [validMoves, setValidMoves] = useState(null)
+    const [inventory, setInventory] = useState(null)
+
+    const fetchInventory = () => {
+      fetch('/api/inventory')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => {
+          setInventory(data)
+          //console.log('DisplayDungeon: INVENTORY:', inventory)
+        })
+        .catch(error => console.log('DisplayDungeon: error displayMap fetch', error))
+    }
 
     const displayMap = () => {
       fetch('/api/dungeon-map')
@@ -78,6 +93,7 @@ const DisplayDungeon = () => {
           }).then((res) => {
             const someJson = res.json()
             console.log('DisplayDungeon: after post fetch completes', someJson) 
+            fetchInventory()
             fetchValidMoves()
             return someJson
           }).catch(error => console.log('ERROR: handle movement post request', error))
@@ -97,6 +113,7 @@ const DisplayDungeon = () => {
                 <p>
                     {console.log('DisplayDungeon: RERENDER')}
                     {console.log('DisplayDungeon: validMoves', validMoves)}
+                    {console.log('DisplayDungeon: INVENTORY (return)', inventory)}
                     {displayMap()}
                     North: { validMoves.north.toString() }
                     <MovementButton direction='North' doorOpen={validMoves.north} onButtonClick={() => handleClick('North')} />

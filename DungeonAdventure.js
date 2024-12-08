@@ -96,6 +96,8 @@ export default class DungeonAdventure {
     }
 
     startGame() {
+        //const fileDungeon = fs.readFileSync('__tests__/test_files/easyDA.txt')
+        //this.#myDungeon = DungeonAdventure.fromJSON(JSON.parse(fileDungeon.toString().trim()))
         this.#myDungeon = new Dungeon(this.#myDifficulty);
         this.#myCurrentRoom = this.#myDungeon.getEntrance();    
         this.#myStarted = true;
