@@ -29,7 +29,6 @@ export default class Inventory {
 
     collectItemFromRoom(theRoom) {
         const content = theRoom.getContent();
-        const containedItem = true;
         if (content === Room.CONTENT.healingPotion) {
             this.addHealingPotion();
         } else if (content === Room.CONTENT.visionPotion) {
@@ -46,7 +45,7 @@ export default class Inventory {
             return false;
         }
         theRoom.clearContent();
-        return containedItem;
+        return true;
     }
     
     static fromJSON(theJSON) {

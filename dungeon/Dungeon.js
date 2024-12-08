@@ -140,8 +140,8 @@ export default class Dungeon {
             throw new TypeError("The given value is not a room");
         }
         const coordinate = theRoom.getCoordinate();
-        const curRow = coordinate.getCol();
-        const curCol = coordinate.getRow();
+        const curRow = coordinate.getRow();
+        const curCol = coordinate.getCol();
 
         const adjacentRooms = new Array(3);
         for (let row = -1; row <= 1; row++) {
