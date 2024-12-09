@@ -1,13 +1,13 @@
 import express from "express"
 import cors from 'cors'
-import DungeonAdventure from "../DungeonAdventure.js"
+import DungeonAdventure from "../DungeonAdventure.js"    
 
 const app = express()
 const model = new DungeonAdventure()      
 
 // stores the character type selected on the CharacterSelection screen, 
 // to be used in a call to the model once the character name is recieved. 
-let selectedCharacter
+let selectedCharacter  
 
 app.use(express.json())  
 app.use(cors())
@@ -17,11 +17,11 @@ app.get("/", (req, res) => {
 }); 
 
 app.get("/api/characters", (req, res) => { 
-    console.log("Server: request to /api/characters") 
+    console.log("Server: request to /api/characters")   
     res.json(DungeonAdventure.getHeroes())
 })  
 
-app.post("/api/selected-character", (req, res) => {  
+app.post("/api/selected-character", (req, res) => {     
     selectedCharacter = req.body.character
     console.log("Server: request to /api/selected-character:", selectedCharacter.name)
 })
@@ -32,11 +32,11 @@ app.post("/api/selected-name", (req, res) => {
 })
 
 app.get("/api/difficulties", (req, res) => {
-    console.log("Server: request to /api/difficulties")     
+    console.log("Server: request to /api/difficulties")           
     res.json(DungeonAdventure.getDifficulties())
 })   
 
-app.post("/api/selected-difficulty", (req, res) => {
+app.post("/api/selected-difficulty", (req, res) => { 
     console.log('Server: recieved selected difficulty from react:', req.body.difficulty)
     model.setDifficulty(req.body.difficulty) 
     model.startGame() 
@@ -50,27 +50,27 @@ app.get("/api/valid-moves", (req, res) => {
 })
  
 app.post("/api/move-north", (req, res) => {
-    console.log('Server: post request to /api/move-north')        
-    model.moveNorth()
-    res.json({fromServer:'north'}) 
+    console.log('Server: post request to /api/move-north')         
+    const message = model.moveNorth()
+    res.json(message) 
 })
 
 app.post("/api/move-east", (req, res) => {
     console.log('Server: post request to /api/move-east')  
-    model.moveEast()  
-    res.json({fromServer:'east'})
+    const message = model.moveEast()  
+    res.json(message)
 })
 
 app.post("/api/move-south", (req, res) => { 
     console.log('Server: post request to /api/move-south')   
-    model.moveSouth()
-    res.json({fromServer:'south'})
+    const message = model.moveSouth()
+    res.json(message)
 })
 
 app.post("/api/move-west", (req, res) => {
     console.log('Server: post request to /api/move-west') 
-    model.moveWest()
-    res.json({fromServer:'west'})
+    const message = model.moveWest()  
+    res.json(message)
 })
 
 app.post("/api/move-direction", (req, res) => {
@@ -86,24 +86,50 @@ app.post("/api/move-direction", (req, res) => {
             model.moveSouth()     
             break  
         case 'West':  
-            model.moveWest()   
+            model.moveWest()    
             break   
         default:
-            throw new Error('ERROR Server: direction must be North, East, South, West')
+            throw new Error('ERROR Server: direction must be North, East, South, West') 
     }
-    console.log(model.getDungeon().toString())
+    //console.log(model.getDungeon().toString())
 })
 
 app.get("/api/dungeon-map", (req, res) => { 
-    console.log('Server: get request to /api/dungeon-map')     
+    console.log('Server: get request to /api/dungeon-map')
     res.json(model.viewDungeon())
 })
 
-app.get("/api/inventory", (req, res) => {
-    console.log('Server: get request to /api/inventory')  
+app.get("/api/inventory", (req, res) => { 
+    console.log('Server: get request to /api/inventory')       
     const adventurer = model.toJSON().adventurer
-    res.json(adventurer.getInventory())
+    res.json(adventurer.getInventory()) 
+})
+
+app.get("/api/fighting-status", (req, res) => {
+    console.log('Server: get request to /api/fighting-status')
+    res.json(model.isAdventurerFighting()) 
+})
+
+app.get("/api/adventurer", (req, res) => {
+    console.log('Server: get request to /api/adventurer')
+    res.json(JSON.parse(model.getAdventurerInfo()))
+})
+
+app.get("/api/opponent", (req, res) => {
+    console.log('Server: get request to /api/opponent')
+    res.json(JSON.parse(model.getOpponentInfo()))    
+})
+
+app.get("/api/attack", (req, res) => {
+    console.log('Server: get request /api/attack')        
+    model.attackOpponent() 
+    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() }) 
+})
+
+app.get("api/special-attack", (req, res) => {
+    console.log('Server: get request /api/special-attack')         
+    model.specialAttackOpponent()
+    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })     
 })
      
-
 app.listen(5001, () => { console.log("Server started on port 5001") }) 

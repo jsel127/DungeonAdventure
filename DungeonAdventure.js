@@ -74,7 +74,7 @@ export default class DungeonAdventure {
         const heroes = [HeroFactory.getWarriorData(), 
                        HeroFactory.getPriestessData(), 
                        HeroFactory.getThiefData()];
-        return heroes;
+        return heroes; 
     }
 
     static getDifficulties() {
@@ -97,6 +97,8 @@ export default class DungeonAdventure {
     }
 
     startGame() {
+        //const fileDungeon = fs.readFileSync('__tests__/test_files/easyDA.txt')
+        //this.#myDungeon = DungeonAdventure.fromJSON(JSON.parse(fileDungeon.toString().trim()))
         this.#myDungeon = new Dungeon(this.#myDifficulty);
         this.#myCurrentRoom = this.#myDungeon.getEntrance();    
         this.#myStarted = true;
@@ -112,7 +114,7 @@ export default class DungeonAdventure {
         }
     }
 
-    moveNorth() {
+    moveNorth() {  
         this.#checkStarted();
         if (this.#myCurrentRoom.isNorthDoorOpen()) {
             const location = this.#myCurrentRoom.getCoordinate();
@@ -150,6 +152,7 @@ export default class DungeonAdventure {
 
     attackOpponent() { 
         this.#checkStarted();
+        console.log('DungeonAdventure: fightingStatus', this.#myAdventurer.getFightingStatus())
         if (!this.#myAdventurer.getFightingStatus()) {
             throw new EvalError("The adventurer is not currently fighting so it cannot attack.");
         }
@@ -199,9 +202,10 @@ export default class DungeonAdventure {
 
     isOpponentDead() {
         this.#checkStarted();
-        if (this.#myAdventurer.getFightingStatus()) {
-            throw new EvalError("The adventurer is not currently fighting");
-        }
+        //console.log('DungeonAdventure: fightingStatus in isOpponentDead', this.#myAdventurer.getFightingStatus())
+        //if (!this.#myAdventurer.getFightingStatus()) {
+            //throw new EvalError("The adventurer is not currently fighting");
+        //}
         return this.#myCurrentOpponent.isDead();
     }
 
