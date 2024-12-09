@@ -6,7 +6,7 @@ const app = express()
 const model = new DungeonAdventure()       
 
 // stores the character type selected on the CharacterSelection screen, 
-// to be used in a call to the model once the character name is recieved. 
+// to be used in a call to the model once the character name is recieved.  
 let selectedCharacter  
 
 app.use(express.json())  
@@ -129,7 +129,12 @@ app.get("/api/attack", (req, res) => {
 app.get("/api/special-attack", (req, res) => {  
     console.log('Server: get request /api/special-attack')         
     model.specialAttackOpponent()
-    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })      
+    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })       
+})
+
+app.get("/api/has-won-game", (req, res) => {
+    console.log('Server: get request /api/has-won-game')     
+    res.json(model.hasWonGame())   
 })
      
 app.listen(5001, () => { console.log("Server started on port 5001") })     

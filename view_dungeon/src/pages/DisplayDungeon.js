@@ -78,6 +78,21 @@ const DisplayDungeon = () => {
         .catch(error => console.log('DisplayDungeon: error isMonster fetch', error))
     }
 
+    const hasWonGame = () => {
+      fetch('/api/has-won-game')
+          .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+          })
+          .then(data => {
+            if (data) {
+              navigate('/game-over')
+            }
+          })
+          .catch(error => console.error('DisplayDungeon: error hasWonGame', error))
+    }
+
     const handleClick = (direction) => {
         console.log('DisplayDungeon:  handleClick called', direction)
         console.log(validMoves)
@@ -115,6 +130,7 @@ const DisplayDungeon = () => {
           .then((res) => {
             const message = res.json()
             console.log('DisplayDungeon: after post fetch completes', message) 
+            hasWonGame()
             isMonster()
             fetchInventory()
             fetchValidMoves()

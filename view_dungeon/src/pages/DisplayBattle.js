@@ -68,7 +68,7 @@ const DisplayBattle = () => {
       if (data.win) {
         navigate('/dungeon')
       } else if (data.lose) {
-        navigate('/lose-game')
+        navigate('/game-over')
       } else {
         fetchAdventurer()
         fetchOpponent()
