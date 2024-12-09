@@ -217,7 +217,7 @@ export default class DungeonAdventure {
         inventory.useHealingPotion();
         const gainedHP =  Inventory.getHealingPotionHP();
         this.#myAdventurer.setHP(this.#myAdventurer.getHP() + gainedHP);
-        return `You used a healing point and gain ${gainedHP} HP.`;
+        return `You used a healing potion and gained ${gainedHP} HP.`;
     }
 
     /**
