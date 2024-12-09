@@ -1,9 +1,15 @@
 {
-  "type":"module",
-  "scripts": {"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"},
-
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
   "jest": {
     "transform": {}
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
-
 }

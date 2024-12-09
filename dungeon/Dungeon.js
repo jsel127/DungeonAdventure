@@ -150,7 +150,7 @@ export default class Dungeon {
                 adjacentRooms[row + 1][col + 1] = this.#myRooms[curRow + row][curCol + col];
             }
         }
-        return adjacentRooms;
+        return JSON.stringify(adjacentRooms);
     }
 
     #makeDungeon() {
