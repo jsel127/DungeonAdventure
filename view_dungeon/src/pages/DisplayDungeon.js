@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const MovementButton = ({ direction, doorOpen, onButtonClick }) => {
     return (
@@ -10,10 +11,14 @@ const MovementButton = ({ direction, doorOpen, onButtonClick }) => {
 
 const DisplayDungeon = () => {
 
+    const navigate = useNavigate()
+
     const [validMoves, setValidMoves] = useState(null)
     const [inventory, setInventory] = useState(null)
+    const [message, setMessage] = useState('')
 
     const fetchInventory = () => {
+      console.log('FETCH INVENTORY CALLED')
       fetch('/api/inventory')
         .then(res => {
           if (res.ok) {
@@ -22,7 +27,8 @@ const DisplayDungeon = () => {
         })
         .then(data => {
           setInventory(data)
-          //console.log('DisplayDungeon: INVENTORY:', inventory)
+          return data
+          //console.log('DisplayDungeon: INVENTORY: (data)', data)
         })
         .catch(error => console.log('DisplayDungeon: error displayMap fetch', error))
     }
@@ -57,6 +63,21 @@ const DisplayDungeon = () => {
         }
       }
 
+    const isMonster = () => {
+      fetch('/api/fighting-status')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(isFighting => {
+          if (isFighting) {
+            navigate('/battle')
+          }
+        })
+        .catch(error => console.log('DisplayDungeon: error isMonster fetch', error))
+    }
+
     const handleClick = (direction) => {
         console.log('DisplayDungeon:  handleClick called', direction)
         console.log(validMoves)
@@ -90,19 +111,26 @@ const DisplayDungeon = () => {
             body: JSON.stringify({
               dir: direction
             })
-          }).then((res) => {
-            const someJson = res.json()
-            console.log('DisplayDungeon: after post fetch completes', someJson) 
+          })
+          .then((res) => {
+            const message = res.json()
+            console.log('DisplayDungeon: after post fetch completes', message) 
+            isMonster()
             fetchInventory()
             fetchValidMoves()
-            return someJson
-          }).catch(error => console.log('ERROR: handle movement post request', error))
+            return message
+          })
+          .then(result => {
+            setMessage(result)
+          })
+          .catch(error => console.log('ERROR: handle movement post request', error))
 
     }
 
     useEffect(() => {
         console.log('Display Dungeon: useEffect called')
         fetchValidMoves()
+        fetchInventory()
     }, [])
 
     return (
@@ -126,6 +154,15 @@ const DisplayDungeon = () => {
                     <br/>
                     West: { validMoves.west.toString() } 
                     <MovementButton direction='West' doorOpen={validMoves.west} onButtonClick={() => handleClick('West')} />
+                    <br/>
+                    <br/>
+                   Message: 
+                   {message}
+                   <br/>
+                   <br/>
+                   Inventory:
+                   {
+                    inventory === null ? <p>Loading Inventory...</p> : JSON.stringify(inventory.items)}
                 </p>
             )}
         </>
