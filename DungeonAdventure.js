@@ -1,10 +1,10 @@
-import DungeonCharacter from "./characters/DungeonCharacter.js";
 import Hero from "./characters/Hero.js";
 import HeroFactory from "./characters/HeroFactory.js";
 import Inventory from "./characters/Inventory.js";
 import Dungeon from "./dungeon/Dungeon.js";
 import Coordinate from "./dungeon/Coordinate.js";
 import Monster from "./characters/Monster.js";
+import fs from 'fs';
 // source: https://stackoverflow.com/questions/20572016/javascript-string-concatenation-behavior-with-null-or-undefined-values 
 
 export default class DungeonAdventure {
@@ -93,6 +93,9 @@ export default class DungeonAdventure {
         if (typeof theName !== "string") {
             throw new TypeError("Invalid name provided");
         }
+        if (!HeroFactory.getHeroTypes().includes(theHeroType)) {
+            throw new TypeError("Invalid Hero Type provided");
+        }
         this.#myAdventurer = HeroFactory.createHero(theHeroType, theName);
     }
 
@@ -176,11 +179,11 @@ export default class DungeonAdventure {
         if (this.#doesAdventurerAttackFirst()) {
             this.#myAdventurer.specialAttack(this.#myCurrentOpponent);
             if (this.#processAttack()) {
-                this.#myCurrentOpponent.specialAttack(this.#myAdventurer);
+                this.#myCurrentOpponent.attack(this.#myAdventurer);
                 this.#processAttack();
             }
         } else {
-            this.#myCurrentOpponent.specialAttack(this.#myAdventurer);
+            this.#myCurrentOpponent.attack(this.#myAdventurer);
             if (this.#processAttack()) {
                 this.#myAdventurer.specialAttack(this.#myCurrentOpponent);
                 this.#processAttack();
@@ -199,7 +202,7 @@ export default class DungeonAdventure {
 
     isOpponentDead() {
         this.#checkStarted();
-        if (this.#myAdventurer.getFightingStatus()) {
+        if (!this.#myAdventurer.getFightingStatus()) {
             throw new EvalError("The adventurer is not currently fighting");
         }
         return this.#myCurrentOpponent.isDead();
@@ -214,7 +217,7 @@ export default class DungeonAdventure {
         inventory.useHealingPotion();
         const gainedHP =  Inventory.getHealingPotionHP();
         this.#myAdventurer.setHP(this.#myAdventurer.getHP() + gainedHP);
-        return gainedHP;
+        return `You used a healing point and gain ${gainedHP} HP.`;
     }
 
     /**
@@ -319,9 +322,7 @@ export default class DungeonAdventure {
     hasWonGame() {
         if (this.#myCurrentRoom.isExit()) {
             const inventory = this.#myAdventurer.getInventory();
-            if (inventory.hasAllPillars()) {
-                return true;
-            }
+            return inventory.hasAllPillars();
         } 
         return false;
     }
@@ -352,6 +353,17 @@ export default class DungeonAdventure {
         } else {
             return JSON.stringify(this.#myCurrentOpponent.toJSON());
         }
+    }
+
+    saveGameAsFile() {
+        if (this.#checkStarted) {
+            fs.writeFile("serialized_game.txt", JSON.stringify(this), err => {
+                if (err) {
+                    console.error(err);
+                }
+            });
+            return "File saved successfully.";
+        } 
     }
 
     #checkStarted() {
