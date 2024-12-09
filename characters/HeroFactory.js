@@ -7,6 +7,7 @@
 import Warrior from './Warrior.js';
 import Priestess from './Priestess.js';
 import Thief from './Thief.js';
+import Hero from './Hero.js';
 /**
  * Will create a specific type of Hero based on the name it is passed (e.g. Warrior). 
  * @author Jasmine Sellers
@@ -97,5 +98,11 @@ export default class HeroFactory {
 
     static getThiefData() {
         return HeroFactory.#HERO_TYPES[HeroFactory.#THIEF_INDEX];
+    }
+
+    static getHeroTypes() {
+        const heroTypes = [];
+        HeroFactory.#HERO_TYPES.forEach(hero => heroTypes.push(hero.name));
+        return heroTypes;
     }
 }
