@@ -119,5 +119,17 @@ app.get("/api/opponent", (req, res) => {
     console.log('Server: get request to /api/opponent')
     res.json(JSON.parse(model.getOpponentInfo()))    
 })
+
+app.get("/api/attack", (req, res) => {
+    console.log('Server: get request /api/attack')        
+    model.attackOpponent() 
+    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() }) 
+})
+
+app.get("api/special-attack", (req, res) => {
+    console.log('Server: get request /api/special-attack')         
+    model.specialAttackOpponent()
+    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })     
+})
      
 app.listen(5001, () => { console.log("Server started on port 5001") }) 

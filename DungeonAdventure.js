@@ -152,6 +152,7 @@ export default class DungeonAdventure {
 
     attackOpponent() { 
         this.#checkStarted();
+        console.log('DungeonAdventure: fightingStatus', this.#myAdventurer.getFightingStatus())
         if (!this.#myAdventurer.getFightingStatus()) {
             throw new EvalError("The adventurer is not currently fighting so it cannot attack.");
         }
@@ -201,9 +202,10 @@ export default class DungeonAdventure {
 
     isOpponentDead() {
         this.#checkStarted();
-        if (this.#myAdventurer.getFightingStatus()) {
-            throw new EvalError("The adventurer is not currently fighting");
-        }
+        //console.log('DungeonAdventure: fightingStatus in isOpponentDead', this.#myAdventurer.getFightingStatus())
+        //if (!this.#myAdventurer.getFightingStatus()) {
+            //throw new EvalError("The adventurer is not currently fighting");
+        //}
         return this.#myCurrentOpponent.isDead();
     }
 

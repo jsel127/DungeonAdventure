@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const DisplayBattle = () => {
+
+    const navigate = useNavigate()
 
     const [adventurer, setAdventurer] = useState(null)
     const [opponent, setOpponent] = useState(null)
@@ -16,7 +19,7 @@ const DisplayBattle = () => {
             setAdventurer(data)
             return data
           })
-          .catch(error => console.log('DisplayDungeon: error fetchAdventurer', error))
+          .catch(error => console.error('DisplayBattle: error fetchAdventurer', error))
       }
 
       const fetchOpponent = () => {
@@ -30,13 +33,47 @@ const DisplayBattle = () => {
             setOpponent(data)
             return data
           })
-          .catch(error => console.log('DisplayDungeon: error fetchOpponent', error))
+          .catch(error => console.error('DisplayBattle: error fetchOpponent', error))
       }
 
     useEffect(() => {
         fetchAdventurer()
         fetchOpponent()
     }, [])
+
+    const handleAttack = () => {
+      fetch('/api/attack')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => processAfterAttack(data))
+        .catch(error => console.error('DisplayBattle: error handleAttack', error))
+    }
+
+    const handleSpecialAttack = () => {
+      fetch('/api/special-attack')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => processAfterAttack(data))
+        .catch(error => console.error('DisplayBattle: error handleSpecialAttack', error))
+    }
+
+    const processAfterAttack = () => {
+      console.log('WIN/LOSE DATA', data)
+      if (data.win) {
+        console.log('WIN')
+      } else if (data.lose) {
+        navigate('/lose-game')
+      } else {
+        fetchAdventurer()
+        fetchOpponent()
+      }
+    }
 
     return (
         <>
@@ -45,7 +82,7 @@ const DisplayBattle = () => {
             {
                 adventurer === null ? <p>Loading adventurer...</p> : (
                     <>
-                        <p>Hero: {JSON.stringify(adventurer.hero.dungeon_character.name)} 
+                        <p>Hero ({JSON.stringify(adventurer.__type)}): {JSON.stringify(adventurer.hero.dungeon_character.name)}
                         <br/>
                         hp: {JSON.stringify(adventurer.hero.dungeon_character.hp)}</p>
                     </>
@@ -60,6 +97,8 @@ const DisplayBattle = () => {
                     </>
                 )
             }
+            <button onClick={() => handleAttack()}>Attack</button>
+            <button onClick={() => handleSpecialAttack()}>Special Attack</button>
         </>
     )
 
