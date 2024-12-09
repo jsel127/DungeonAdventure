@@ -63,10 +63,10 @@ const DisplayBattle = () => {
         .catch(error => console.error('DisplayBattle: error handleSpecialAttack', error))
     }
 
-    const processAfterAttack = () => {
+    const processAfterAttack = (data) => {
       console.log('WIN/LOSE DATA', data)
       if (data.win) {
-        console.log('WIN')
+        navigate('/dungeon')
       } else if (data.lose) {
         navigate('/lose-game')
       } else {

@@ -1,23 +1,23 @@
 import express from "express"
-import cors from 'cors'
+import cors from "cors"
 import DungeonAdventure from "../DungeonAdventure.js"    
 
 const app = express()
-const model = new DungeonAdventure()      
+const model = new DungeonAdventure()       
 
 // stores the character type selected on the CharacterSelection screen, 
 // to be used in a call to the model once the character name is recieved. 
 let selectedCharacter  
 
 app.use(express.json())  
-app.use(cors())
+app.use(cors()) 
 
 app.get("/", (req, res) => {    
     res.send("Welcome to the Dungeon Adventure server!");      
 }); 
 
 app.get("/api/characters", (req, res) => { 
-    console.log("Server: request to /api/characters")   
+    console.log("Server: request to /api/characters")    
     res.json(DungeonAdventure.getHeroes())
 })  
 
@@ -33,7 +33,7 @@ app.post("/api/selected-name", (req, res) => {
 
 app.get("/api/difficulties", (req, res) => {
     console.log("Server: request to /api/difficulties")           
-    res.json(DungeonAdventure.getDifficulties())
+    res.json(DungeonAdventure.getDifficulties())   
 })   
 
 app.post("/api/selected-difficulty", (req, res) => { 
@@ -123,13 +123,13 @@ app.get("/api/opponent", (req, res) => {
 app.get("/api/attack", (req, res) => {
     console.log('Server: get request /api/attack')        
     model.attackOpponent() 
-    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() }) 
+    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })   
 })
 
-app.get("api/special-attack", (req, res) => {
+app.get("/api/special-attack", (req, res) => {  
     console.log('Server: get request /api/special-attack')         
     model.specialAttackOpponent()
-    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })     
+    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })      
 })
      
-app.listen(5001, () => { console.log("Server started on port 5001") }) 
+app.listen(5001, () => { console.log("Server started on port 5001") })     

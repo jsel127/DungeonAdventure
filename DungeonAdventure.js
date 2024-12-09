@@ -179,11 +179,11 @@ export default class DungeonAdventure {
         if (this.#doesAdventurerAttackFirst()) {
             this.#myAdventurer.specialAttack(this.#myCurrentOpponent);
             if (this.#processAttack()) {
-                this.#myCurrentOpponent.specialAttack(this.#myAdventurer);
+                this.#myCurrentOpponent.attack(this.#myAdventurer);
                 this.#processAttack();
             }
         } else {
-            this.#myCurrentOpponent.specialAttack(this.#myAdventurer);
+            this.#myCurrentOpponent.attack(this.#myAdventurer);
             if (this.#processAttack()) {
                 this.#myAdventurer.specialAttack(this.#myCurrentOpponent);
                 this.#processAttack();
@@ -206,7 +206,7 @@ export default class DungeonAdventure {
         //if (!this.#myAdventurer.getFightingStatus()) {
             //throw new EvalError("The adventurer is not currently fighting");
         //}
-        return this.#myCurrentOpponent.isDead();
+        return this.#myCurrentOpponent === null || this.#myCurrentOpponent.isDead();
     }
 
     useHealingPotion() {

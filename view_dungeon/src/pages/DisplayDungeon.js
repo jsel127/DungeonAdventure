@@ -128,9 +128,11 @@ const DisplayDungeon = () => {
     }
 
     useEffect(() => {
+      setTimeout(function() {
         console.log('Display Dungeon: useEffect called')
         fetchValidMoves()
         fetchInventory()
+      }, 100)
     }, [])
 
     return (
