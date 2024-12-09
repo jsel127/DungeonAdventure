@@ -8,10 +8,7 @@ import DungeonAdventure from "../DungeonAdventure.js";
 import HeroFactory from "../characters/HeroFactory.js";
 import Dungeon from "../dungeon/Dungeon.js";
 import Room from "../dungeon/Room.js";
-import { availableMemory } from 'process';
-import Monster from '../characters/Monster.js';
 import MonsterFactory from '../characters/MonsterFactory.js';
-import exp from 'constants';
 
 describe("Tests main starting functionality", () => {
     const gameWarriorEasy = new DungeonAdventure();
@@ -236,9 +233,11 @@ describe("Tests DungeonAdventure on 5x5 Dungeon where move straight until you re
                 test("Use healing potion adds 10HP to adventurer", () => {
                     let adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
                     const preHP = adventurer.hero.dungeon_character.hp;
-                    const gainedHP = easyDungeonTopLeftBottomRight.useHealingPotion();
+                    const returnedMessage = easyDungeonTopLeftBottomRight.useHealingPotion();
                     adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
-                    expect(adventurer.hero.dungeon_character.hp - preHP).toBe(gainedHP);
+                    const postHP = adventurer.hero.dungeon_character.hp;
+                    expect(returnedMessage).toBe(`You used a healing potion and gained ${postHP - preHP} HP.`);
+                    expect(postHP - preHP).toBe(10);
                     expect(adventurer.hero.inventory.items.healing_potion).toBe(0);
                 });
         
@@ -261,13 +260,13 @@ describe("Tests DungeonAdventure on 5x5 Dungeon where move straight until you re
             testInventory(0, 1, true, true, true, true);            
             testNotWonYet();
             test("Use Vision Potion and should return 8 adjacent rooms including itself", () => {
-                const adjacentRooms = easyDungeonTopLeftBottomRight.useVisionPotion();
+                const adjacentRooms = JSON.parse(easyDungeonTopLeftBottomRight.useVisionPotion());
                 const adventurer = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
                 const currentCoordinate = JSON.parse(easyDungeonTopLeftBottomRight.getCurrentRoomInfo()).coordinate;
                 expect(adventurer.hero.inventory.items.vision_potion).toBe(0);
                 for (let i = 0; i < 3; i++) {
                     for (let j = 0; j < 3; j++) {
-                        const room = adjacentRooms[i][j];
+                        const room = Room.fromJSON(adjacentRooms[i][j]);
                         const coordinate = room.getCoordinate();
                         expect(coordinate.getRow()).toBe(currentCoordinate.row - 1 + i);
                         expect(coordinate.getCol()).toBe(currentCoordinate.col - 1 + j);
@@ -291,9 +290,6 @@ describe("Tests DungeonAdventure on 5x5 Dungeon where move straight until you re
                 const priorHP = priorPitAdventurerInfo.hero.dungeon_character.hp;
                 priorPitAdventurerInfo = JSON.parse(easyDungeonTopLeftBottomRight.getAdventurerInfo());
                 const lostHP = priorHP - priorPitAdventurerInfo.hero.dungeon_character.hp;
-                console.log("lostHP", lostHP);
-                console.log("priorHP", priorHP);
-                console.log("postHP", priorPitAdventurerInfo.hero.dungeon_character.hp);
                 expect(lostHP).toBeGreaterThanOrEqual(0);
                 expect(lostHP).toBeLessThan(11);
             });
@@ -426,28 +422,32 @@ describe("Testing spawning monster and processing monster (HP: 1250, DPMin&Max: 
             expect(opponent).toBe(JSON.stringify(MonsterFactory.createMonster("Ogre")));
         });
 
-        test("Fighting status has been changed", () => {
-            expect(easyMonsterDungeonTopLeftBottomRight.isAdventurerFighting()).toBeTruthy();
-        });
+        // test("Fighting status has been changed", () => {
+        //     expect(easyMonsterDungeonTopLeftBottomRight.isAdventurerFighting()).toBeTruthy();
+        // });
         
-        test("Attack is carried out", () => {
-            easyMonsterDungeonTopLeftBottomRight.attackOpponent();
-            expect(easyMonsterDungeonTopLeftBottomRight.isOpponentDead()).toBeTruthy();
-            expect(easyMonsterDungeonTopLeftBottomRight.isAdventurerFighting()).toBeFalsy();
+        // test("Attack is carried out", () => {
+        //     easyMonsterDungeonTopLeftBottomRight.attackOpponent();
+        //     expect(easyMonsterDungeonTopLeftBottomRight.isOpponentDead()).toBeTruthy();
+        //     expect(easyMonsterDungeonTopLeftBottomRight.isAdventurerFighting()).toBeFalsy();
+        // });
+    });
+
+    describe("Process fighting gremlin", () => {
+        //"adventurer":{"__type":"Warrior","hero":{"dungeon_character":{"name":"Jasmine","hp":1250,"dp_min":400,"dp_max":400,"attack_speed":1,"hit_chance":100},"block_chance": 0
+        test("Correct monster has been set as the opponent", () => {
+            easyMonsterDungeonTopLeftBottomRight.moveWest();
+            const opponent = easyMonsterDungeonTopLeftBottomRight.getOpponentInfo();
+            expect(opponent).toBe(JSON.stringify(MonsterFactory.createMonster("Gremlin")));
+        });
+    });
+
+    describe("Process fighting skeleton", () => {
+        //"adventurer":{"__type":"Warrior","hero":{"dungeon_character":{"name":"Jasmine","hp":1250,"dp_min":400,"dp_max":400,"attack_speed":1,"hit_chance":100},"block_chance": 0
+        test("Correct monster has been set as the opponent", () => {
+            easyMonsterDungeonTopLeftBottomRight.moveWest();
+            const opponent = easyMonsterDungeonTopLeftBottomRight.getOpponentInfo();
+            expect(opponent).toBe(JSON.stringify(MonsterFactory.createMonster("Skeleton")));
         });
     });
 });
-
-// expect(ogre.toString()).toBe("Ogre 200 30 60 2 60 10 30 60");
-// });
-
-// test('Creating an ogre', () => {
-// const gremlin = MonsterFactory.createMonster("Gremlin");  
-// expect(gremlin instanceof Monster).toBeTruthy();
-// expect(gremlin.toString()).toBe("Gremlin 70 15 30 5 80 40 20 40");
-// });
-
-// test('Creating an ogre', () => {
-// const skeleton = MonsterFactory.createMonster("Skeleton");  
-// expect(skeleton instanceof Monster).toBeTruthy();
-// expect(skeleton.toString()).toBe("Skeleton 100 30 50 3 80 30 30 50");

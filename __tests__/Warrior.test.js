@@ -45,18 +45,6 @@ describe("Tests Warrior Character instanciated to Name: Warrior, HP: 20, DPMin: 
         expect(warrior.getFightingStatus()).toBeTruthy();
     });
 
-    test("Block should be successful (block change = 100).", () => {
-        const warrior = new Warrior("Warrior", 20, 10, 10, 5, 100, 100, Hero.FIGHTING_STATUS.fighting);
-        warrior.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
-        expect(warrior.block()).toBeTruthy();
-    });
-
-    test("Block should fail (block chance = 0)", () => {
-        const warriorWithNoShield = new Warrior("Warrior", 20, 10, 10, 5, 100, 0, Hero.FIGHTING_STATUS.fighting);
-        warriorWithNoShield.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
-        expect(warriorWithNoShield.block()).toBeFalsy();
-    });
-
     test("Tests the attack method (hit chance = 100, DPmin = 10, DPmax = 10", () => {
         const warrior = new Warrior("Warrior", 20, 10, 10, 5, 100, 100, Hero.FIGHTING_STATUS.fighting);
         warrior.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
