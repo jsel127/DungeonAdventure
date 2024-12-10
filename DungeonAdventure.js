@@ -210,14 +210,7 @@ export default class DungeonAdventure {
 
     useHealingPotion() {
         this.#checkStarted();
-        const inventory = this.#myAdventurer.getInventory();
-        if (!inventory.hasHealingPotion()) {
-            return "You have no healing potions";
-        }
-        inventory.useHealingPotion();
-        const gainedHP =  Inventory.getHealingPotionHP();
-        this.#myAdventurer.setHP(this.#myAdventurer.getHP() + gainedHP);
-        return `You used a healing potion and gained ${gainedHP} HP.`;
+        return Inventory.this.#myAdventurer.useHealingPotion();
     }
 
     /**
@@ -228,11 +221,9 @@ export default class DungeonAdventure {
      */
     useVisionPotion() {
         this.#checkStarted();
-        const inventory = this.#myAdventurer.getInventory();
-        if (!inventory.hasVisionPotion()) {
+        if (!this.#myAdventurer.useVisionPotion()) {
             return "You have no vision potions";
-        } 
-        inventory.useVisionPotion();
+        }
         return this.#myDungeon.getAdjacentRooms(this.#myCurrentRoom);
     }
 
@@ -265,11 +256,17 @@ export default class DungeonAdventure {
         }
     }
 
+    /**
+     * Picks up the item in the current room if any.
+     * Item is added to the adventurer's inventory.
+     * @returns 
+     */
     #pickUpItem() {
-        const inventory = this.#myAdventurer.getInventory();
-        const item = inventory.collectItemFromRoom(this.#myCurrentRoom);
-        if (item) {
-            return `You picked up a ${item}`;
+        const roomContent = this.#myCurrentRoom.getContent();
+        const result = this.#myAdventurer.collectItem(roomContent);
+        if (result) {
+            this.#myCurrentRoom.clearContent();
+            return result;
         }
     }
 
@@ -321,8 +318,7 @@ export default class DungeonAdventure {
 
     hasWonGame() {
         if (this.#myCurrentRoom.isExit()) {
-            const inventory = this.#myAdventurer.getInventory();
-            return inventory.hasAllPillars();
+            return this.#myAdventurer.hasAllRequiredItems();
         } 
         return false;
     }
