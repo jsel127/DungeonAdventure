@@ -3,7 +3,7 @@ import cors from "cors"
 import DungeonAdventure from "../DungeonAdventure.js"    
 
 const app = express()
-const model = new DungeonAdventure()       
+let model = new DungeonAdventure()       
 
 // stores the character type selected on the CharacterSelection screen, 
 // to be used in a call to the model once the character name is recieved.  
@@ -16,8 +16,19 @@ app.get("/", (req, res) => {
     res.send("Welcome to the Dungeon Adventure server!");       
 }); 
 
+app.get('/api/save-game', (req, res) => {
+    console.log('Server: get request /api/save-game')      
+    res.json(JSON.stringify(model)) 
+})
+
+app.post("/api/load-game", (req, res) => {
+    console.log('Server: post request /api/load-game', req.body.loadModel)  
+    model = DungeonAdventure.fromJSON(JSON.parse(req.body.loadModel))
+    res.send('success')
+})
+
 app.get("/api/characters", (req, res) => { 
-    console.log("Server: request to /api/characters")     
+    console.log("Server: request to /api/characters")       
     res.json(DungeonAdventure.getHeroes())
 })  
 
@@ -101,8 +112,10 @@ app.get("/api/dungeon-map", (req, res) => {
 
 app.get("/api/inventory", (req, res) => { 
     console.log('Server: get request to /api/inventory')       
-    const adventurer = model.toJSON().adventurer
-    res.json(adventurer.getInventory()) 
+    const adventurer = JSON.parse(model.getAdventurerInfo())
+    console.log('Server: adventurer', adventurer)
+    console.log('Server: ADVENTURER.INVENTORY', adventurer.inventory)
+    res.json(adventurer.hero.inventory)  
 })
 
 app.get("/api/fighting-status", (req, res) => {
@@ -123,13 +136,13 @@ app.get("/api/opponent", (req, res) => {
 app.get("/api/attack", (req, res) => {
     console.log('Server: get request /api/attack')        
     model.attackOpponent() 
-    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })   
+    res.json({ fightingStatus:model.isAdventurerFighting(), adventurerDead:model.isAdventurerDead() })   
 })
 
 app.get("/api/special-attack", (req, res) => {  
-    console.log('Server: get request /api/special-attack')         
+    console.log('Server: get request /api/special-attack')              
     model.specialAttackOpponent()
-    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })        
+    res.json({ fightingStatus:model.isAdventurerFighting(), adventurerDead:model.isAdventurerDead() })        
 })
 
 app.get("/api/has-won-game", (req, res) => {
@@ -138,7 +151,7 @@ app.get("/api/has-won-game", (req, res) => {
 })
 
 app.get("/api/use-healing-potion", (req, res) => {
-    console.log('Server: get request /api/use-healing-potion')       
+    console.log('Server: get request /api/use-healing-potion')         
     res.json(model.useHealingPotion())
 })
 
@@ -148,9 +161,9 @@ app.get("/api/use-vision-potion", (req, res) => {
 })
 
 app.get("/api/coordinates", (req, res) => {
-    console.log('Server: get request /api/room-info') 
+    console.log('Server: get request /api/room-info')   
     const room = JSON.parse(model.getCurrentRoomInfo()) 
     res.json(room.coordinate) 
 })
      
-app.listen(5001, () => { console.log("Server started on port 5001") })                   
+app.listen(5001, () => { console.log("Server started on port 5001") })                    

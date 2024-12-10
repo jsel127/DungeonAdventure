@@ -19,6 +19,20 @@ function HomePage() {
     transition: 'color 0.2s ease',
   });
 
+  const handleLoad = () => {
+    fetch('/api/load-game', {
+      method: 'POST', 
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        loadModel: localStorage.getItem("saved-game")
+      })
+    }).then(res => {
+      return res.json()
+    }).catch(error => console.log('ERROR: handleLoad post request'))
+  }
+
   return (
     <div>
       <header style={headerStyle}>
@@ -77,6 +91,16 @@ function HomePage() {
             <button style={startButtonStyle}>Start</button>
           </Link>
         </div>
+        {/* Load Button */}
+        {localStorage.getItem('saved-game') !== null ? (
+          <div style={{ marginTop: '30px' }}>
+          <Link to="/dungeon"> {/* Match route */}
+            <button onClick={() => handleLoad()} style={startButtonStyle}>Load</button>
+          </Link>
+        </div>
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   );

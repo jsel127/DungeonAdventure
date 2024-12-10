@@ -64,6 +64,19 @@ const DisplayBattle = () => {
     }
 
     const processAfterAttack = (data) => {
+
+      if (data.fightingStatus) {
+        fetchAdventurer()
+        fetchOpponent()
+      } else {
+        if (data.adventurerDead) {
+          navigate('/game-over')
+        } else {
+          navigate('/dungeon')
+        }
+      }
+
+      /*
       console.log('WIN/LOSE DATA', data)
       if (data.win) {
         navigate('/dungeon')
@@ -73,9 +86,14 @@ const DisplayBattle = () => {
         fetchAdventurer()
         fetchOpponent()
       }
+        */
     }
 
     return (
+      <>
+      <audio autoPlay loop>
+                 <source src="/suspense.mp3" type="audio/mp3" />
+            </audio>
       <div style={{           
         backgroundColor: 'maroon', 
         minHeight: '100vh', 
@@ -109,6 +127,7 @@ const DisplayBattle = () => {
             <button onClick={() => handleAttack()}>Attack</button>
             <button onClick={() => handleSpecialAttack()}>Special Attack</button>
         </div>
+      </>
     )
 
 }

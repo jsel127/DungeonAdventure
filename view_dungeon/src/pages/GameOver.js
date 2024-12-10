@@ -23,6 +23,10 @@ const GameOver = () => {
     }, [])
 
     return (
+        <>
+        <audio autoPlay loop>
+                 <source src="/gameover.mp3" type="audio/mp3" />
+            </audio>
         <div style={{           
             backgroundColor: 'maroon', 
             minHeight: '100vh', 
@@ -43,6 +47,7 @@ const GameOver = () => {
                 <button>Home</button>
             </Link>
         </div>
+    </>
     )
 
 }

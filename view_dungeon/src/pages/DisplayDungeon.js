@@ -52,8 +52,9 @@ const DisplayDungeon = () => {
         })
         .then(data => {
           setInventory(data)
+          console.log('DisplayDungeon: INVENTORY:', inventory)
           return data
-          //console.log('DisplayDungeon: INVENTORY: (data)', data)
+
         })
         .catch(error => console.log('DisplayDungeon: error fetchInventory fetch', error))
     }
@@ -203,11 +204,7 @@ const DisplayDungeon = () => {
           })
           .then(data => {
             console.log('DisplayDungeon: HEAL DATA:', data)
-            if (data === 'You have no healing potions') {
-              setMessage(data)
-            } else {
-              setMessage('You healed ' + data + ' hp')
-            }
+            setMessage(data)
             fetchInventory()
             fetchAdventurer()
           })
@@ -216,6 +213,20 @@ const DisplayDungeon = () => {
 
     const handleVisionPotion = () => {
       navigate('/vision-potion')
+    }
+
+    const handleSave = () => {
+      fetch('/api/save-game')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => {
+          localStorage.setItem('saved-game', data)
+          return data
+        })
+        .catch(error => console.log('DisplayDungeon: error handleSave', error))
     }
 
     useEffect(() => {
@@ -239,6 +250,10 @@ const DisplayDungeon = () => {
     }
 
     return (
+      <>
+      <audio autoPlay loop>
+                 <source src="/dungeon.mp3" type="audio/mp3" />
+            </audio>
       <div style={{           
         backgroundColor: 'maroon', 
         minHeight: '100vh', 
@@ -278,6 +293,7 @@ const DisplayDungeon = () => {
                    <h3>Inventory:</h3>
                    {inventory === null ? <p>Loading Inventory...</p> : (
                       <p>
+                        {console.log('INVENTORY.items', inventory.items)}
                         <button style={ButtonStyle} onClick={() => handleHealingPotion()}>Healing Potions ({JSON.stringify(inventory.items.healing_potion)})</button>
                         <button style={ButtonStyle} onClick={() => handleVisionPotion()}>Vision Potions ({JSON.stringify(inventory.items.vision_potion)})</button>
                         <br/>
@@ -288,9 +304,11 @@ const DisplayDungeon = () => {
                         {inventory.items.pillars.polymorphism ? <div>Pillar of Polymorphism</div> : <div/> }
                       </p>
                     )}
+                    <button onClick={() => handleSave()}>Save Game</button>
                 </p>
             )}
         </div>
+      </>
     ) 
 
 }
