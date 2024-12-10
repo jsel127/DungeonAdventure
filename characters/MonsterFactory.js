@@ -7,15 +7,24 @@
 import Monster from "./Monster.js";
 
 /**
- * Will create a Monster.
+ * Creates specified types of monsters of default stats.
  * @author Jasmine Sellers
  * @version 1.0
  */
 export default class MonsterFactory {
     /**
+     * Prevents default creation of a constructor.
+     * @throws {EvalError} if the class is instanciated.
+     */
+    constructor() {
+        throw new EvalError("This class cannot be instanciated.");
+    }
+
+    /**
      * Creates and returns a Monster.
      * @param {*} theName the name of the monster.
-     * @returns a Monster instanciated with the given values.
+     * @returns a Monster instanciated with the corresponding default values.
+     * @throws {UndefinedValueError} if the name does not match a prexisting monster.
      */
     static createMonster(theName) {
         if (theName === "Gremlin") {

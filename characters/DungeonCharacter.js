@@ -11,27 +11,30 @@
  */
 export default class DungeonCharacter {
     /** The name of the dungeon character. */
-    #myName
+    #myName;
     /** The HP of the dungeon character. */
-    #myHP
+    #myHP;
     /** The DP Min of the dungeon character. */
-    #myDPMin
+    #myDPMin;
     /** The DP Max of the dungeon character. */
-    #myDPMax
+    #myDPMax;
     /** The Attack Speed of the dungeon character. */
-    #myAttackSpeed
+    #myAttackSpeed;
     /** The Hit Chance (0-100) of the dungeon character. */
-    #myHitChance
+    #myHitChance;
     /**
      * Constructor that will store the given arguments in the corresponding 
      * instance fields.
      * A DungeonCharacter cannot be directly instanciated.
-     * @param {*} theName the name of the dungeon character
-     * @param {*} theHP the health points of the dungeon character
-     * @param {*} theDPMin the min damage points of the dungeon character
-     * @param {*} theDPMax the max damage points of the dungeon character
-     * @param {*} theAttackSpeed the attack speed of the dungeon character
-     * @param {*} theHitChance the hit chance of the dungeon character
+     * @param {string} theName the name of the dungeon character as a string
+     * @param {number} theHP the health points of the dungeon character as an integer (>=0)
+     * @param {number} theDPMin the min damage points of the dungeon character as an integer (>0)
+     * @param {number} theDPMax the max damage points of the dungeon character as an integer (>=0)
+     * @param {number} theAttackSpeed the attack speed of the dungeon character as an integer (>=0)
+     * @param {number} theHitChance the hit chance of the dungeon character as an integer [1-100]
+     * @throws {TypeError} If the the given arguments are not of the expected data type.
+     * @throws {RangeError} If the given numeric numbers are not in the valid range 
+     *         (depending on the parameter: negative, zero, greater than 100)
      */
     constructor(theName, theHP, theDPMin, theDPMax,
                 theAttackSpeed, theHitChance) {
@@ -76,6 +79,48 @@ export default class DungeonCharacter {
             attack_speed: this.#myAttackSpeed,
             hit_chance: this.#myHitChance
         }
+    }
+
+    /**
+     * This method carries out the attack on the opponent if a hit is 
+     * landed on the monster.
+     * @param {DungeonCharacter} theOpponent the opponent the dungeon character is facing.
+     * @returns true if the attack was successul and false otherwise.
+     */
+    attack(theOpponent, autoSuccess=false) {
+        if (!this.isDead() && (autoSuccess || Math.random() * 100 < this.#myHitChance)) {
+            const rangeDP = this.#myDPMax - this.#myDPMin;
+            const attackDP = -1 * (Math.round(Math.random() * rangeDP) + this.#myDPMin);
+            theOpponent.applyHPChange(attackDP);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Will change the HP by the given change (positive or negative). If the change
+     * and negative than the HP remaining the HP will be set to 0.
+     * @param {number} theChangeHP the change in HP to be applied.
+     * @throws {TypeError} if the given change is not an integer.
+     */
+    applyHPChange(theChangeHP) {
+        if (!Number.isInteger(theChangeHP)) {
+            throw new TypeError("The change in HP should be an integer");
+        }
+        const newHP = this.getHP() + theChangeHP;
+        if (newHP < 0) {
+            this.setHP(0);
+        } else {
+            this.setHP(newHP);
+        }
+    }
+
+    /**
+     * Checks if the dungeon character has died or not. 
+     * @returns true if the dungeon character died and false otherwise.
+     */
+    isDead() {
+        return this.#myHP === 0;
     }
     
     /**
@@ -128,7 +173,9 @@ export default class DungeonCharacter {
 
     /**
      * Sets the HP to the new HP.
-     * @param {*} theNewHP the new HP of the dungeon character.
+     * @param {number} theNewHP the new HP of the dungeon character.
+     * @throws {TypeError} if the given HP is not an integer.
+     * @throws {RangeError} if the given HP is negative.
      */
     setHP(theNewHP) {
         if (!Number.isInteger(theNewHP)) {
@@ -139,50 +186,12 @@ export default class DungeonCharacter {
         }
         this.#myHP = theNewHP;
     }
-    
-    /**
-     * This method carries out the attack on the opponent if a hit is landed on the monster.
-     * @param {*} theOpponent the opponent the dungeon character is facing.
-     * @returns true if the attack was successul and false otherwise.
-     */
-    attack(theOpponent, autoSuccess=false) {
-        if (!this.isDead() && (autoSuccess || Math.random() * 100 < this.#myHitChance)) {
-            const rangeDP = this.#myDPMax - this.#myDPMin;
-            const attackDP = -1 * (Math.round(Math.random() * rangeDP) + this.#myDPMin);
-            theOpponent.applyHPChange(attackDP);
-            return true;
-        }
-        return false;
-    }
 
     /**
-     * Will change the HP by the given change (positive or negative). If the change is larger 
-     * and negative than the HP remaining the HP will be set to 0.
-     * @param {*} theChangeHP the change in HP to be applied.
-     */
-    applyHPChange(theChangeHP) {
-        if (!Number.isInteger(theChangeHP)) {
-            throw new TypeError("The change in HP should be an integer");
-        }
-        const newHP = this.getHP() + theChangeHP;
-        if (newHP < 0) {
-            this.setHP(0);
-        } else {
-            this.setHP(newHP);
-        }
-    }
-
-    /**
-     * Checks if the dungeon character has died or not. 
-     * @returns true if the dungeon character died and false otherwise.
-     */
-    isDead() {
-        return this.#myHP === 0;
-    }
-
-    /**
-     * Returns the information of the dungeon character including its name, HP, DPMin, DPMax, AttackSpeed, and HitChange.
-     * @returns a string representation of the dungeon character formatted by the information it contains (name, HP, DPMin, DPMax, AttackSpeed, HitChange)
+     * Returns the information of the dungeon character including its 
+     * name, HP, DPMin, DPMax, AttackSpeed, and HitChange.
+     * @returns a string representation of the dungeon character information 
+     *          (name, HP, DPMin, DPMax, AttackSpeed, HitChange).
      */
     toString() {
         return `${this.#myName} ${this.#myHP} ${this.#myDPMin} ${this.#myDPMax} ${this.#myAttackSpeed} ${this.#myHitChance}`;
