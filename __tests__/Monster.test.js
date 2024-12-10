@@ -12,75 +12,75 @@ import Warrior from "../characters/Warrior.js";
  * @author Jasmine Sellers
  * @version 1.0
  */
-describe('Tests Monster Character instanciated to Name: Gremlin, HP: 70, DPMin: 15, DPMax: 30, ' +
-         'AttackSpeed: 5, HitChange: 80, HealChance: 40, MinHeal: 20, MaxHeal: 40', () => {
+describe("Tests Monster Character instanciated to Name: Gremlin, HP: 70, DPMin: 15, DPMax: 30, " +
+         "AttackSpeed: 5, HitChange: 80, HealChance: 40, MinHeal: 20, MaxHeal: 40", () => {
     const gremlin = new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);  
-    test('Creating the character', () => {
+    test("Creating the character", () => {
         expect(gremlin.toString()).toBe("Gremlin 70 15 30 5 80 40 20 40");
     });
 
-    test('getName', () => {
+    test("getName", () => {
         expect(gremlin.getName()).toBe("Gremlin");
     });
 
-    test('getHP', () => {
+    test("getHP", () => {
         expect(gremlin.getHP()).toBe(70);
     });
 
-    test('getDPMin', () => {
+    test("getDPMin", () => {
         expect(gremlin.getDPMin()).toBe(15);
     });
 
-    test('getDPMax', () => {
+    test("getDPMax", () => {
         expect(gremlin.getDPMax()).toBe(30);
     });
 
-    test('getAttackSpeed', () => {
+    test("getAttackSpeed", () => {
         expect(gremlin.getAttackSpeed()).toBe(5);
     });
 
-    test('getHitChance', () => {
+    test("getHitChance", () => {
         expect(gremlin.getHitChance()).toBe(80);
     });
 
-    test('getHealChance', () => {
+    test("getHealChance", () => {
         expect(gremlin.getHealChance()).toBe(40);
     });
 
-    test('getMinHeal', () => {
+    test("getMinHeal", () => {
         expect(gremlin.getMinHeal()).toBe(20);
     });
 
-    test('getMaxHeal', () => {
+    test("getMaxHeal", () => {
         expect(gremlin.getMaxHeal()).toBe(40);
     });
 
-    test('setHP to smaller number (10)', () => {
+    test("setHP to smaller number (10)", () => {
         gremlin.setHP(10);
         expect(gremlin.getHP()).toBe(10);
     });
 
-    test('setHP to larger number (500)', () => {
+    test("setHP to larger number (500)", () => {
         gremlin.setHP(500);
         expect(gremlin.getHP()).toBe(500);
     });
 
-    test('setHP to 0', () => {
+    test("setHP to 0", () => {
         gremlin.setHP(0);
         expect(gremlin.getHP()).toBe(0);
     });
 
-    test('isDead when the monster is NOT dead HP 100', () => {
+    test("isDead when the monster is NOT dead HP 100", () => {
         gremlin.setHP(100);
         expect(gremlin.isDead()).toBeFalsy();
     });
 
-    test('isDead when the monster is NOT dead HP 1', () => {
+    test("isDead when the monster is NOT dead HP 1", () => {
         gremlin.setHP(1);
         expect(gremlin.isDead()).toBeFalsy();
     });
 
-    test('isDead when the monster is dead HP 0', () => {
+    test("isDead when the monster is dead HP 0", () => {
         gremlin.setHP(0);
         expect(gremlin.isDead()).toBeTruthy();
     });
@@ -185,76 +185,108 @@ describe("Testing attack method", () => {
     });
 });
 
-describe('Tests Monster Character constructor instanciated with invalid arguments.', () => {  
-    test('Creating the character with no name', () => {
+describe("Tests Monster Character constructor instanciated with invalid arguments.", () => {  
+    test("Creating the character with no name", () => {
         expect(() => new Monster(null, 70, 15, 30, 5, 80, 40, 20, 40)).toThrow(TypeError);
     });
 
-    test('Creating the character with no name', () => {
+    test("Creating the character with no name", () => {
         expect(() => new Monster(1, 70, 15, 30, 5, 80, 40, 20, 40)).toThrow(TypeError);
     });
 
-    test('Creating the character with negative HP', () => {
+    test("Creating the character with non-numeric HP", () => {
+        expect(() => new Monster("Gremlin", "1", 15, 30, 5, 80, 40, 20, 40)).toThrow(TypeError);
+    });
+
+    test("Creating the character with negative HP", () => {
         expect(() => new Monster("Gremlin", -1, 15, 30, 5, 80, 40, 20, 40)).toThrow(RangeError);
     });
 
-    test('Creating the character with zero HP', () => {
+    test("Creating the character with zero HP", () => {
         expect(() => new Monster("Gremlin", 0, 15, 30, 5, 80, 40, 20, 40)).toThrow(RangeError);
     });
 
-    test('Creating the character with negative DPMin', () => {
+    test("Creating the character with non-numeric DPMin", () => {
+        expect(() => new Monster("Gremlin", 70, "1", 30, 5, 80, 40, 20, 40)).toThrow(TypeError);
+    });
+
+    test("Creating the character with negative DPMin", () => {
         expect(() => new Monster("Gremlin", 70, -1, 30, 5, 80, 40, 20, 40)).toThrow(RangeError);
     });
 
-    test('Creating the character with negative DPMax', () => {
+    test("Creating the character with non-numeric DPMax", () => {
+        expect(() => new Monster("Gremlin", 70, 30, "1", 5, 80, 40, 20, 40)).toThrow(TypeError);
+    });
+
+    test("Creating the character with negative DPMax", () => {
         expect(() => new Monster("Gremlin", 70, 15, -1, 5, 80, 40, 20, 40)).toThrow(RangeError);
     });
 
-    test('Creating the character with 0 DPMax', () => {
+    test("Creating the character with 0 DPMax", () => {
         expect(() => new Monster("Gremlin", 70, 15, 0, 5, 80, 40, 20, 40)).toThrow(RangeError);
     });
 
-    test('Creating the character with zero AttackSpeed', () => {
-        expect(() => new Monster("Gremlin", 70, 15, 30, 0, 80, 40, 20, 40)).toThrow(RangeError);
-    });
+    test("Creating the character with non-numeric AttackSpeed", () => {
+        expect(() => new Monster("Gremlin", 70, 15, 30, "1", 80, 40, 20, 40)).toThrow(TypeError);
+    }); 
 
-    test('Creating the character with negative AttackSpeed', () => {
+    test("Creating the character with negative AttackSpeed", () => {
         expect(() => new Monster("Gremlin", 70, 15, 30, -1, 80, 40, 20, 40)).toThrow(RangeError);
     });
 
-    test('Creating the character with negative HitChance', () => {
+    test("Creating the character with zero AttackSpeed", () => {
+        expect(() => new Monster("Gremlin", 70, 15, 30, 0, 80, 40, 20, 40)).toThrow(RangeError);
+    });
+
+    test("Creating the character with non-numeric HitChance", () => {
+        expect(() => new Monster("Gremlin", 70, 15, 1, "1", 80, 40, 20, 40)).toThrow(TypeError);
+    });
+
+    test("Creating the character with negative HitChance", () => {
         expect(() => new Monster("Gremlin", 70, 15, 1, -1, 80, 40, 20, 40)).toThrow(RangeError);
     });
 
-    test('Creating the character with a HitChance greater than 100', () => {
+    test("Creating the character with a HitChance greater than 100", () => {
         expect(() => new Monster("Gremlin", 70, 15, 30, 5, 101, 100, 20, 40)).toThrow(RangeError);
     });
 
-    test('Creating the character with a HealChance greater than 100', () => {
-        expect(() => new Monster("Gremlin", 70, 15, 30, 5, 80, 101, 20, 40)).toThrow(RangeError);
+    test("Creating the character with a non-numeric HealChance", () => {
+        expect(() => new Monster("Gremlin", 70, 15, 30, 5, 80, "1", 20, 40)).toThrow(TypeError);
     });
 
-    test('Creating the character with a HealChance less than 0', () => {
+    test("Creating the character with a negative HealChance", () => {
         expect(() => new Monster("Gremlin", 70, 15, 30, 5, 80, -1, 20, 40)).toThrow(RangeError);
     });
 
-    test('Creating the character with a MinHeal less than 0', () => {
+    test("Creating the character with a HealChance greater than 100", () => {
+        expect(() => new Monster("Gremlin", 70, 15, 30, 5, 80, 101, 20, 40)).toThrow(RangeError);
+    });
+
+    test("Creating the character with a non-numeric MinHeal", () => {
+        expect(() => new Monster("Gremlin", 70, 15, 30, 5, 80, 40, "1", 40)).toThrow(TypeError);
+    });
+    
+    test("Creating the character with a negative MinHeal", () => {
         expect(() => new Monster("Gremlin", 70, 15, 30, 5, 80, 40, -1, 40)).toThrow(RangeError);
     });
 
-    test('Creating the character with a MaxHeal less than 0', () => {
+    test("Creating the character with a non-numeric MaxHeal", () => {
+        expect(() => new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, "1")).toThrow(TypeError);
+    });
+
+    test("Creating the character with a negative MaxHeal", () => {
         expect(() => new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, -1)).toThrow(RangeError);
     });
 });
 
 describe("Tests Monster's setter methods with invalid data", () => {
-    test('Set HP to a non numeric value', () => {
+    test("Set HP to a non numeric value", () => {
         expect(() => {
             const gremlin = new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);  
             gremlin.setHP("Hello");
         }).toThrow(TypeError);
     });
-    test('Set HP to a negative value', () => {
+    test("Set HP to a negative value", () => {
         expect(() => {
             const gremlin = new Monster("Gremlin", 70, 15, 30, 5, 80, 40, 20, 40);  
             gremlin.setHP(-1);

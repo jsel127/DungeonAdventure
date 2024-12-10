@@ -48,13 +48,13 @@ describe("Tests Priestess Character instanciated to Name: Priestess, HP: 20, DPM
 
     test("Will not allow attack if fighting status is not fighting", () => {
         const priestess = new Priestess("Priestess", 20, 10, 10, 5, 100, 100);
-        priestess.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+        priestess.setFightingStatus(Hero.FIGHTING_STATUS.notFighting);
         expect(() => priestess.attack(MonsterFactory.createMonster("Gremlin"))).toThrow(EvalError);
     });
 
     test("Will not allow special attack if fighting status is not fighting", () => {
         const priestess = new Priestess("Priestess", 20, 10, 10, 5, 100, 100);
-        priestess.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+        priestess.setFightingStatus(Hero.FIGHTING_STATUS.notFighting);
         expect(() => priestess.specialAttack(MonsterFactory.createMonster("Gremlin"))).toThrow(EvalError);
     });
 });
