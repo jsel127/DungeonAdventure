@@ -77,6 +77,9 @@ const DisplayBattle = () => {
 
     return (
         <>
+        <audio autoPlay loop>
+                 <source src="/suspense.mp3" type="audio/mp3" />
+            </audio>
             Battle Interface
             <br/>
             {
