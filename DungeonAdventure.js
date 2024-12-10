@@ -210,7 +210,7 @@ export default class DungeonAdventure {
 
     useHealingPotion() {
         this.#checkStarted();
-        return Inventory.this.#myAdventurer.useHealingPotion();
+        return this.#myAdventurer.useHealingPotion();
     }
 
     /**

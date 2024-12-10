@@ -179,7 +179,7 @@ export default class Hero extends DungeonCharacter {
         if (!this.#myInventory.hasVisionPotion()) {
             return false;
         } 
-        inventory.useVisionPotion();
+        this.#myInventory.useVisionPotion();
         return true;
     }
     

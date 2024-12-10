@@ -8,7 +8,6 @@ import Warrior from "../characters/Warrior.js";
 import Thief from "../characters/Thief.js";
 import Priestess from "../characters/Priestess.js";
 import HeroFactory from "../characters/HeroFactory.js";
-import Hero from "../characters/Hero.js";
 
 /**
  * Test HeroFactory class which creates different heroes. 
