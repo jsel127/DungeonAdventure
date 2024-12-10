@@ -26,7 +26,7 @@ describe("Testing hero factory to ensure proper hero is created and the object i
         expect(thief.toString()).toBe("Stone 75 20 40 6 80 40")
     });
     test("Creates an invalid hero type", () => {
-        expect(() => HeroFactory.createHero("Skeleton")).toThrow();
+        expect(() => HeroFactory.createHero("Skeleton")).toThrow(ReferenceError);
     });
 });
 

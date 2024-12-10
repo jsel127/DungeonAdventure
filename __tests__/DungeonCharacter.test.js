@@ -11,8 +11,8 @@ import DungeonCharacter from "../characters/DungeonCharacter.js";
  * @author Jasmine Sellers
  * @version 1.0
  */
-describe('Tests simulation of abstract class DungeonCharacter.', () => {
-    test('Instanciates a DungeonCharacter object. Should throw an error', () => {
+describe("Tests simulation of abstract class DungeonCharacter.", () => {
+    test("Instanciates a DungeonCharacter object. Should throw an error", () => {
         expect(() => new DungeonCharacter("Incorrect", 125, 35, 60, 4, 80)).toThrow(TypeError);
     });
 });
