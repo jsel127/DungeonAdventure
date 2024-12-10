@@ -49,7 +49,7 @@ export default class DungeonAdventure {
         }
         const opponent = (theJSON.opponent === "null") ? Monster.fromJSON(theJSON.opponent) : null
         return new DungeonAdventure(true, Dungeon.fromJSON(theJSON.dungeon), 
-                                    HeroFactory.loadHero(theJSON.adventurer.__type, theJSON.adventurer),
+                                    HeroFactory.loadHero(theJSON.adventurer),
                                     Coordinate.fromJSON(theJSON.current_room_coordinate),
                                     theJSON.difficulty,
                                     opponent);
