@@ -76,7 +76,16 @@ const DisplayBattle = () => {
     }
 
     return (
-        <>
+      <div style={{           
+        backgroundColor: 'maroon', 
+        minHeight: '100vh', 
+        color: 'white', 
+        padding: '20px', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        alignItems: 'center' 
+      }}>
             Battle Interface
             <br/>
             {
@@ -99,7 +108,7 @@ const DisplayBattle = () => {
             }
             <button onClick={() => handleAttack()}>Attack</button>
             <button onClick={() => handleSpecialAttack()}>Special Attack</button>
-        </>
+        </div>
     )
 
 }

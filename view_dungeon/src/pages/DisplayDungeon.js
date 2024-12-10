@@ -2,8 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const MovementButton = ({ direction, doorOpen, onButtonClick }) => {
+
+  const ButtonStyle = {
+    backgrounColor: 'maroon',
+    cursor: 'pointer',
+    marginBottom: '15px',
+    border: doorOpen ? '2px solid green' : '2px solid gray',
+    padding: '10px',
+    width: '200px',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: doorOpen ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.0)',
+    borderRadius: '5px',
+  }
+
     return (
-        <button disabled={!doorOpen} onClick={onButtonClick}>
+        <button style={ButtonStyle} disabled={!doorOpen} onClick={onButtonClick}>
             {direction}
         </button>
     )
@@ -17,6 +31,16 @@ const DisplayDungeon = () => {
     const [inventory, setInventory] = useState(null)
     const [message, setMessage] = useState('')
     const [adventurer, setAdventurer] = useState(null)
+    const [coordinates, setCoordinates] = useState(null)
+
+    const fetchModelUpdates = () => {
+      hasWonGame()
+      isMonster()
+      fetchInventory()
+      fetchValidMoves()
+      fetchAdventurer()
+      fetchCoordinates()
+    }
 
     const fetchInventory = () => {
       console.log('FETCH INVENTORY CALLED')
@@ -31,7 +55,22 @@ const DisplayDungeon = () => {
           return data
           //console.log('DisplayDungeon: INVENTORY: (data)', data)
         })
-        .catch(error => console.log('DisplayDungeon: error displayMap fetch', error))
+        .catch(error => console.log('DisplayDungeon: error fetchInventory fetch', error))
+    }
+
+    const fetchCoordinates = () => {
+      fetch('/api/coordinates')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => {
+          setCoordinates(data)
+          console.log('DisplayDungeon: COORDS', coordinates)
+          return data
+        })
+        .catch(error => console.log('DisplayDungeon: error fetchCoordinates', error))
     }
 
     const displayMap = () => {
@@ -145,10 +184,7 @@ const DisplayDungeon = () => {
           .then((res) => {
             const message = res.json()
             console.log('DisplayDungeon: after post fetch completes', message) 
-            hasWonGame()
-            isMonster()
-            fetchInventory()
-            fetchValidMoves()
+            fetchModelUpdates()
             return message
           })
           .then(result => {
@@ -173,24 +209,46 @@ const DisplayDungeon = () => {
               setMessage('You healed ' + data + ' hp')
             }
             fetchInventory()
+            fetchAdventurer()
           })
           .catch(error => console.error('DisplayDungeon: error useHealingPotion', error))
     }
 
     const handleVisionPotion = () => {
-
+      setMessage('Vision potions are not yet implemented')
     }
 
     useEffect(() => {
       setTimeout(function() {
         console.log('Display Dungeon: useEffect called')
-        fetchValidMoves()
-        fetchInventory()
+        fetchModelUpdates()
       }, 100)
     }, [])
 
+    const ButtonStyle = {
+      backgrounColor: 'maroon',
+      cursor: 'pointer',
+      marginBottom: '15px',
+      border: '2px solid green',
+      padding: '10px',
+      width: '200px',
+      textAlign: 'center',
+      color: 'white',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      borderRadius: '5px',
+    }
+
     return (
-        <>
+      <div style={{           
+        backgroundColor: 'maroon', 
+        minHeight: '100vh', 
+        color: 'white', 
+        padding: '20px', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        alignItems: 'center' 
+      }}>
             { validMoves === null ? (
                 <p>Loading Dungeon...</p>
             ) : (
@@ -199,32 +257,40 @@ const DisplayDungeon = () => {
                     {console.log('DisplayDungeon: validMoves', validMoves)}
                     {console.log('DisplayDungeon: INVENTORY (return)', inventory)}
                     {displayMap()}
-                    North: { validMoves.north.toString() }
+                    {
+                      adventurer === null ? <p>Loading adventurer...</p> : (
+                        <h2>
+                          <>{JSON.stringify(adventurer.hero.dungeon_character.name).replace(/"/g, '')} - {JSON.stringify(adventurer.__type).replace(/"/g, '')}
+                          <br/>
+                          {JSON.stringify(adventurer.hero.dungeon_character.hp)} HP</>
+                        </h2>
+                      )
+                    }
+                    <h3>Room: {coordinates === null ? <>Loading...</> : <>{JSON.stringify(coordinates.row)}, {JSON.stringify(coordinates.col)}</>}</h3>
                     <MovementButton direction='North' doorOpen={validMoves.north} onButtonClick={() => handleClick('North')} />
                     <br/>
-                    East: { validMoves.east.toString() } 
+                    <MovementButton direction='West' doorOpen={validMoves.west} onButtonClick={() => handleClick('West')} />
                     <MovementButton direction='East' doorOpen={validMoves.east} onButtonClick={() => handleClick('East')} />
                     <br/>
-                    South: { validMoves.south.toString() } 
                     <MovementButton direction='South' doorOpen={validMoves.south} onButtonClick={() => handleClick('South')} />
                     <br/>
-                    West: { validMoves.west.toString() } 
-                    <MovementButton direction='West' doorOpen={validMoves.west} onButtonClick={() => handleClick('West')} />
-                    <br/>
-                    <br/>
-                    <button onClick={() => handleHealingPotion()}>Use Healing Potion</button>
-                    <button onClick={() => handleVisionPotion()}>Use Vision Potion</button>
-                    <br/>
-                    <br/>
-                   Message: 
-                   {message}
-                   <br/>
-                   <br/>
-                   Inventory:
-                   {inventory === null ? <p>Loading Inventory...</p> : JSON.stringify(inventory.items)}
+                   <h3>Message: {message}</h3>
+                   <h3>Inventory:</h3>
+                   {inventory === null ? <p>Loading Inventory...</p> : (
+                      <p>
+                        <button style={ButtonStyle} onClick={() => handleHealingPotion()}>Healing Potions ({JSON.stringify(inventory.items.healing_potion)})</button>
+                        <button style={ButtonStyle} onClick={() => handleVisionPotion()}>Vision Potions ({JSON.stringify(inventory.items.vision_potion)})</button>
+                        <br/>
+                        Pillars:
+                        {inventory.items.pillars.abstraction ? <div>Pillar of Abstraction</div> : <div/> }
+                        {inventory.items.pillars.encapsulation ? <div>Pillar of Encapsulation</div> : <div/> }
+                        {inventory.items.pillars.inheritance ? <div>Pillar of Inheritance</div> : <div/> }
+                        {inventory.items.pillars.polymorphism ? <div>Pillar of Polymorphism</div> : <div/> }
+                      </p>
+                    )}
                 </p>
             )}
-        </>
+        </div>
     ) 
 
 }

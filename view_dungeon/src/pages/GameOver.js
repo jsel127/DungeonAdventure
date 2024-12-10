@@ -23,7 +23,16 @@ const GameOver = () => {
     }, [])
 
     return (
-        <>
+        <div style={{           
+            backgroundColor: 'maroon', 
+            minHeight: '100vh', 
+            color: 'white', 
+            padding: '20px', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            justifyContent: 'center', 
+            alignItems: 'center' 
+          }}>
             {
                 hasWon === null ? <p>Loading...</p> : (
                     hasWon ? <p>You Win</p> : <p>You Lose</p>
@@ -33,7 +42,7 @@ const GameOver = () => {
             <Link to='/'>
                 <button>Home</button>
             </Link>
-        </>
+        </div>
     )
 
 }

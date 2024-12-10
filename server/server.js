@@ -138,13 +138,19 @@ app.get("/api/has-won-game", (req, res) => {
 })
 
 app.get("/api/use-healing-potion", (req, res) => {
-    console.log('Server: get request /api/use-healing-potion')   
+    console.log('Server: get request /api/use-healing-potion')       
     res.json(model.useHealingPotion())
 })
 
 app.get("/api/use-vision-potion", (req, res) => {
-    console.log('Server: get request /api/use-vision-potion')  
+    console.log('Server: get request /api/use-vision-potion')        
     res.json(model.useVisionPotion())
 })
+
+app.get("/api/coordinates", (req, res) => {
+    console.log('Server: get request /api/room-info')
+    const room = JSON.parse(model.getCurrentRoomInfo()) 
+    res.json(room.coordinate) 
+})
      
-app.listen(5001, () => { console.log("Server started on port 5001") })     
+app.listen(5001, () => { console.log("Server started on port 5001") })             
