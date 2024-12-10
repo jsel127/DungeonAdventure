@@ -24,7 +24,7 @@ export default class MonsterFactory {
      * Creates and returns a Monster.
      * @param {*} theName the name of the monster.
      * @returns a Monster instanciated with the corresponding default values.
-     * @throws {UndefinedValueError} if the name does not match a prexisting monster.
+     * @throws {ReferenceError} if the name does not match a prexisting monster.
      */
     static createMonster(theName) {
         if (theName === "Gremlin") {
@@ -34,7 +34,7 @@ export default class MonsterFactory {
         } else if (theName === "Skeleton") {
             return new Monster("Skeleton", 100, 30, 50, 3, 80, 30, 30, 50);
         } else {
-            throw new UndefinedValueError("The given monster type does not exist.");
+            throw new ReferenceError("The given monster type does not exist.");
         }
     }
 }

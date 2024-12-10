@@ -143,12 +143,14 @@ export default class Inventory {
 
     /**
      * Decrements the healing potions quantity if there is a 
-     * healing potion available. Does nothing if there are none. 
+     * healing potion available. 
+     * @throws {EvalError} If there are no healing potions to use.
      */
     useHealingPotion() {
-        if (this.hasHealingPotion()) {
-            this.#myItems.healing_potion -= 1;
+        if (!this.hasHealingPotion()) {
+            throw EvalError("There are no healing potions to use");
         }
+        this.#myItems.healing_potion -= 1;
     }
     /**
      * Checks if the inventory has vision potion(s).
@@ -175,12 +177,14 @@ export default class Inventory {
 
     /**
      * Decrements the vision potions quantity if there is a 
-     * vision potion available. Does nothing if there are none. 
+     * vision potion available. 
+     * @throws {EvalError} If not vision potions to use. 
      */
     useVisionPotion() {
-        if (this.hasVisionPotion()) {
-            this.#myItems.vision_potion -= 1;
+        if (!this.hasVisionPotion()) {
+            throw new EvalError("There are no vision potions to use")
         }
+        this.#myItems.vision_potion -= 1;
     }
 
     /**

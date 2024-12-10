@@ -64,7 +64,7 @@ export default class HeroFactory {
      * @param {string} theHeroType the type of the hero.
      * @param {string} theName the name of the hero.
      * @returns an Hero instanciated with the set values.
-     * @throws {UndefinedValueError} if the hero type is not valid.
+     * @throws {ReferenceError} if the hero type is not valid.
      */
     static createHero(theHeroType, theName) {
         if (theHeroType === "Warrior") {
@@ -86,7 +86,7 @@ export default class HeroFactory {
                              thiefData.attack_speed, thiefData.hit_chance, 
                              thiefData.block_chance);
         } else {
-            throw new UndefinedValueError("The given hero type does not exist.");
+            throw new ReferenceError("The given hero type does not exist.");
         }
     }
     /**
@@ -94,7 +94,7 @@ export default class HeroFactory {
      * @param {string} theHeroType the type of the hero.
      * @param {object} theJSON an object containing information to instanciate the saved Hero.
      * @returns an Hero instanciated with the set values.
-     * @throws {UndefinedValueError} if the hero type is not valid.
+     * @throws {ReferenceError} if the hero type is not valid.
      */
     static loadHero(theHeroType, theJSON) {
         if (theHeroType === "Warrior") {
@@ -104,7 +104,7 @@ export default class HeroFactory {
         } else if (theHeroType === "Thief") {
             return Thief.fromJSON(theJSON)
         } else {
-            throw new UndefinedValueError("The given hero type does not exist.");
+            throw new ReferenceError("The given hero type does not exist.");
         }
     }
 
