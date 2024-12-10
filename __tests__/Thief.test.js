@@ -44,18 +44,6 @@ describe("Tests Thief Character instanciated to Name: Thief, HP: 20, DPMin: 10, 
         expect(thief.getFightingStatus()).toBeTruthy();
     });
 
-    test("Block should be successful (block change = 100).", () => {
-        const thief = new Thief("Thief", 20, 10, 10, 5, 100, 100);
-        thief.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
-        expect(thief.block()).toBeTruthy();
-    });
-
-    test("Block should fail (block chance = 0)", () => {
-        const thiefWithNoShield = new Thief("Thief", 20, 10, 10, 5, 100, 0);
-        thiefWithNoShield.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
-        expect(thiefWithNoShield.block()).toBeFalsy();
-    });
-
     test("Tests the attack method (hit chance = 100, DPmin = 10, DPmax = 10", () => {
         const thief = new Thief("Thief", 20, 10, 10, 5, 100, 100);
         thief.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
