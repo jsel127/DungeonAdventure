@@ -96,12 +96,12 @@ export default class HeroFactory {
      * @returns an Hero instanciated with the set values.
      * @throws {ReferenceError} if the hero type is not valid.
      */
-    static loadHero(theHeroType, theJSON) {
-        if (theHeroType === "Warrior") {
+    static loadHero(theJSON) {
+        if (theJSON.__type === Warrior.name) {
             return Warrior.fromJSON(theJSON);
-        } else if (theHeroType === "Priestess") {
+        } else if (theJSON.__type === Priestess.name) {
             return Priestess.fromJSON(theJSON);
-        } else if (theHeroType === "Thief") {
+        } else if (theJSON.__type === Thief.name) {
             return Thief.fromJSON(theJSON)
         } else {
             throw new ReferenceError("The given hero type does not exist.");
