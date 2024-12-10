@@ -89,7 +89,7 @@ export default class Monster extends DungeonCharacter {
      * @throws {TypeError} if the damage points to apply is not a number. 
      */
     applyHPChange(theDamagePoints) {
-        if (!Number.isInteger(theChangeHP)) {
+        if (!Number.isInteger(theDamagePoints)) {
             throw new TypeError("The change in HP should be an integer");
         }
         if (Math.round(Math.random() * 100) < this.#myHealChance) {
