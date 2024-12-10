@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-
 const MovementButton = ({ direction, doorOpen, onButtonClick }) => {
     return (
         <button disabled={!doorOpen} onClick={onButtonClick}>
@@ -17,86 +16,96 @@ const DisplayDungeon = () => {
     const [validMoves, setValidMoves] = useState(null)
     const [inventory, setInventory] = useState(null)
     const [message, setMessage] = useState('')
-    const [adventurerInfo, setAdventurerInfo] = useState(null)
+    const [adventurer, setAdventurer] = useState(null)
 
-    const fetchInventory = async () => {
-        try {
-            const response = await fetch('/api/inventory');
-            if (!response.ok) throw new Error('Failed to fetch inventory');
-            const data = await response.json();
-            console.log('Fetched inventory:', data); // Log fetched inventory
-            setInventory(data);
-        } catch (error) {
-            console.error('Error fetching inventory:', error);
-        }
-    };
-
-    const fetchAdventurerInfo = async () => {
-        try {
-            const response = await fetch('/api/adventurer');
-            if (!response.ok) throw new Error('Failed to fetch adventurer info');
-            const data = await response.json();
-            
-            // Accessing nested values properly
-            const hero = data.hero;
-            const adventurerInfo = {
-                name: hero.dungeon_character.name,
-                health: hero.dungeon_character.hp,
-                attack: hero.dungeon_character.dp_min,  // You can adjust this to use dp_min or dp_max, depending on your logic
-                defense: hero.block_chance,  // Assuming block_chance represents defense here
-                inventory: hero.inventory.items
-            };
-    
-            setAdventurerInfo(adventurerInfo);
-        } catch (error) {
-            console.error('Error fetching adventurer info:', error);
-        }
-    };
-    const [map, setMap] = useState(null);
+    const fetchInventory = () => {
+      console.log('FETCH INVENTORY CALLED')
+      fetch('/api/inventory')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => {
+          setInventory(data)
+          return data
+          //console.log('DisplayDungeon: INVENTORY: (data)', data)
+        })
+        .catch(error => console.log('DisplayDungeon: error displayMap fetch', error))
+    }
 
     const displayMap = () => {
-        fetch('/api/dungeon-map')
-          .then(res => {
-            if (res.ok) {
-              return res.json()
-            }
-          })
-          .then(data => {
-            console.log('DisplayDungeon: MAP\n', data)
-          })
-          .catch(error => console.log('DisplayDungeon: error displayMap fetch', error))
-      }
+      fetch('/api/dungeon-map')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => {
+          console.log('DisplayDungeon: MAP\n', data)
+        })
+        .catch(error => console.log('DisplayDungeon: error displayMap fetch', error))
+    }
 
     const fetchValidMoves = async () => {
         try {
-            const response = await fetch('http://localhost:5001/api/valid-moves', {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+          const response = await fetch('http://localhost:5001/api/valid-moves', {
+            headers: {
+                'Content-Type': 'application/json'
             }
-            const data = await response.json();
-            setValidMoves(data)
+          });
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          setValidMoves(data)
         } catch (error) {
-            console.error('Fetch error: ', error);
+          console.error('Fetch error: ', error);
         }
-    }
+      }
 
     const isMonster = () => {
-        fetch('/api/fighting-status')
-            .then(res => {
-                if (res.ok) {
-                    return res.json()
-                }
-            })
-            .then(isFighting => {
-                if (isFighting) {
-                    navigate('/battle')
-                }
-            })
-            .catch(error => console.log('DisplayDungeon: error isMonster fetch', error))
+      fetch('/api/fighting-status')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(isFighting => {
+          if (isFighting) {
+            navigate('/battle')
+          }
+        })
+        .catch(error => console.log('DisplayDungeon: error isMonster fetch', error))
+    }
+
+    const hasWonGame = () => {
+      fetch('/api/has-won-game')
+          .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+          })
+          .then(data => {
+            if (data) {
+              navigate('/game-over')
+            }
+          })
+          .catch(error => console.error('DisplayDungeon: error hasWonGame', error))
+    }
+
+    const fetchAdventurer = () => {
+      fetch('/api/adventurer')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => {
+          setAdventurer(data)
+          return data
+        })
+        .catch(error => console.error('DisplayDungeon: error fetchAdventurer', error))
     }
 
     const handleClick = (direction) => {
@@ -126,78 +135,97 @@ const DisplayDungeon = () => {
         fetch(url, { 
             method: 'POST', 
             headers: {  
-                'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache'
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache'
             },
             body: JSON.stringify({
-                dir: direction
+              dir: direction
             })
-        })
-        .then((res) => {
+          })
+          .then((res) => {
             const message = res.json()
             console.log('DisplayDungeon: after post fetch completes', message) 
+            hasWonGame()
             isMonster()
             fetchInventory()
             fetchValidMoves()
             return message
-        })
-        .then(result => {
+          })
+          .then(result => {
             setMessage(result)
-        })
-        .catch(error => console.log('ERROR: handle movement post request', error))
+          })
+          .catch(error => console.log('ERROR: handle movement post request', error))
+
+    }
+
+    const handleHealingPotion = () => {
+      fetch('/api/use-healing-potion')
+          .then(res => {
+            if (res.ok) {
+              return res.json()
+            }
+          })
+          .then(data => {
+            console.log('DisplayDungeon: HEAL DATA:', data)
+            if (data === 'You have no healing potions') {
+              setMessage(data)
+            } else {
+              setMessage('You healed ' + data + ' hp')
+            }
+            fetchInventory()
+          })
+          .catch(error => console.error('DisplayDungeon: error useHealingPotion', error))
+    }
+
+    const handleVisionPotion = () => {
 
     }
 
     useEffect(() => {
+      setTimeout(function() {
         console.log('Display Dungeon: useEffect called')
         fetchValidMoves()
         fetchInventory()
-        fetchAdventurerInfo() // Fetch adventurer info on initial render
+      }, 100)
     }, [])
 
     return (
-  <>
-    {validMoves === null ? (
-      <p>Loading Dungeon...</p>
-    ) : (
-      <p>
-        {console.log('DisplayDungeon: RERENDER')}
-        {console.log('DisplayDungeon: validMoves', validMoves)}
-        {console.log('DisplayDungeon: INVENTORY (return)', inventory)}
-
-        
-
-        North: {validMoves.north.toString()}
-        <MovementButton direction='North' doorOpen={validMoves.north} onButtonClick={() => handleClick('North')} />
-        <br />
-        East: {validMoves.east.toString()}
-        <MovementButton direction='East' doorOpen={validMoves.east} onButtonClick={() => handleClick('East')} />
-        <br />
-        South: {validMoves.south.toString()}
-        <MovementButton direction='South' doorOpen={validMoves.south} onButtonClick={() => handleClick('South')} />
-        <br />
-        West: {validMoves.west.toString()}
-        <MovementButton direction='West' doorOpen={validMoves.west} onButtonClick={() => handleClick('West')} />
-        <br />
-        <br />
-
-        Adventurer Info:
-        {adventurerInfo === null ? <p>Loading Adventurer Info...</p> : (
-          <div>
-            <p>Name: {adventurerInfo.name}</p>
-            <p>Health: {adventurerInfo.health}</p>
-            <p>Attack Power: {adventurerInfo.attack}</p>
-            <p>Defense: {adventurerInfo.defense}</p>
-          </div>
-        )}
-        Inventory:
-        {inventory === null ? <p>Loading Inventory...</p> : JSON.stringify(inventory.items)}
-        <br />
-        <br />
-      </p>
-    )}
-  </>
-);
+        <>
+            { validMoves === null ? (
+                <p>Loading Dungeon...</p>
+            ) : (
+                <p>
+                    {console.log('DisplayDungeon: RERENDER')}
+                    {console.log('DisplayDungeon: validMoves', validMoves)}
+                    {console.log('DisplayDungeon: INVENTORY (return)', inventory)}
+                    {displayMap()}
+                    North: { validMoves.north.toString() }
+                    <MovementButton direction='North' doorOpen={validMoves.north} onButtonClick={() => handleClick('North')} />
+                    <br/>
+                    East: { validMoves.east.toString() } 
+                    <MovementButton direction='East' doorOpen={validMoves.east} onButtonClick={() => handleClick('East')} />
+                    <br/>
+                    South: { validMoves.south.toString() } 
+                    <MovementButton direction='South' doorOpen={validMoves.south} onButtonClick={() => handleClick('South')} />
+                    <br/>
+                    West: { validMoves.west.toString() } 
+                    <MovementButton direction='West' doorOpen={validMoves.west} onButtonClick={() => handleClick('West')} />
+                    <br/>
+                    <br/>
+                    <button onClick={() => handleHealingPotion()}>Use Healing Potion</button>
+                    <button onClick={() => handleVisionPotion()}>Use Vision Potion</button>
+                    <br/>
+                    <br/>
+                   Message: 
+                   {message}
+                   <br/>
+                   <br/>
+                   Inventory:
+                   {inventory === null ? <p>Loading Inventory...</p> : JSON.stringify(inventory.items)}
+                </p>
+            )}
+        </>
+    ) 
 
 }
 

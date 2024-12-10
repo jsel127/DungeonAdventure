@@ -64,6 +64,21 @@ export default class DungeonCharacter {
     }
     
     /**
+     * Returns a JSON representation of the Monster object. 
+     * @returns a JSON representation of the Monster object.
+     */
+    toJSON() {
+        return {
+            name: this.#myName,
+            hp: this.#myHP,
+            dp_min: this.#myDPMin,
+            dp_max: this.#myDPMax,
+            attack_speed: this.#myAttackSpeed,
+            hit_chance: this.#myHitChance
+        }
+    }
+    
+    /**
      * Returns the name of the dungeon character
      * @returns the name of the dungeon character 
      */
@@ -130,18 +145,31 @@ export default class DungeonCharacter {
      * @param {*} theOpponent the opponent the dungeon character is facing.
      * @returns true if the attack was successul and false otherwise.
      */
-    attack(theOpponent, theBlocked = false, autoSuccess=false) {
-        if (theBlocked || !this.isDead() && (autoSuccess || Math.random() * 100 < this.#myHitChance)) {
+    attack(theOpponent, autoSuccess=false) {
+        if (!this.isDead() && (autoSuccess || Math.random() * 100 < this.#myHitChance)) {
             const rangeDP = this.#myDPMax - this.#myDPMin;
-            const attackDP = Math.round(Math.random() * rangeDP) + this.#myDPMin;
-            if (attackDP < theOpponent.getHP()) {
-                theOpponent.setHP(theOpponent.getHP() - attackDP);
-            } else {
-                theOpponent.setHP(0);
-            }
+            const attackDP = -1 * (Math.round(Math.random() * rangeDP) + this.#myDPMin);
+            theOpponent.applyHPChange(attackDP);
             return true;
         }
         return false;
+    }
+
+    /**
+     * Will change the HP by the given change (positive or negative). If the change is larger 
+     * and negative than the HP remaining the HP will be set to 0.
+     * @param {*} theChangeHP the change in HP to be applied.
+     */
+    applyHPChange(theChangeHP) {
+        if (!Number.isInteger(theChangeHP)) {
+            throw new TypeError("The change in HP should be an integer");
+        }
+        const newHP = this.getHP() + theChangeHP;
+        if (newHP < 0) {
+            this.setHP(0);
+        } else {
+            this.setHP(newHP);
+        }
     }
 
     /**
@@ -158,16 +186,5 @@ export default class DungeonCharacter {
      */
     toString() {
         return `${this.#myName} ${this.#myHP} ${this.#myDPMin} ${this.#myDPMax} ${this.#myAttackSpeed} ${this.#myHitChance}`;
-    }
-
-    toJSON() {
-        return {
-            name: this.#myName,
-            hp: this.#myHP,
-            dp_min: this.#myDPMin,
-            dp_max: this.#myDPMax,
-            attack_speed: this.#myAttackSpeed,
-            hit_chance: this.#myHitChance
-        }
     }
 }

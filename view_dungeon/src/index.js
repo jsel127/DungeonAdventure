@@ -13,6 +13,8 @@ import CharacterSelection from './pages/CharacterSelection.js';
 import NameSelection from './pages/NameSelection.js';
 import DifficultySelection from './pages/DifficultySelection.js';
 import DisplayDungeon from './pages/DisplayDungeon.js'
+import DisplayBattle from './pages/DisplayBattle.js'
+import GameOver from './pages/GameOver.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -28,6 +30,8 @@ root.render(
       <Route path="/select-name" element={<NameSelection />} />
       <Route path="/select-difficulty" element={<DifficultySelection />} />
       <Route path="/dungeon" element={<DisplayDungeon />} />
+      <Route path="/battle" element={<DisplayBattle />} />
+      <Route path="/game-over" element={<GameOver />} />
     </Routes>
   </Router>
 );
