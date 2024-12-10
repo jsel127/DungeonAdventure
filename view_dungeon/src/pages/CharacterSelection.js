@@ -20,16 +20,15 @@ const CharacterSelection = () => {
   };
 
   return (
-    <div style={{ backgroundColor: 'maroon', minHeight: '100vh', color: 'white', padding: '20px' }}>
+    <div style={{ backgroundColor: 'maroon', minHeight: '100vh', color: 'white', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       <h1>Select Your Hero</h1>
       {characters.length === 0 ? (
         <p>Loading characters...</p>
       ) : (
         <div className="character-list" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {characters.map((character, index) => (
+          {characters.map((character) => (
             <div
-              key={index}
-              className={`character-card ${selectedCharacter?.name === character.name ? 'selected' : ''}`}
+              key={character.name}
               onClick={() => handleCharacterSelect(character)}
               style={{
                 cursor: 'pointer',
@@ -39,7 +38,7 @@ const CharacterSelection = () => {
                 width: '200px',
                 textAlign: 'center',
                 color: 'white',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                backgroundColor: selectedCharacter?.name === character.name ? 'rgba(0, 128, 0, 0.5)' : 'rgba(0, 0, 0, 0.5)',  // Update background dynamically based on selection
                 borderRadius: '5px',
               }}
             >
@@ -64,20 +63,24 @@ const CharacterSelection = () => {
       {selectedCharacter && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <Link to="/select-name">
-            <button onClick={() => {
-              console.log('Start game with', selectedCharacter.name)
-              fetch('/api/selected-character', {
-                method: 'POST', 
-                headers: {
-                  'content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                  character: selectedCharacter
+            <button
+              onClick={() => {
+                console.log('Start game with', selectedCharacter.name);
+                fetch('/api/selected-character', {
+                  method: 'POST',
+                  headers: {
+                    'content-type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    character: selectedCharacter,
+                  }),
                 })
-              }).then(res => {
-                return res.json()
-              }).catch(error => console.log('ERROR: select character post request'))
-            }}>
+                  .then((res) => res.json())
+                  .catch((error) =>
+                    console.log('ERROR: select character post request', error)
+                  );
+              }}
+            >
               Next
             </button>
           </Link>
