@@ -87,10 +87,10 @@ export default class Dungeon {
         for (let row = Dungeon.BUFFER; row < this.#myDimension + Dungeon.BUFFER; row++) {
             for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {
                 currentRoom = this.getRoomWithRowCol(row, col);
-                str += (currentRoom.isWestDoorOpen()) ? "\\" : "|";
+                str += (currentRoom.isWestDoorOpen()) ? " " : "|";
                 str += currentRoom.getContent();
             }
-            str += (currentRoom.isEastDoorOpen()) ? "\\" : "|";
+            str += (currentRoom.isEastDoorOpen()) ? " " : "|";
             str += "\n ";
             for (let col = Dungeon.BUFFER; col < this.#myDimension + Dungeon.BUFFER; col++) {                
                 currentRoom = this.getRoomWithRowCol(row, col);
@@ -121,7 +121,7 @@ export default class Dungeon {
         if (!theCoordinate instanceof Coordinate) {
             throw TypeError("The given coordinate was not a Coordinate type.");
         }
-        return this.#myRooms[theCoordinate.getCol()][theCoordinate.getRow()];
+        return this.#myRooms[theCoordinate.getRow()][theCoordinate.getCol()];
     }
 
     getRoomWithRowCol(theRow, theCol) {
@@ -150,7 +150,7 @@ export default class Dungeon {
                 adjacentRooms[row + 1][col + 1] = this.#myRooms[curRow + row][curCol + col];
             }
         }
-        return adjacentRooms;
+        return JSON.stringify(adjacentRooms);
     }
 
     #makeDungeon() {

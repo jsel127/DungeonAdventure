@@ -7,6 +7,7 @@
 import Hero from "../characters/Hero.js";
 import Priestess from "../characters/Priestess.js";
 import MonsterFactory from "../characters/MonsterFactory.js";
+import Monster from "../characters/Monster.js";
 describe("Tests Priestess Character instanciated to Name: Priestess, HP: 20, DPMin: 10, DPMax: 10, AttackSpeed: 5, HitChange: 100, BlockChance 100", () => {
     test("Name properly set", () => {
         const priestess = new Priestess("Priestess", 20, 10, 10, 5, 100, 100);
@@ -45,37 +46,34 @@ describe("Tests Priestess Character instanciated to Name: Priestess, HP: 20, DPM
         expect(priestess.getFightingStatus()).toBeTruthy();
     });
 
-    test("Block should be successful (block change = 100).", () => {
+    test("Will not allow attack if fighting status is not fighting", () => {
         const priestess = new Priestess("Priestess", 20, 10, 10, 5, 100, 100);
-        priestess.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
-        expect(priestess.block()).toBeTruthy();
+        priestess.setFightingStatus(Hero.FIGHTING_STATUS.notFighting);
+        expect(() => priestess.attack(MonsterFactory.createMonster("Gremlin"))).toThrow(EvalError);
     });
 
-    test("Block should fail (block chance = 0)", () => {
-        const priestessWithNoShield = new Priestess("Priestess", 20, 10, 10, 5, 100, 0);
-        priestessWithNoShield.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
-        expect(priestessWithNoShield.block()).toBeFalsy();
-    });
-
-    test("Tests the attack method (hit chance = 100, DPmin = 10, DPmax = 10", () => {
+    test("Will not allow special attack if fighting status is not fighting", () => {
         const priestess = new Priestess("Priestess", 20, 10, 10, 5, 100, 100);
-        priestess.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
-        const monster = MonsterFactory.createMonster("Ogre");
-        const monsterInitialHP = monster.getHP();
-        priestess.attack(monster);
-        expect(monsterInitialHP - monster.getHP()).toBe(10);
+        priestess.setFightingStatus(Hero.FIGHTING_STATUS.notFighting);
+        expect(() => priestess.specialAttack(MonsterFactory.createMonster("Gremlin"))).toThrow(EvalError);
     });
+});
 
-    test("Tests the attack method (hit chance = 0, DPmin = 10, DPmax = 10", () => {
-        const priestess = new Priestess("Priestess", 20, 10, 10, 5, 0, 100);
-        priestess.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
-        const monster = MonsterFactory.createMonster("Ogre");
-        const monsterInitialHP = monster.getHP();
-        priestess.attack(monster);
-        expect(monsterInitialHP - monster.getHP()).toBe(0);
+describe("Tests applyHPChange, attack, and specialAttack methods", () => {
+    test("Apply HP Change, Block Chance 100", () => {
+        const priestessBlockChance100 = new Priestess("Priestess", 10, 1, 1, 10, 100, 100);
+        priestessBlockChance100.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+        const gremlinHitChance100 = new Monster("Gremlin", 10, 10000, 10000, 100, 100, 0, 0, 0);
+        gremlinHitChance100.attack(priestessBlockChance100);
+        expect(priestessBlockChance100.getHP()).toBe(10);
     });
-
-// TODO: tests special attack
+    test("Apply HP Change, Block Chance 0", () => {
+        const priestessBlockChance0 = new Priestess("Priestess", 10, 1, 1, 10, 100, 0);
+        priestessBlockChance0.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+        const gremlinHitChance100 = new Monster("Gremlin", 10, 10000, 10000, 100, 100, 0, 0, 0);
+        gremlinHitChance100.attack(priestessBlockChance0);
+        expect(priestessBlockChance0.getHP()).toBe(0);
+    });
 });
 
 describe("Tests Saves and Loads Priestess class", () => {

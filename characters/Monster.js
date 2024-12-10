@@ -13,23 +13,25 @@ import DungeonCharacter from "./DungeonCharacter.js";
  */
 export default class Monster extends DungeonCharacter {
     /** The heal chance (0-100) of the monster. */
-    #myHealChance
+    #myHealChance;
     /** The min heal points the monster can get. */
-    #myMinHeal
+    #myMinHeal;
     /** The max heal points the monster can get. */
-    #myMaxHeal
+    #myMaxHeal;
     /**
      * Constructor that will store the given arguments in the corresponding 
      * instance fields.
-     * @param {*} theName the name of the monster.
-     * @param {*} theHP the health points of the monster.
-     * @param {*} theDPMin the min damage points of the monster.
-     * @param {*} theDPMax the max damage points of the monster.
-     * @param {*} theAttackSpeed the attack speed of the monster.
-     * @param {*} theHitChance the hit chance of the monster.
-     * @param {*} theHealChance the heal chance (0-100) success rate when healing.
-     * @param {*} theMinHeal the min heal points the monster can get during a heal.
-     * @param {*} theMaxHeal the max heal points the monster can get during a heal.
+     * @param {string} theName the name of the monster as a string
+     * @param {number} theHP the health points of the monster as an integer (>=0)
+     * @param {number} theDPMin the min damage points of the monster as an integer (>0)
+     * @param {number} theDPMax the max damage points of the monster as an integer (>=0)
+     * @param {number} theAttackSpeed the attack speed of the monster as an integer (>=0)
+     * @param {number} theHitChance the hit chance of the monster as an integer [1-100]
+     * @param {number} theHealChance the heal chance success rate when healing as an integer [0, 100].
+     * @param {number} theMinHeal the min heal points the monster can get during a heal as an integer (>=0).
+     * @param {number} theMaxHeal the max heal points the monster can get during a heal as an integer (>=0).
+     * @throws {TypeError} if the healing chance, min heal, or max heal is not a integer.
+     * @throws {RangeError} if the min heal or max heal is negative or heal chance is not between [1-100]
      */
     constructor(theName, theHP, theDPMin, theDPMax,
                 theAttackSpeed, theHitChance,
@@ -51,10 +53,10 @@ export default class Monster extends DungeonCharacter {
 
     /**
      * Creates a Monster instance based on the given structured data 
-     * represended with JavaScript Object Notation (JSON)
-     * @param {*} theJSON the data to create an instance based on
-     * @returns a Monster object loaded with the given data
-     * @throws {TypeError} If the __type property is not Monster
+     * represended with JavaScript Object Notation (JSON).
+     * @param {object} theJSON the data to create an instance based on.
+     * @returns a Monster object loaded with the given data.
+     * @throws {TypeError} If the __type property is not Monster.
      */
     static fromJSON(theJSON) {
         if (theJSON.__type === undefined || theJSON.__type !== Monster.name) {
@@ -83,9 +85,13 @@ export default class Monster extends DungeonCharacter {
 
     /**
      * Applied damage to the monster and also applied heal if successful.
-     * @param {*} theDamagePoints 
+     * @param {number} theDamagePoints the damage points to apply.
+     * @throws {TypeError} if the damage points to apply is not a number. 
      */
     applyHPChange(theDamagePoints) {
+        if (!Number.isInteger(theDamagePoints)) {
+            throw new TypeError("The change in HP should be an integer");
+        }
         if (Math.round(Math.random() * 100) < this.#myHealChance) {
             const rangeAddHP = this.#myMaxHeal - this.#myMinHeal;
             const addHP = Math.round(Math.random() * rangeAddHP) + this.#myMinHeal;
@@ -120,8 +126,10 @@ export default class Monster extends DungeonCharacter {
     }
 
     /**
-     * Returns the information of the monster including its name, HP, DPMin, DPMax, AttackSpeed, HitChange, HealChance, MinHeal, and MaxHeal.
-     * @returns a string representation of the monster formatted by the information it contains (name, HP, DPMin, DPMax, AttackSpeed, HitChange, HealChance, MinHeal, MaxHeal)
+     * Returns the information of the monster including its name, HP, DPMin, DPMax, 
+     * AttackSpeed, HitChange, HealChance, MinHeal, and MaxHeal.
+     * @returns a string representation of the monster formatted by the information it contains 
+     *          (name, HP, DPMin, DPMax, AttackSpeed, HitChange, HealChance, MinHeal, MaxHeal)
      */
     toString() {
         return super.toString() + ` ${this.#myHealChance} ${this.#myMinHeal} ${this.#myMaxHeal}`;
