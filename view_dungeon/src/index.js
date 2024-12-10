@@ -15,6 +15,7 @@ import DifficultySelection from './pages/DifficultySelection.js';
 import DisplayDungeon from './pages/DisplayDungeon.js'
 import DisplayBattle from './pages/DisplayBattle.js'
 import GameOver from './pages/GameOver.js'
+import UseVisionPotion from './pages/UseVisionPotion.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -32,6 +33,7 @@ root.render(
       <Route path="/dungeon" element={<DisplayDungeon />} />
       <Route path="/battle" element={<DisplayBattle />} />
       <Route path="/game-over" element={<GameOver />} />
+      <Route path="/vision-potion" element={<UseVisionPotion />} />
     </Routes>
   </Router>
 );

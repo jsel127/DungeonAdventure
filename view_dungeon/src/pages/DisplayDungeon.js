@@ -215,7 +215,7 @@ const DisplayDungeon = () => {
     }
 
     const handleVisionPotion = () => {
-      setMessage('Vision potions are not yet implemented')
+      navigate('/vision-potion')
     }
 
     useEffect(() => {

@@ -148,9 +148,9 @@ app.get("/api/use-vision-potion", (req, res) => {
 })
 
 app.get("/api/coordinates", (req, res) => {
-    console.log('Server: get request /api/room-info')
+    console.log('Server: get request /api/room-info') 
     const room = JSON.parse(model.getCurrentRoomInfo()) 
     res.json(room.coordinate) 
 })
      
-app.listen(5001, () => { console.log("Server started on port 5001") })             
+app.listen(5001, () => { console.log("Server started on port 5001") })                   
