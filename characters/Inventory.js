@@ -38,7 +38,7 @@ export default class Inventory {
         if (!typeof thePillars === "object") {
             throw new TypeError("The pillars status must be passed in as an object type.");
         }
-        if (Object.keys().length !== 4) {
+        if (Object.keys(thePillars).length !== 4) {
             throw new TypeError("The pillars object should only contain 4 key-value pairs.");
         }
         if (!(typeof thePillars["abstraction"] === "boolean"
