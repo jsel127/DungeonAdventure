@@ -24,7 +24,9 @@ const GameOver = () => {
 
     return (
         <>
-                <source src="/dungeon.mp3" type="audio/mp3" />
+        <audio autoPlay loop>
+                 <source src="/gameover.mp3" type="audio/mp3" />
+            </audio>
             {
                 hasWon === null ? <p>Loading...</p> : (
                     hasWon ? <p>You Win</p> : <p>You Lose</p>
