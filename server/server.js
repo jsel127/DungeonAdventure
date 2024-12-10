@@ -13,11 +13,11 @@ app.use(express.json())
 app.use(cors()) 
 
 app.get("/", (req, res) => {    
-    res.send("Welcome to the Dungeon Adventure server!");      
+    res.send("Welcome to the Dungeon Adventure server!");       
 }); 
 
 app.get("/api/characters", (req, res) => { 
-    console.log("Server: request to /api/characters")    
+    console.log("Server: request to /api/characters")     
     res.json(DungeonAdventure.getHeroes())
 })  
 
@@ -37,7 +37,7 @@ app.get("/api/difficulties", (req, res) => {
 })   
 
 app.post("/api/selected-difficulty", (req, res) => { 
-    console.log('Server: recieved selected difficulty from react:', req.body.difficulty)
+    console.log('Server: recieved selected difficulty from react:', req.body.difficulty) 
     model.setDifficulty(req.body.difficulty) 
     model.startGame() 
 })
@@ -129,12 +129,22 @@ app.get("/api/attack", (req, res) => {
 app.get("/api/special-attack", (req, res) => {  
     console.log('Server: get request /api/special-attack')         
     model.specialAttackOpponent()
-    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })       
+    res.json({ win:model.isOpponentDead(), lose:model.isAdventurerDead() })        
 })
 
 app.get("/api/has-won-game", (req, res) => {
     console.log('Server: get request /api/has-won-game')     
     res.json(model.hasWonGame())   
+})
+
+app.get("/api/use-healing-potion", (req, res) => {
+    console.log('Server: get request /api/use-healing-potion')   
+    res.json(model.useHealingPotion())
+})
+
+app.get("/api/use-vision-potion", (req, res) => {
+    console.log('Server: get request /api/use-vision-potion')  
+    res.json(model.useVisionPotion())
 })
      
 app.listen(5001, () => { console.log("Server started on port 5001") })     

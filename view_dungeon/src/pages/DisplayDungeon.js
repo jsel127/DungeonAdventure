@@ -16,6 +16,7 @@ const DisplayDungeon = () => {
     const [validMoves, setValidMoves] = useState(null)
     const [inventory, setInventory] = useState(null)
     const [message, setMessage] = useState('')
+    const [adventurer, setAdventurer] = useState(null)
 
     const fetchInventory = () => {
       console.log('FETCH INVENTORY CALLED')
@@ -93,6 +94,20 @@ const DisplayDungeon = () => {
           .catch(error => console.error('DisplayDungeon: error hasWonGame', error))
     }
 
+    const fetchAdventurer = () => {
+      fetch('/api/adventurer')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => {
+          setAdventurer(data)
+          return data
+        })
+        .catch(error => console.error('DisplayDungeon: error fetchAdventurer', error))
+    }
+
     const handleClick = (direction) => {
         console.log('DisplayDungeon:  handleClick called', direction)
         console.log(validMoves)
@@ -143,6 +158,29 @@ const DisplayDungeon = () => {
 
     }
 
+    const handleHealingPotion = () => {
+      fetch('/api/use-healing-potion')
+          .then(res => {
+            if (res.ok) {
+              return res.json()
+            }
+          })
+          .then(data => {
+            console.log('DisplayDungeon: HEAL DATA:', data)
+            if (data === 'You have no healing potions') {
+              setMessage(data)
+            } else {
+              setMessage('You healed ' + data + ' hp')
+            }
+            fetchInventory()
+          })
+          .catch(error => console.error('DisplayDungeon: error useHealingPotion', error))
+    }
+
+    const handleVisionPotion = () => {
+
+    }
+
     useEffect(() => {
       setTimeout(function() {
         console.log('Display Dungeon: useEffect called')
@@ -174,13 +212,16 @@ const DisplayDungeon = () => {
                     <MovementButton direction='West' doorOpen={validMoves.west} onButtonClick={() => handleClick('West')} />
                     <br/>
                     <br/>
+                    <button onClick={() => handleHealingPotion()}>Use Healing Potion</button>
+                    <button onClick={() => handleVisionPotion()}>Use Vision Potion</button>
+                    <br/>
+                    <br/>
                    Message: 
                    {message}
                    <br/>
                    <br/>
                    Inventory:
-                   {
-                    inventory === null ? <p>Loading Inventory...</p> : JSON.stringify(inventory.items)}
+                   {inventory === null ? <p>Loading Inventory...</p> : JSON.stringify(inventory.items)}
                 </p>
             )}
         </>
