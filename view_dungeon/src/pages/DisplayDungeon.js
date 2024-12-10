@@ -192,6 +192,9 @@ const DisplayDungeon = () => {
 
     return (
         <>
+        <audio autoPlay loop>
+                 <source src="/dungeon.mp3" type="audio/mp3" />
+            </audio>
             { validMoves === null ? (
                 <p>Loading Dungeon...</p>
             ) : (
