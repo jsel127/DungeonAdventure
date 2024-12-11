@@ -57,7 +57,7 @@ export default class Hero extends DungeonCharacter {
         if (typeof theFightingStatus !== "boolean") {
             throw new TypeError("Invalid fighting status. Must be of boolean type.");
         }
-        if (!theInventory instanceof Inventory) {
+        if (!(theInventory instanceof Inventory)) {
             throw new TypeError("The inventory in not of Inventory type.");
         }
         this.#myBlockChance = theBlockChance;
@@ -109,7 +109,7 @@ export default class Hero extends DungeonCharacter {
         if (this.#myFightingStatus !== Hero.FIGHTING_STATUS.fighting) {
             throw new EvalError("The hero is not currently fighting any monster. Attacks are not allowed.");
         }
-        if (!theOpponent instanceof Monster) {
+        if (!(theOpponent instanceof Monster)) {
             throw new TypeError("The opponent should be of Monster type.");
         }
         super.attack(theOpponent);
@@ -125,7 +125,7 @@ export default class Hero extends DungeonCharacter {
         if (this.#myFightingStatus !== Hero.FIGHTING_STATUS.fighting) {
             throw new EvalError("The hero is not currently fighting any monster. Special attacks are not allowed.");
         }
-        if (!theOpponent instanceof Monster) {
+        if (!(theOpponent instanceof Monster)) {
             throw new TypeError("The opponent should be of Monster type.");
         }
     }

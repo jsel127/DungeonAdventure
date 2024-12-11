@@ -54,19 +54,19 @@ export default class Room {
     constructor(theCoordinate = new Coordinate(Dungeon.BUFFER, Dungeon.BUFFER), theNorthDoor = new Door(), 
                 theEastDoor = new Door(), theSouthDoor = new Door(), theWestDoor = new Door(), 
                 theContent = Room.CONTENT.empty) {
-        if (theCoordinate === undefined || !theCoordinate instanceof Coordinate) {
+        if (theCoordinate === undefined || !(theCoordinate instanceof Coordinate)) {
             throw TypeError("The given coordinate was not a Coordinate type.");
         }
-        if (theNorthDoor === undefined || !theNorthDoor instanceof Door) {
+        if (theNorthDoor === undefined || !(theNorthDoor instanceof Door)) {
             throw TypeError("The North Door was not a Door type.");
         }
-        if (theEastDoor === undefined || !theEastDoor instanceof Door) {
+        if (theEastDoor === undefined || !(theEastDoor instanceof Door)) {
             throw TypeError("The East Door was not a Door type.");
         }
-        if (theSouthDoor === undefined || !theSouthDoor instanceof Door) {
+        if (theSouthDoor === undefined || !(theSouthDoor instanceof Door)) {
             throw TypeError("The South Door was not a Door type.");
         }
-        if (theWestDoor === undefined || !theWestDoor instanceof Door) {
+        if (theWestDoor === undefined || !(theWestDoor instanceof Door)) {
             throw TypeError("The West Door was not a Door type. Coordinate");
         }
         this.#myCoordinate = theCoordinate;

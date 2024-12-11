@@ -92,7 +92,7 @@ export default class Monster extends DungeonCharacter {
         if (!Number.isInteger(theDamagePoints)) {
             throw new TypeError("The change in HP should be an integer");
         }
-        if (Math.round(Math.random() * 100) < this.#myHealChance) {
+        if (Math.random() * 100 < this.#myHealChance) {
             const rangeAddHP = this.#myMaxHeal - this.#myMinHeal;
             const addHP = Math.round(Math.random() * rangeAddHP) + this.#myMinHeal;
             super.applyHPChange(addHP + theDamagePoints);

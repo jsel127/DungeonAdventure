@@ -22,9 +22,9 @@ export default class DungeonAdventure {
             if (!Number.isInteger(theDifficulty) || theDifficulty < Dungeon.DIFFICULTY.Easy || theDifficulty > Dungeon.DIFFICULTY.Hard) {
                 throw new RangeError("The difficulty must be between easy and hard.");
             }
-            if (!(theDungeon instanceof Dungeon && theAdventurer instanceof Hero
-                && theCurrentRoomCoordinate instanceof Coordinate 
-                && (theCurrentOpponent === null || theCurrentOpponent instanceof Monster))) {
+            if (!((theDungeon instanceof Dungeon) && (theAdventurer instanceof Hero)
+                && (theCurrentRoomCoordinate instanceof Coordinate )
+                && ((theCurrentOpponent === null) || (theCurrentOpponent instanceof Monster)))) {
                 throw new TypeError("Invalid data was passed when loading. Actual types do not match expected ones.");
             }
             this.#myDungeon = theDungeon;
@@ -298,7 +298,7 @@ export default class DungeonAdventure {
     }
     
     #doesAdventurerAttackFirst() {
-        if (!this.#myCurrentOpponent instanceof Monster) {
+        if (!(this.#myCurrentOpponent instanceof Monster)) {
             throw new EvalError("There is not opponent to fight.");
         }
         return this.#myAdventurer.getAttackSpeed() - this.#myCurrentOpponent.getAttackSpeed() >= 0;
@@ -309,7 +309,7 @@ export default class DungeonAdventure {
      * @param {*} theOpponent 
      */
     #setOpponentToFight(theOpponent) {
-        if (!theOpponent instanceof Monster) {
+        if (!(theOpponent instanceof Monster)) {
             throw new TypeError("The given opponent was not a dungeon character.");
         }
         this.#myAdventurer.setFightingStatus(Hero.FIGHTING_STATUS.fighting);

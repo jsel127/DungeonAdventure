@@ -56,14 +56,14 @@ export default class Dungeon {
             || theEntranceCoordinate === null || theExitCoordinate === null) {
             this.#makeDungeon();
         } else {
-            if (!theEntranceCoordinate instanceof Coordinate 
-                || !theExitCoordinate instanceof Coordinate) {
+            if (!(theEntranceCoordinate instanceof Coordinate) 
+                || !(theExitCoordinate instanceof Coordinate)) {
                 throw new TypeError("The exit and entrance must be coordinates");
             }
             for (let row = 0; row < this.#myDimension + 1; row++) {
                 for (let col = 0; col < this.#myDimension + 1; col++) {
-                    if (!theSouthDoors[row][col] instanceof Door 
-                        || !theEastDoors[row][col] instanceof Door) {
+                    if (!(theSouthDoors[row][col] instanceof Door) 
+                        || !(theEastDoors[row][col] instanceof Door)) {
                         throw new TypeError("The east and south array of doors must contain all doors.");
                     }
                 }
@@ -136,7 +136,7 @@ export default class Dungeon {
     }
 
     getAdjacentRooms(theRoom) {
-        if (!theRoom instanceof Room) {
+        if (!(theRoom instanceof Room)) {
             throw new TypeError("The given value is not a room");
         }
         const coordinate = theRoom.getCoordinate();
