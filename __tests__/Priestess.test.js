@@ -297,7 +297,44 @@ describe("Test special attack method", () => {
     });
 
     describe("Special attack should heal the priestess by 10 to 20% their current HP. Test on various HP.", () => {
+        let opponentHP2000Heal0;
+        beforeEach(() => {
+            opponentHP2000Heal0 = new Monster("2000HP", 2000, 1, 1, 100, 100, 0, 1, 1);
+        });        
         
+        test("HP is not gained if HP is less than 2 (since rounded if 0.4 rounds to 0 so no HP can be gained)", () => {
+            for (let hp = 1; hp < 2; hp++) {
+                const priestessNotHealable = new Priestess("Priestess", hp, 10, 10, 5, 100, 100);
+                priestessNotHealable.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+                priestessNotHealable.specialAttack(opponentHP2000Heal0);
+                expect(priestessNotHealable.getHP()).toBe(hp);
+            }
+        });
+
+        test("HP@100 gained is between 10-20%", () => {
+            const priestessFighting = new Priestess("Priestess", 100, 10, 10, 5, 100, 100);
+            priestessFighting.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+            priestessFighting.specialAttack(opponentHP2000Heal0);
+            expect(priestessFighting.getHP()).toBeGreaterThan(109);
+            expect(priestessFighting.getHP()).toBeLessThan(121);
+        });
+
+
+        test("HP@9 gained is between 10-20%", () => {
+            const priestessFighting = new Priestess("Priestess", 9, 10, 10, 5, 100, 100);
+            priestessFighting.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+            priestessFighting.specialAttack(opponentHP2000Heal0);
+            expect(priestessFighting.getHP()).toBeGreaterThan(9);
+            expect(priestessFighting.getHP()).toBeLessThan(12);
+        });
+
+        test("HP@15 gained is between 10-20%", () => {
+            const priestessFighting = new Priestess("Priestess", 15, 10, 10, 5, 100, 100);
+            priestessFighting.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+            priestessFighting.specialAttack(opponentHP2000Heal0);
+            expect(priestessFighting.getHP()).toBeGreaterThan(16);
+            expect(priestessFighting.getHP()).toBeLessThan(19);
+        });
     });
 });
 
