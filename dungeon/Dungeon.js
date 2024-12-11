@@ -1,6 +1,18 @@
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
+
 import Coordinate from './Coordinate.js';
 import Room from './Room.js';
 import Door from './Door.js';
+
+/**
+ * Dungeon class that contains an array of rooms connected by doors.
+ * @author Jasmine Sellers
+ * @version 1.0
+ */
 export default class Dungeon {
     /** An object that stores the difficulty levels offered in the game. */
     static DIFFICULTY = Object.freeze ({
@@ -37,15 +49,26 @@ export default class Dungeon {
     #myEastDoors;
     /** The 2D array of south doors. */
     #mySouthDoors;
-    /** 
-     * Creates a Dungeon that stores the entrance, exit, dimensions, and rooms of the game.
-     */
 
+    /**
+     * Constructs a new room or reconstructs an existing room.
+     * @param {*} theDifficulty the difficulty of the dungeon.
+     * @param {*} theRoomContent the content of the rooms.
+     * @param {*} theEastDoors the east doors of the dungeon.
+     * @param {*} theSouthDoors the south doors of the dungeon.
+     * @param {*} theEntranceCoordinate the entrance coordinate of the dungeon.
+     * @param {*} theExitCoordinate the Exit coordiante of the dungeon.
+     * @throws {RangeError} if the difficulty is out of the valid range.
+     * @throws {TypeError} if the difficulty is not an integer, the coordinates 
+     * are not Coordinates, and the doors are not doors. 
+     */
     constructor(theDifficulty, theRoomContent = null, theEastDoors = null, 
                 theSouthDoors = null, theEntranceCoordinate = null, 
                 theExitCoordinate = null) {
-        if (!Number.isInteger(theDifficulty) 
-            || theDifficulty < Dungeon.DIFFICULTY.Easy 
+        if (!Number.isInteger(theDifficulty)) {
+            throw new TypeError("The difficulty must be an integer");
+        }
+        if (theDifficulty < Dungeon.DIFFICULTY.Easy 
             || theDifficulty > Dungeon.DIFFICULTY.Hard) {
             throw new RangeError(`${theDifficulty} is not a valid difficulty level."
                                  + "Select for the DIFFICULTY object.`);
@@ -76,6 +99,10 @@ export default class Dungeon {
         }
     }
 
+    /**
+     * A string representation of the dungeon (spaces mean open doors)
+     * @returns a string representation of the dungeon.
+     */
     toString() {
         let str = " ";
         let currentRoom;
@@ -101,14 +128,18 @@ export default class Dungeon {
         return str;
     }
 
+    /**
+     * Returns the entrance of the dungeon.
+     * @returns the entrance room.
+     */
     getEntrance() {
         return this.#myEntrance;
     }
 
-    getExit() {
-        return this.#myExit;
-    }
-
+    /**
+     * Returns the dimensions of the dungeon.
+     * @returns the dimensions of the dungeon
+     */
     getDimensions() {
         return this.#myDimension;
     }

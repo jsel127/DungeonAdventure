@@ -226,6 +226,7 @@ export default class Room {
     /**
      * Sets the content to the given content.
      * @param {string} theContent the content to set the room's content to.
+     * @throws {TypeError} if the content is not part of the valid room content.
      */
     setContent(theContent) {
         if (!Object.values(Room.CONTENT).includes(theContent)) {

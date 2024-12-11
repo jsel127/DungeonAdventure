@@ -14,10 +14,6 @@ describe("Test basic setup of the Dungeon", () => {
     test("Entrance is set up properly", () => {
         expect(entranceRoom.getContent()).toBe(Room.CONTENT.entrance);
     });
-    const exitRoom = dungeonEasy.getExit();
-    test("Exit is set up.", () => {
-        expect(exitRoom.getContent()).toBe(Room.CONTENT.exit);
-    });
 
     test("Dimensions are set up correctly", () => {
         expect(dungeonEasy.getDimensions()).toBe(Dungeon.DIFFICULTY.Easy * 5);
