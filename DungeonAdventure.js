@@ -224,6 +224,7 @@ export default class DungeonAdventure {
      */
     useVisionPotion() {
         this.#checkStarted();
+        console.log('DungeonAdventure: USE VISION POTION CALLED') 
         if (!this.#myAdventurer.useVisionPotion()) {
             return "You have no vision potions";
         }

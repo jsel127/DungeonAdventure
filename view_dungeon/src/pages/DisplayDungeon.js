@@ -34,12 +34,29 @@ const DisplayDungeon = () => {
     const [coordinates, setCoordinates] = useState(null)
 
     const fetchModelUpdates = () => {
+      console.log('DisplayDungeon: MODEL UPDATES') 
       hasWonGame()
+      isHeroDead()
       isMonster()
       fetchInventory()
       fetchValidMoves()
       fetchAdventurer()
       fetchCoordinates()
+    }
+
+    const isHeroDead = () => {
+      fetch('/api/is-hero-dead')
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          }
+        })
+        .then(data => {
+          if (data) {
+            navigate('/game-over')
+          }
+        })
+        .catch(error => console.log('DisplayDungeon: error isHeroDead fetch', error))
     }
 
     const fetchInventory = () => {

@@ -5,7 +5,7 @@ import DungeonAdventure from "../DungeonAdventure.js"
 const app = express()
 let model = new DungeonAdventure()       
 
-// stores the character type selected on the CharacterSelection screen, 
+// stores the character type selected on the CharacterSelection screen,  
 // to be used in a call to the model once the character name is recieved.  
 let selectedCharacter  
 
@@ -17,18 +17,18 @@ app.get("/", (req, res) => {
 }); 
 
 app.get('/api/save-game', (req, res) => {
-    console.log('Server: get request /api/save-game')      
-    res.json(JSON.stringify(model)) 
+    console.log('Server: get request /api/save-game')              
+    res.json(JSON.stringify(model))  
 })
 
 app.post("/api/load-game", (req, res) => {
-    console.log('Server: post request /api/load-game', req.body.loadModel)  
+    console.log('Server: post request /api/load-game', req.body.loadModel)                
     model = DungeonAdventure.fromJSON(JSON.parse(req.body.loadModel))
     res.send('success')
 })
 
 app.get("/api/characters", (req, res) => { 
-    console.log("Server: request to /api/characters")       
+    console.log("Server: request to /api/characters")             
     res.json(DungeonAdventure.getHeroes())
 })  
 
@@ -146,24 +146,29 @@ app.get("/api/special-attack", (req, res) => {
 })
 
 app.get("/api/has-won-game", (req, res) => {
-    console.log('Server: get request /api/has-won-game')     
+    console.log('Server: get request /api/has-won-game')      
     res.json(model.hasWonGame())   
 })
 
-app.get("/api/use-healing-potion", (req, res) => {
-    console.log('Server: get request /api/use-healing-potion')         
+app.get("/api/use-healing-potion", (req, res) => { 
+    console.log('Server: get request /api/use-healing-potion')                                           
     res.json(model.useHealingPotion())
 })
 
 app.get("/api/use-vision-potion", (req, res) => {
-    console.log('Server: get request /api/use-vision-potion')        
+    console.log('Server: get request /api/use-vision-potion')         
     res.json(model.useVisionPotion())
 })
 
 app.get("/api/coordinates", (req, res) => {
-    console.log('Server: get request /api/room-info')   
+    console.log('Server: get request /api/room-info')      
     const room = JSON.parse(model.getCurrentRoomInfo()) 
     res.json(room.coordinate) 
+})
+
+app.get("/api/is-hero-dead", (req, res) => {
+    console.log('Server: get request /api/is-hero-dead')
+    res.json(model.isAdventurerDead())
 })
      
 app.listen(5001, () => { console.log("Server started on port 5001") })                    
