@@ -8,6 +8,12 @@ import MonsterFactory from "../characters/MonsterFactory.js";
 import Coordinate from "./Coordinate.js";
 import Door from "./Door.js";
 import Dungeon from "./Dungeon.js";
+/**
+ * Coordinate class Negative coordinates are not supported 
+ * and cannot be less than the buffer of the dungeon.
+ * @author Jasmine Sellers
+ * @version 1.0
+ */
 export default class Room {
     /** Object of content in the room and their corresponding symbol */
     static CONTENT = Object.freeze({
@@ -44,12 +50,14 @@ export default class Room {
     /**
      * Creates a room which contains the doors to other rooms, content, and a 
      * coordinate to track its location in the dungeon.
-     * @param {*} theCoordinate the coordinate of the room in the dungeon.
-     * @param {*} theNorthDoor the north door shared with the room north to it (if present).
-     * @param {*} theEastDoor the east door shared with the room east to it (if present).
-     * @param {*} theSouthDoor the south door shared with the room south to it (if present).
-     * @param {*} theWestDoor the west door shared with the room west to it (if present).
-     * @param {*} theContent 
+     * @param {Coordinate} theCoordinate the coordinate of the room in the dungeon.
+     * @param {Door} theNorthDoor the north door shared with the room north to it (if present).
+     * @param {Door} theEastDoor the east door shared with the room east to it (if present).
+     * @param {Door} theSouthDoor the south door shared with the room south to it (if present).
+     * @param {Door} theWestDoor the west door shared with the room west to it (if present).
+     * @param {string} theContent the contents of the room
+     * @throws {TypeError} if given doors are not of Door type, coordinates not Coordinate type,
+     *                     of content is not a string.
      */
     constructor(theCoordinate = new Coordinate(Dungeon.BUFFER, Dungeon.BUFFER), theNorthDoor = new Door(), 
                 theEastDoor = new Door(), theSouthDoor = new Door(), theWestDoor = new Door(), 
@@ -69,6 +77,9 @@ export default class Room {
         if (theWestDoor === undefined || !(theWestDoor instanceof Door)) {
             throw TypeError("The West Door was not a Door type. Coordinate");
         }
+        if (typeof theContent !== "string") {
+            throw TypeError("The content was not a string.");
+        }
         this.#myCoordinate = theCoordinate;
         this.#myNorthDoor = theNorthDoor;      
         this.#myEastDoor = theEastDoor;
@@ -77,6 +88,61 @@ export default class Room {
         this.#myContent = theContent;
     }
 
+    /**
+     * Creates a Room instance based on the given structured data 
+     * represended with JavaScript Object Notation (JSON).
+     * @param {object} theJSON the data to create an instance based on.
+     * @returns a Room object loaded with the given data.
+     * @throws {TypeError} If the __type property is not Room.
+     */
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || theJSON.__type !== Room.name) {
+            throw new TypeError("The JSON is not a room type");
+        }
+        return new Room(Coordinate.fromJSON(theJSON.coordinate), 
+                        Door.fromJSON(theJSON.north_door), 
+                        Door.fromJSON(theJSON.east_door), 
+                        Door.fromJSON(theJSON.south_door),
+                        Door.fromJSON(theJSON.west_door), 
+                        theJSON.content);
+    }
+
+    /**
+     * Returns a JSON representation of the Room object. 
+     * @returns a JSON representation of the Room object.
+     */
+    toJSON() {
+        return {
+            __type: Room.name,
+            coordinate: this.#myCoordinate,
+            north_door: this.#myNorthDoor,
+            east_door: this.#myEastDoor,
+            south_door: this.#mySouthDoor,
+            west_door: this.#myWestDoor,
+            content: this.#myContent
+        }
+    }
+
+    /**
+     * Creates the corresponding monster if present and clears the contents
+     * of the room.
+     * @returns the monster in the room if present.
+     */
+    spawnMonster() {
+        const content = this.#myContent;
+        if (content === 'o') {
+            this.clearContent();
+            return MonsterFactory.createMonster("Ogre");
+        } else if (content === 'g') {
+            this.clearContent();
+            return MonsterFactory.createMonster("Gremlin");
+        } else if (content === 's') {
+            this.clearContent();
+            return MonsterFactory.createMonster("Skeleton");
+        }
+        return false;
+    }
+    
     /**
      * Checks if the north door is open.
      * @returns true if the north door is open.
@@ -139,25 +205,7 @@ export default class Room {
         return this.#myContent === Room.CONTENT.pit;
     }
 
-    /**
-     * Creates the corresponding monster if present and clears the contents
-     * of the room.
-     * @returns the monster in the room if present.
-     */
-    spawnMonster() {
-        const content = this.#myContent;
-        if (content === 'o') {
-            this.clearContent();
-            return MonsterFactory.createMonster("Ogre");
-        } else if (content === 'g') {
-            this.clearContent();
-            return MonsterFactory.createMonster("Gremlin");
-        } else if (content === 's') {
-            this.clearContent();
-            return MonsterFactory.createMonster("Skeleton");
-        }
-        return false;
-    }
+    
 
     /**
      * Gets the contents of the room.
@@ -177,7 +225,7 @@ export default class Room {
     
     /**
      * Sets the content to the given content.
-     * @param {*} theContent the content to set the room's content to.
+     * @param {string} theContent the content to set the room's content to.
      */
     setContent(theContent) {
         if (!Object.values(Room.CONTENT).includes(theContent)) {
@@ -225,29 +273,5 @@ export default class Room {
             str += "*_*";
         }
         return str;
-    }
-
-    toJSON() {
-        return {
-            __type: Room.name,
-            coordinate: this.#myCoordinate,
-            north_door: this.#myNorthDoor,
-            east_door: this.#myEastDoor,
-            south_door: this.#mySouthDoor,
-            west_door: this.#myWestDoor,
-            content: this.#myContent
-        }
-    }
-
-    static fromJSON(theJSON) {
-        if (theJSON.__type === undefined || theJSON.__type !== Room.name) {
-            throw new TypeError("The JSON is not a room type");
-        }
-        return new Room(Coordinate.fromJSON(theJSON.coordinate), 
-                        Door.fromJSON(theJSON.north_door), 
-                        Door.fromJSON(theJSON.east_door), 
-                        Door.fromJSON(theJSON.south_door),
-                        Door.fromJSON(theJSON.west_door), 
-                        theJSON.content);
     }
 }

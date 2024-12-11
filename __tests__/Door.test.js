@@ -5,8 +5,16 @@
  */
 import Door from "../dungeon/Door.js";
 
+/**
+ * Tests Door class updates and stores state of doors.
+ * @author Jasmine Sellers
+ * @version 1.0
+ */
 describe("Tests basic functionality of the Door class (keep track of state of door and open door)", () => {
-    const closedDoor = new Door();
+    let closedDoor;
+    beforeEach(() => {
+        closedDoor = new Door();
+    });
 
     test("Creates a closed door if no state specified", () => {
         expect(closedDoor.isOpen()).toBeFalsy();

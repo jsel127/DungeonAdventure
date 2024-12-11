@@ -74,38 +74,6 @@ export default class Coordinate {
     getCol() {
         return this.#myCol;
     }
-
-    /**
-     * The new row to set the coordinate to.
-     * @param {numeric} theRow the new row number to set coordinate to.
-     * @throws {TypeError} if the row is not an integer.
-     * @throws {RangeError} if the row is less than the Dungeon's buffer
-     */
-    setRow(theRow) {
-        if (!Number.isInteger(theRow)) {
-            throw new TypeError("Expecting an integer received a " + (typeof theRow));
-        } 
-        if (theRow < Dungeon.BUFFER) {
-            throw new RangeError("Negative coordinates are not supported");
-        }
-        this.#myRow = theRow;
-    }
-
-    /**
-     * The new col to set the coordinate to.
-     * @param {numeric} theCol the new col number to set coordinate to.
-     * @throws {TypeError} if the col is not an integer.
-     * @throws {RangeError} if the col is less than the Dungeon's buffer
-     */
-    setCol(theCol) {
-        if (!Number.isInteger(theCol)) {
-            throw new TypeError("Expecting an integer received a " + (typeof theCol));
-        } 
-        if (theCol < 0) {
-            throw new RangeError("Negative coordinates are not supported");
-        }
-        this.#myCol = theCol;
-    }    
     
     /**
      * A string of the row col
