@@ -86,8 +86,8 @@ export default class DungeonCharacter {
      * @param {DungeonCharacter} theOpponent the opponent the dungeon character is facing.
      * @returns true if the attack was successul and false otherwise.
      */
-    attack(theOpponent, autoSuccess=false) {
-        if (!this.isDead() && (autoSuccess || Math.random() * 100 < this.#myHitChance)) {
+    attack(theOpponent, theAutoSuccess=false) {
+        if (!this.isDead() && (theAutoSuccess || Math.random() * 100 < this.#myHitChance)) {
             const rangeDP = this.#myDPMax - this.#myDPMin;
             const attackDP = -1 * (Math.round(Math.random() * rangeDP) + this.#myDPMin);
             theOpponent.applyHPChange(attackDP);
