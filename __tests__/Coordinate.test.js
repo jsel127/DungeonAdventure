@@ -30,38 +30,54 @@ describe("Basic behavior of a coordinate no invalid input", () => {
 });
 
 describe("Invalid input constructor and setter methods", () => {
-    test("String x", () => {
+    test("String col", () => {
         expect(() => new Coordinate("invalid", 1)).toThrow(TypeError);
     });
-    test("String y", () => {
+    test("String row", () => {
         expect(() => new Coordinate(1, "invalid")).toThrow(TypeError);
     });
-    test("Negative x", () => {
+    test("Negative col", () => {
         expect(() => new Coordinate(-1, 1)).toThrow(RangeError);
     });
-    test("Negative y", () => {
+    test("Negative row", () => {
         expect(() => new Coordinate(1, -1)).toThrow(RangeError);
     });
 
-    test("less than buffer x", () => {
+    test("less than buffer col", () => {
         expect(() => new Coordinate(Dungeon.BUFFER - 1, 1)).toThrow(RangeError);
     });
-    test("less than buffer y", () => {
+    test("less than buffer row", () => {
         expect(() => new Coordinate(1, Dungeon.BUFFER - 1)).toThrow(RangeError);
     });
 
-    test("Setting valid coordinate to a negative x", () => {
+    test("Setting valid coordinate to a negative col", () => {
         expect(() => {
             const coord = new Coordinate(1, 2);
             coord.setCol(-1)
         }).toThrow(RangeError);
     });
-    test("Setting valid coordinate to a negative y", () => {
+
+    test("Setting valid coordinate to a invalid type col", () => {
+        expect(() => {
+            const coord = new Coordinate(1, 2);
+            coord.setCol("string")
+        }).toThrow(TypeError);
+    });
+
+    test("Setting valid coordinate to a negative row", () => {
         expect(() => {
             const coord = new Coordinate(1, 2);
             coord.setRow(-1)
         }).toThrow(RangeError);
     });
+
+    test("Setting valid coordinate to a invalid type row", () => {
+        expect(() => {
+            const coord = new Coordinate(1, 2);
+            coord.setRow("string")
+        }).toThrow(TypeError);
+    });
+
 });
 
 describe("Tests Saves and Loads Coordinate class", () => {
@@ -86,6 +102,6 @@ describe("Tests Saves and Loads Coordinate class", () => {
     });
 
     test("Save and Load on invalid data", () => {
-        expect(() => Coordinate.fromJSON({x:1, y:2, z:3})).toThrow(TypeError);
+        expect(() => Coordinate.fromJSON({x:1, row:2, z:3})).toThrow(TypeError);
     });
 });
