@@ -297,7 +297,46 @@ describe("Test special attack method", () => {
     });
 
     describe("Special attack should heal the thief by 10 to 20% their current HP. Test on various HP.", () => {
-        
+        let opponentHP2000Heal0;
+        beforeEach(() => {
+            opponentHP2000Heal0 = new Monster("2000HP", 2000, 1, 1, 100, 100, 0, 1, 1);
+        });
+        test("DPMin=DPMax: 1, HitChance = 100", () => {
+            const thiefDP1Hit100 = new Thief("Thief", 20, 1, 1, 5, 100, 100);
+            thiefDP1Hit100.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+            for (let round = 0; round < 1000; round++) {
+                thiefDP1Hit100.specialAttack(opponentHP2000Heal0);
+            }
+            expect(opponentHP2000Heal0.getHP()).toBeGreaterThan(0);
+            expect(opponentHP2000Heal0.getHP()).toBeLessThan(2000);
+        });
+
+        test("DPMin=DPMax: 1, HitChance = 50", () => {
+            const thiefDP1Hit50 = new Thief("Thief", 20, 1, 1, 5, 50, 100);
+            thiefDP1Hit50.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+            for (let rounds = 0; rounds < 1000; rounds++) {
+                thiefDP1Hit50.attack(opponentHP2000Heal0);
+            }
+            expect(opponentHP2000Heal0.getHP()).toBeGreaterThan(1000);
+            expect(opponentHP2000Heal0.getHP()).toBeLessThan(2000);
+        });
+
+        test("DPMin=DPMax: 1, HitChance = 0", () => {
+            const thiefDP1Hit0 = new Thief("Thief", 20, 1, 1, 5, 0, 100);
+            thiefDP1Hit0.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+            thiefDP1Hit0.attack(opponentHP2000Heal0);
+            expect(opponentHP2000Heal0.getHP()).toBe(2000);
+        });
+
+        test("DPMin: 1 DPMax: 2, HitChance = 100", () => {
+            const thiefDP1Hit50 = new Thief("Thief", 20, 1, 2, 5, 50, 100);
+            thiefDP1Hit50.setFightingStatus(Hero.FIGHTING_STATUS.fighting);
+            for (let rounds = 0; rounds < 1000; rounds++) {
+                thiefDP1Hit50.attack(opponentHP2000Heal0);
+            }
+            expect(opponentHP2000Heal0.getHP()).toBeGreaterThan(0);
+            expect(opponentHP2000Heal0.getHP()).toBeLessThan(2000);
+        });
     });
 });
 

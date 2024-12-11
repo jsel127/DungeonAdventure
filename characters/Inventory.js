@@ -182,7 +182,7 @@ export default class Inventory {
      */
     useVisionPotion() {
         if (!this.hasVisionPotion()) {
-            throw new EvalError("There are no vision potions to use")
+            throw new EvalError("There are no vision potions to use");
         }
         this.#myItems.vision_potion -= 1;
     }
