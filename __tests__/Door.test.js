@@ -48,13 +48,13 @@ describe("Tests Saves and Loads Door class", () => {
     test("Saves and Loads Door class properly (No chances made from initialization)", () => {
         const doorToSave = new Door();  
         const doorFromSave = Door.fromJSON(JSON.parse(JSON.stringify(doorToSave)));
-        expect(doorFromSave.toString()).toBe(doorToSave.toString());
+        expect(JSON.stringify(doorFromSave)).toBe(JSON.stringify(doorToSave));
     });
 
     test("Saves and Loads Door class where door is open.", () => {
         const doorToSave = new Door(Door.STATUS.open);  
         const doorFromSave = Door.fromJSON(JSON.parse(JSON.stringify(doorToSave)));
-        expect(doorFromSave.toString()).toBe(doorToSave.toString());
+        expect(JSON.stringify(doorFromSave)).toBe(JSON.stringify(doorToSave));
     });
 
     test("Save and Load on invalid data", () => {
