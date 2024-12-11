@@ -4,7 +4,13 @@
  * Jasmine Sellers, Boyd Bouck, Simran Narwal
  */
 
+/**
+ * Door class updates and stores state of doors.
+ * @author Jasmine Sellers
+ * @version 1.0
+ */
 export default class Door {
+    /** Stores the expected state for open and closed door. */
     static STATUS = Object.freeze({
         open: true,
         closed: false
@@ -13,13 +19,38 @@ export default class Door {
     #myStatus;
     /**
      * Creates a door that can be open or closed.
-     * @param {*} theStatus the status to set the door (open/closed).
+     * @param {boolean} theStatus the status to set the door (open/closed).
      */
     constructor(theStatus = Door.STATUS.closed) {
         if (typeof theStatus !== "boolean") {
             throw new TypeError("Door expects a boolean type to be passed");
         }
         this.#myStatus = theStatus;
+    }
+
+    /**
+     * Creates a Door instance based on the given structured data 
+     * represended with JavaScript Object Notation (JSON).
+     * @param {object} theJSON the data to create an instance based on.
+     * @returns a Door object loaded with the given data.
+     * @throws {TypeError} If the __type property is not Door.
+     */
+    static fromJSON(theJSON) {
+        if (theJSON.__type === undefined || !theJSON.__type === Door.type) {
+            throw new TypeError("The JSON is not of door type");
+        }
+        return new Door(theJSON.status);
+    }
+
+    /**
+     * Returns a JSON representation of the Door object. 
+     * @returns a JSON representation of the Door object.
+     */
+    toJSON() {
+        return {
+            __type: Door.name,
+            status: this.#myStatus
+        }
     }
 
     /**
@@ -35,19 +66,5 @@ export default class Door {
      */
     open() {
         this.#myStatus = Door.STATUS.open;
-    }
-
-    toJSON() {
-        return {
-            __type: Door.name,
-            status: this.#myStatus
-        }
-    }
-
-    static fromJSON(theJSON) {
-        if (theJSON.__type === undefined || !theJSON.__type === Door.type) {
-            throw new TypeError("The JSON is not of door type");
-        }
-        return new Door(theJSON.status);
     }
 }

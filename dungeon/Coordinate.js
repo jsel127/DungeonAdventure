@@ -5,7 +5,7 @@
  */
 import Dungeon from "./Dungeon.js";
 /**
- * Test Coordinate class Negative coordinates are not supported 
+ * Coordinate class Negative coordinates are not supported 
  * and cannot be less than the buffer of the dungeon.
  * @author Jasmine Sellers
  * @version 1.0
@@ -32,6 +32,7 @@ export default class Coordinate {
         this.#myRow = theRow;
         this.#myCol = theCol;
     }
+    
     /**
      * Creates a Coordinate instance based on the given structured data 
      * represended with JavaScript Object Notation (JSON).
