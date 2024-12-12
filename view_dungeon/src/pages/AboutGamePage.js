@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
+//Function to implement the AboutGamePage
 function AboutGamePage() {
-
     useEffect(() => {
         // Set the background color of the entire page to dark grey
         document.body.style.backgroundColor = 'black';
@@ -11,6 +11,7 @@ function AboutGamePage() {
 
     return (
         <div >
+            {/*Heading for page*/}
             <h1 style={{ fontFamily: 'Garamond', color: 'maroon', textAlign: 'center', padding: 10, fontSize: '50px' }}>About this Game</h1>
             <p style={{ color: 'white', maxWidth: '800px', margin: '0 auto', fontSize: '20px' }}>
                 Dungeon Adventure is an immersive game where players take on the role of heroes navigating through a mysterious dungeon.
@@ -19,6 +20,7 @@ function AboutGamePage() {
                 potions, and avoid deadly traps. Each hero brings unique abilities to aid in overcoming obstacles, making every journey 
                 through the dungeon a test of strategy, bravery, and skill.
             </p>
+            {/*Styling for image*/}
             <div style={imageContainerStyle}>
                 <img src={`${process.env.PUBLIC_URL}/Pillars.jpg`} style={{ width: '800px', height: 'auto' }} />
             </div>

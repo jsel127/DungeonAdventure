@@ -11,6 +11,7 @@ function HomePage() {
     document.body.style.padding = '0'; // Remove padding
   }, []);
 
+    // Function to dynamically style the links based on hover status
   const linkStyle = (isHovered) => ({
     color: isHovered ? 'maroon' : 'grey', // Change color based on hover status
     textDecoration: 'none',
@@ -18,7 +19,8 @@ function HomePage() {
     fontSize: '15px',
     transition: 'color 0.2s ease',
   });
-
+  
+  // Function to handle loading the saved game data from localStorage
   const handleLoad = () => {
     fetch('/api/load-game', {
       method: 'POST', 

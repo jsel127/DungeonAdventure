@@ -1,38 +1,44 @@
+/* The main container for the App component */
 .App {
-  text-align: center;
+  text-align: center; /* Center-aligns the text */
 }
 
+/* Styling for the logo element */
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  height: 40vmin; /* Makes the logo height 40% of the viewport's minimum dimension */
+  pointer-events: none; /* Disables any pointer interactions (e.g., clicking) with the logo */
 }
 
+/* Animation for logo spinning when the user prefers reduced motion */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 20s linear; /* Infinite spin animation over 20 seconds */
   }
 }
 
+/* The header section of the app */
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: #282c34; /* Dark background color */
+  min-height: 100vh; /* Minimum height of 100% of the viewport */
+  display: flex; /* Flexbox for layout */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  font-size: calc(10px + 2vmin); /* Responsive font size based on viewport size */
+  color: white; /* Text color is white */
 }
 
+/* Styling for links inside the app */
 .App-link {
-  color: #61dafb;
+  color: #61dafb; /* React blue color for links */
 }
 
+/* Keyframes for spinning the logo */
 @keyframes App-logo-spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg); /* Start from 0 degrees */
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg); /* Rotate to 360 degrees (full rotation) */
   }
 }
