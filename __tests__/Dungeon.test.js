@@ -7,7 +7,11 @@
 import Coordinate from "../dungeon/Coordinate.js";
 import Dungeon from "../dungeon/Dungeon.js";
 import Room from "../dungeon/Room.js";
-
+/**
+ * Test Dungeon class which creates and stores all rooms.
+ * @author Jasmine Sellers
+ * @version 1.0
+ */
 describe("Test basic setup of the Dungeon", () => {
     const dungeonEasy = new Dungeon(Dungeon.DIFFICULTY.Easy);
     const entranceRoom = dungeonEasy.getEntrance();
@@ -108,10 +112,22 @@ describe("Tests Dungeon class with invalid input.", () => {
 });
 
 describe("Tests Saves and Loads Dungeon class", () => {
-    test("Saves and Loads Dungeon properly (No chances made from initialization)", () => {
+    test("Saves and Loads Dungeon properly Easy (No chances made from initialization)", () => {
         const dungeonToSave = new Dungeon(Dungeon.DIFFICULTY.Easy);
         const dungeonFromSave = Dungeon.fromJSON(JSON.parse(JSON.stringify(dungeonToSave)));
-        expect(dungeonFromSave.toString()).toBe(dungeonToSave.toString());
+        expect(JSON.stringify(dungeonFromSave)).toBe(JSON.stringify(dungeonToSave));
+    });
+
+    test("Saves and Loads Dungeon properly Medium (No chances made from initialization)", () => {
+        const dungeonToSave = new Dungeon(Dungeon.DIFFICULTY.Medium);
+        const dungeonFromSave = Dungeon.fromJSON(JSON.parse(JSON.stringify(dungeonToSave)));
+        expect(JSON.stringify(dungeonFromSave)).toBe(JSON.stringify(dungeonToSave));
+    });
+
+    test("Saves and Loads Dungeon properly Hard (No chances made from initialization)", () => {
+        const dungeonToSave = new Dungeon(Dungeon.DIFFICULTY.Hard);
+        const dungeonFromSave = Dungeon.fromJSON(JSON.parse(JSON.stringify(dungeonToSave)));
+        expect(JSON.stringify(dungeonFromSave)).toBe(JSON.stringify(dungeonToSave));
     });
 
     test("Save and Load on invalid data", () => {

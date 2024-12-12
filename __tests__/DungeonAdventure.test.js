@@ -9,7 +9,12 @@ import HeroFactory from "../characters/HeroFactory.js";
 import Dungeon from "../dungeon/Dungeon.js";
 import Room from "../dungeon/Room.js";
 import MonsterFactory from '../characters/MonsterFactory.js';
-
+/**
+ * Test DungeonAdventure class which holds the main logic of the game
+ * play (fighting, dungeon creations, picking adventurer, updating state etc.).
+ * @author Jasmine Sellers
+ * @version 1.0
+ */
 describe("Tests main starting functionality", () => {
     const gameWarriorEasy = new DungeonAdventure();
 
