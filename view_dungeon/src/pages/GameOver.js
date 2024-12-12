@@ -39,7 +39,7 @@ const GameOver = () => {
           }}>
             {
                 hasWon === null ? <p>Loading...</p> : (
-                    hasWon ? <p>You Win</p> : <p>You Lose</p>
+                    hasWon ? <h1>Victory!</h1> : <h1>Defeat</h1>   
                 )
             }
             {/* Restarting the game does not currently work */}

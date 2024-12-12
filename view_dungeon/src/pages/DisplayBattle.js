@@ -104,23 +104,23 @@ const DisplayBattle = () => {
         justifyContent: 'center', 
         alignItems: 'center' 
       }}>
-            Battle Interface
+            <h1>Battle</h1>
             <br/>
             {
                 adventurer === null ? <p>Loading adventurer...</p> : (
                     <>
-                        <p>Hero ({JSON.stringify(adventurer.__type)}): {JSON.stringify(adventurer.hero.dungeon_character.name)}
+                        <h3>{JSON.stringify(adventurer.hero.dungeon_character.name).replace(/"/g, '')} - {JSON.stringify(adventurer.__type).replace(/"/g, '')}
                         <br/>
-                        hp: {JSON.stringify(adventurer.hero.dungeon_character.hp)}</p>
+                        {JSON.stringify(adventurer.hero.dungeon_character.hp)} HP</h3>
                     </>
                 )
             }
             {
                 opponent === null ? <p>Loading monster...</p> : (
                     <>
-                        <p>Monster: {JSON.stringify(opponent.dungeon_character.name)}
+                        <h3>Monster - {JSON.stringify(opponent.dungeon_character.name).replace(/"/g, '')}
                         <br/>
-                        hp: {JSON.stringify(opponent.dungeon_character.hp)}</p>
+                        {JSON.stringify(opponent.dungeon_character.hp)} HP</h3>
                     </>
                 )
             }

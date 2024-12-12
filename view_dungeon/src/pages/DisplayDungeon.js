@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import './DisplayDungeon.css'
 
 const MovementButton = ({ direction, doorOpen, onButtonClick }) => {
 
@@ -17,7 +18,7 @@ const MovementButton = ({ direction, doorOpen, onButtonClick }) => {
   }
 
     return (
-        <button style={ButtonStyle} disabled={!doorOpen} onClick={onButtonClick}>
+        <button disabled={!doorOpen} onClick={onButtonClick}>
             {direction}
         </button>
     )
@@ -311,8 +312,8 @@ const DisplayDungeon = () => {
                    {inventory === null ? <p>Loading Inventory...</p> : (
                       <p>
                         {console.log('INVENTORY.items', inventory.items)}
-                        <button style={ButtonStyle} onClick={() => handleHealingPotion()}>Healing Potions ({JSON.stringify(inventory.items.healing_potion)})</button>
-                        <button style={ButtonStyle} onClick={() => handleVisionPotion()}>Vision Potions ({JSON.stringify(inventory.items.vision_potion)})</button>
+                        <button onClick={() => handleHealingPotion()}>Healing Potions ({JSON.stringify(inventory.items.healing_potion)})</button>
+                        <button onClick={() => handleVisionPotion()}>Vision Potions ({JSON.stringify(inventory.items.vision_potion)})</button>
                         <br/>
                         Pillars:
                         {inventory.items.pillars.abstraction ? <div>Pillar of Abstraction</div> : <div/> }

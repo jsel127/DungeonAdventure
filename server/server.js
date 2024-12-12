@@ -20,15 +20,15 @@ app.get('/api/save-game', (req, res) => {
     console.log('Server: get request /api/save-game')              
     res.json(JSON.stringify(model))  
 })
-
+  
 app.post("/api/load-game", (req, res) => {
     console.log('Server: post request /api/load-game', req.body.loadModel)                
     model = DungeonAdventure.fromJSON(JSON.parse(req.body.loadModel))
     res.send('success')
 })
-
+     
 app.get("/api/characters", (req, res) => { 
-    console.log("Server: request to /api/characters")             
+    console.log("Server: request to /api/characters")                 
     res.json(DungeonAdventure.getHeroes())
 })  
 
