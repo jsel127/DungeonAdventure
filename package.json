@@ -1,17 +1,28 @@
 {
-  "type": "module",
+  "name": "dungeonadventure",
+  "version": "1.0.0",
+  "description": "A dungeon adventure game",
+  "main": "index.js",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
-  "jest": {
-    "transform": {}
-  },
-  "dependencies": {
-    "readline-sync": "^1.4.10",
-    "sqlite3": "^5.1.7"
-  },
   "devDependencies": {
     "jest": "^29.7.0",
-    "jsdoc": "^4.0.4"
+    "nodemon": "^3.1.7"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.8",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "node": "^23.4.0",
+    "readline-sync": "^1.4.10",
+    "sqlite3": "^5.1.7",
+    "vite": "^5.4.10"
+  },
+  "type": "module",
+  "jest": {
+    "transform": {}
   }
 }

@@ -183,4 +183,4 @@ export default class PlayGame {
     }
 }
 
-const g = new PlayGame();
+const g = new PlayGame(); 

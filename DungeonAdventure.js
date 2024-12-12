@@ -178,6 +178,8 @@ export default class DungeonAdventure {
      * Starts the game by creating the dungeon with the appropriate difficuly. 
      */
     startGame() {
+        //const fileDungeon = fs.readFileSync('__tests__/test_files/easyDA.txt')
+        //this.#myDungeon = DungeonAdventure.fromJSON(JSON.parse(fileDungeon.toString().trim()))
         this.#myDungeon = new Dungeon(this.#myDifficulty);
         this.#myCurrentRoom = this.#myDungeon.getEntrance();    
         this.#myStarted = true;
@@ -265,6 +267,7 @@ export default class DungeonAdventure {
      */
     attackOpponent() { 
         this.#checkStarted();
+        console.log('DungeonAdventure: fightingStatus', this.#myAdventurer.getFightingStatus())
         if (!this.#myAdventurer.getFightingStatus()) {
             throw new EvalError("The adventurer is not currently fighting so it cannot attack.");
         }
