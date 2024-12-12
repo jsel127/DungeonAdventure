@@ -1,5 +1,5 @@
 /**
- * Express router providing routes for communication between model and view. 
+ * Express router providing routes for communication between model and view.  
  */
 
 import express from "express"
@@ -61,7 +61,7 @@ app.post("/api/load-game", (req, res) => {
  * @param {callback} middleware - Express middleware for handling request and response
  */
 app.get("/api/characters", (req, res) => { 
-    console.log("Server: request to /api/characters")                 
+    console.log("Server: request to /api/characters")                   
     res.json(DungeonAdventure.getHeroes())
 })  
 

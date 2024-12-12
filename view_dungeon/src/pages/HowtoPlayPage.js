@@ -5,8 +5,6 @@ import React, { useEffect } from 'react';
 
 
 function HowtoPlayPage() {
-
-    
         useEffect(() => {
             // Set the background color of the entire page to dark grey
             document.body.style.backgroundColor = 'black';
@@ -19,14 +17,16 @@ function HowtoPlayPage() {
         };
 
         const redTextStyle = {
-            color: 'maroon',
-            fontWeight: 'bold'
-            
+            color: 'maroon', //color of text
+            fontWeight: 'bold' //thickness of text
+             
         };
     
         return (
             <div >
+                 {/*heading style*/}
                 <h1 style={{ fontFamily: 'Garamond', color: 'maroon', textAlign: 'center', padding: 10, fontSize: '50px' }}>How to Play</h1>
+                 {/*ordered list style*/}
             <body>
                 <ol style={{ fontFamily: 'Arial', fontSize: '18px', color: 'white', padding: '`0 20px' }}>
                 <li style={listItemStyle}><span style={redTextStyle}>Start Your Journey:</span> Begin by selecting a hero to navigate the dungeon. Each hero has unique abilities that can be helpful in different situations.</li>
@@ -39,6 +39,7 @@ function HowtoPlayPage() {
                 <li style={listItemStyle}><span style={redTextStyle}>Complete Your Quest:</span> Once you've collected all four pillars, navigate to the exit to complete your journey and emerge victorious!</li>
                 </ol>
             </body>
+            {/*image style*/}
             <div style={imageContainerStyle}>
                 <img src={`${process.env.PUBLIC_URL}/Play.gif`} style={{ width: '300px', height: '300px' }} />
             </div>

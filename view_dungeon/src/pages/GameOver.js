@@ -1,10 +1,22 @@
+/**
+ * GameOver.js
+ */
+
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
+/**
+ * Component rendered at the game over page (/game-over).
+ * @returns the JSX element to render. 
+ */
 const GameOver = () => {
 
+    /** true if adventurer was won, false if adventurer has lost */
     const [hasWon, setHasWon] = useState(null)
 
+    /**
+     * Fetches the player win/lose status
+     */
     const hasWonGame = () => {
         fetch('/api/has-won-game')
           .then(res => {
@@ -18,6 +30,9 @@ const GameOver = () => {
           .catch(error => console.error('GameOver: error hasWonGame', error))
     }
 
+    /**
+     * Initializes state on initial render. 
+     */
     useEffect(() => {
         hasWonGame()
     }, [])

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const DifficultySelection = () => {
-
+    //State to hold difficulties 
     const [difficulties, setDifficulties] = useState([])
+    //State to hold the selected difficulty
     const [selectedDifficulty, setSelectedDifficulty] = useState(null)
 
+     // useEffect hook to fetch difficulties from model
     useEffect(() => {
         fetch('/api/difficulties')
           .then((response) => response.json())
@@ -16,6 +18,7 @@ const DifficultySelection = () => {
           .catch((error) => console.error('Error fetching difficulties:', error));
       }, [])
 
+      // Function to handle difficulty selection when a user clicks on an option
       const handleDifficultySelect = (difficulty) => {
         setSelectedDifficulty(difficulty);
       };
@@ -31,16 +34,16 @@ const DifficultySelection = () => {
           justifyContent: 'center', 
           alignItems: 'center' 
  }}>
-          <h1>Difficulty Selection</h1>
+          <h1>Difficulty Selection</h1> {/* Heading of the page */}
           {difficulties.length === 0 ? (
             <p>Loading...</p>
           ) : (
-            <div className="character-list" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="character-list" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}> {/* Available difficulties and display them as selectable options */}
               {difficulties.map((difficulty) => (
                 <div
                   key={difficulty}
                   className={`character-card ${selectedDifficulty === difficulty ? 'selected' : ''}`}
-                  onClick={() => handleDifficultySelect(difficulty)}
+                  onClick={() => handleDifficultySelect(difficulty)} 
                   style={{
                     backgrounColor: 'maroon',
                     cursor: 'pointer',
@@ -66,6 +69,7 @@ const DifficultySelection = () => {
             </div>
           )}
     
+          {/* Start Game button, which is only enabled once a difficulty is selected */}
           {selectedDifficulty && (
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
               <Link to="/dungeon">

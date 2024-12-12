@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+//State to hold a list of characters
 const CharacterSelection = () => {
   const [characters, setCharacters] = useState([]);
+  //Keeps track of selected character
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
+  //Fetches characters from model
   useEffect(() => {
     fetch('/api/characters')
       .then((response) => response.json())
@@ -15,6 +18,7 @@ const CharacterSelection = () => {
       .catch((error) => console.error('Error fetching characters:', error));
   }, []);
 
+  //Handles the selection of character
   const handleCharacterSelect = (character) => {
     setSelectedCharacter(character);
   };
@@ -22,6 +26,7 @@ const CharacterSelection = () => {
   return (
     <div style={{ backgroundColor: 'maroon', minHeight: '100vh', color: 'white', padding: '20px' }}>
       <h1>Select Your Hero</h1>
+      {/* Show loading text while characters are being fetched */}
       {characters.length === 0 ? (
         <p>Loading characters...</p>
       ) : (
@@ -60,7 +65,7 @@ const CharacterSelection = () => {
           <p>Block Chance: {selectedCharacter.block_chance}%</p>
         </div>
       )}
-
+  {/* Styling for selected character + shows character stats */}
       {selectedCharacter && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <Link to="/select-name">
