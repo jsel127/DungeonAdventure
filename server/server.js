@@ -25,7 +25,7 @@ app.post("/api/load-game", (req, res) => {
     console.log('Server: post request /api/load-game', req.body.loadModel)                
     model = DungeonAdventure.fromJSON(JSON.parse(req.body.loadModel))
     res.send('success')
-})
+}) 
      
 app.get("/api/characters", (req, res) => { 
     console.log("Server: request to /api/characters")                 

@@ -61,7 +61,7 @@ const UseVisionPotion = () => {
     return (
       <>
         <pre style={{ 'font-size': '40px'}}>{roomsString === null ? <p>Loading...</p> : roomsString}</pre>
-        <button onClick={() => navigate('/dungeon')}>Back</button>
+        <button style={{display:'block', margin:'auto'}} onClick={() => navigate('/dungeon')}>Back</button>
       </>
     )
 

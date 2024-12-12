@@ -18,7 +18,7 @@ const MovementButton = ({ direction, doorOpen, onButtonClick }) => {
   }
 
     return (
-        <button disabled={!doorOpen} onClick={onButtonClick}>
+        <button style={{display:'block', margin:'auto'}} disabled={!doorOpen} onClick={onButtonClick}>
             {direction}
         </button>
     )
@@ -280,7 +280,8 @@ const DisplayDungeon = () => {
         display: 'flex', 
         flexDirection: 'column', 
         justifyContent: 'center', 
-        alignItems: 'center' 
+        alignItems: 'center',
+        textAlign: 'center'
       }}>
             { validMoves === null ? (
                 <p>Loading Dungeon...</p>
@@ -302,8 +303,11 @@ const DisplayDungeon = () => {
                     <h3>Room: {coordinates === null ? <>Loading...</> : <>{JSON.stringify(coordinates.row)}, {JSON.stringify(coordinates.col)}</>}</h3>
                     <MovementButton direction='North' doorOpen={validMoves.north} onButtonClick={() => handleClick('North')} />
                     <br/>
-                    <MovementButton direction='West' doorOpen={validMoves.west} onButtonClick={() => handleClick('West')} />
-                    <MovementButton direction='East' doorOpen={validMoves.east} onButtonClick={() => handleClick('East')} />
+                    <div style={{ display: 'flex', gridTemplateColumns: '1fr 1fr', justifyContent: 'center', gap: '10px' }}>
+                      <MovementButton direction='West' doorOpen={validMoves.west} onButtonClick={() => handleClick('West')} />
+                      {/*<img src={'/neswDungeonRoom.png'} />*/}
+                      <MovementButton direction='East' doorOpen={validMoves.east} onButtonClick={() => handleClick('East')} />
+                    </div>
                     <br/>
                     <MovementButton direction='South' doorOpen={validMoves.south} onButtonClick={() => handleClick('South')} />
                     <br/>
@@ -322,6 +326,7 @@ const DisplayDungeon = () => {
                         {inventory.items.pillars.polymorphism ? <div>Pillar of Polymorphism</div> : <div/> }
                       </p>
                     )}
+                    <br/>
                     <button onClick={() => handleSave()}>Save Game</button>
                 </p>
             )}
