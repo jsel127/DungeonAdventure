@@ -19,6 +19,7 @@ import UseVisionPotion from './pages/UseVisionPotion.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+//Rendering the application
 root.render(
   <Router>
     <Routes>

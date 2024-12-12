@@ -22,7 +22,9 @@ function FAQPage() {
 
     return (
         <div >
+            {/*heading style*/}
             <h1 style={{ fontFamily: 'Garamond', color: 'maroon', textAlign: 'center', padding: 10, fontSize: '50px' }}>Frequently Asked Questions</h1>
+            {/*unordered list style*/}
         <body>
             <ul style={{ fontFamily: 'Arial', fontSize: '18px', color: 'white', padding: '`0 20px' }}>
             <li style={listItemStyle}><span style={redTextStyle}>How Do I Start? </span> To start playing, simply select a hero from the available options. Each hero has unique abilities that will help you on your journey through the dungeon.</li>
@@ -32,6 +34,7 @@ function FAQPage() {
             <li style={listItemStyle}><span style={redTextStyle}>How do I win the game?</span> To win the game, you need to collect all four Pillars of Object-Oriented Programming and then find your way to the exit. Completing this quest makes you victorious!</li>
             </ul>
         </body>
+        {/*image style*/}
         <div style={imageContainerStyle}>
             <img src={`${process.env.PUBLIC_URL}/question.png`} style={{ width: '300px', height: '400px' }} />
         </div>
