@@ -1,9 +1,22 @@
+/**
+ * NameSelection.js
+ */
+
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Represents the name selection page. 
+ * @returns the JSX element to render
+ */
 const NameSelection = () => {
+
+  /** method to navigate to other pages */
   const navigate = useNavigate();
 
+  /**
+   * Sets stylization on render.
+   */
   useEffect(() => {
     document.body.style.backgroundColor = 'maroon';
     return () => {
@@ -11,6 +24,12 @@ const NameSelection = () => {
     };
   }, []);
 
+  /**
+   * Sends the user-inputed name to the model and navigates to the 
+   * difficulty select page. Called when the next button is selected on 
+   * the name selection page. 
+   * @param {*} e 
+   */
   function handleSubmit(e) {
     e.preventDefault();
 
