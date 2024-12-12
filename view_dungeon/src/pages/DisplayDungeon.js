@@ -253,7 +253,7 @@ const DisplayDungeon = () => {
         fetchModelUpdates()
       }, 100)
     }, [])
-
+   
     const ButtonStyle = {
       backgrounColor: 'maroon',
       cursor: 'pointer',
