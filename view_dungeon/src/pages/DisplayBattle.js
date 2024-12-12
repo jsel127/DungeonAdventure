@@ -84,17 +84,6 @@ const DisplayBattle = () => {
         }
       }
 
-      /*
-      console.log('WIN/LOSE DATA', data)
-      if (data.win) {
-        navigate('/dungeon')
-      } else if (data.lose) {
-        navigate('/game-over')
-      } else {
-        fetchAdventurer()
-        fetchOpponent()
-      }
-        */
     }
 
     return (
