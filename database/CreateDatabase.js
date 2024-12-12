@@ -5,7 +5,12 @@
  */
 import sqlite3 from 'sqlite3';
 
-// Creates the database
+/**
+ * Creates a database of character stats. The database consists of two
+ * tables (Monsters and Heroes). 
+ * @author Jasmine Sellers
+ * @version 1.0
+ */
 const characterDB = new sqlite3.Database('./database/characters.db', (err) => {
     if (err) {
         console.error("Database creation connection failed \n");
@@ -14,6 +19,9 @@ const characterDB = new sqlite3.Database('./database/characters.db', (err) => {
     }
 });
 
+/**
+ * Creates the tables 'Heroes' and 'Monsters' in the characters.db database.
+ */
 function createTables() {
     const createMonsterTableQuery = "CREATE TABLE IF NOT EXISTS Monsters ("+
                                     "name TEXT NOT NULL UNIQUE, " + 
@@ -48,6 +56,10 @@ function createTables() {
         }
     });
 }
+
+/**
+ * Inserts monster data in the 'Monsters' table.
+ */
 function insertMonsters() {
     // Monsters
     const ogreQuery = createMonsterInsertStatement("'Ogre'", 200, 30, 60, 2, 60, 10, 30, 60);
@@ -71,7 +83,9 @@ function createMonsterInsertStatement(theName, theHP, theDPMin, theDPMax, theAtt
             `VALUES (${theName}, ${theHP}, ${theDPMin}, ${theDPMax}, ${theAttackSpeed}, ${theHitChance}, ${theHealChance}, ${theMinHeal}, ${theMaxHeal})`;
 }
 
-
+/**
+ * Inserts hero data into the 'Hero' table.
+ */
 function insertHeroes() {
     // Heroes
     const warriorQuery = createHeroInsertStatement("'Warrior'", 125, 35, 60, 4, 80, 20);
@@ -114,6 +128,9 @@ function runStatements(theStatements) {
     }
 }
 
+/**
+ * Creates the database using the serialize method (ensures functions are processed in proper order).
+ */
 function createDatabase() {
     characterDB.serialize(() => {
         createTables();
@@ -122,4 +139,5 @@ function createDatabase() {
         characterDB.close();
     });
 }
+
 createDatabase();
