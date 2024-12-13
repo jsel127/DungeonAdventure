@@ -1,6 +1,20 @@
+/*
+ * TCSS360 Software Development and Quality Assurance
+ * Fall 2024
+ * Jasmine Sellers, Boyd Bouck, Simran Narwal
+ */
 import fs from 'fs';
 
+/**
+ * View for console-based version of the game.
+ * @author Jasmine Sellers
+ * @version 1.0
+ */
 export default class GameDisplay {
+    /**
+     * Displays the game page which contains 
+     * the authors, version and game name as ascii art.
+     */
     static displayGamePage() {
         try {
             const gameNameArt = fs.readFileSync('console_based_game/view/ascii_art/dungeon_adventure_ascii_art.txt', 'utf8');
@@ -9,6 +23,11 @@ export default class GameDisplay {
             console.error(err);
         }
     }
+
+    /**
+     * Displays the rules of the game.
+     * @param {string[]} rules the rules to display.
+     */
     static displayRules(rules) {
         try {
             const rulesArt = fs.readFileSync('console_based_game/view/ascii_art/rules_ascii_art.txt', 'utf8');
@@ -21,6 +40,10 @@ export default class GameDisplay {
         }
     }
 
+    /**
+     * Displays the difficulty options of the game.
+     * @param {string[]} theDifficultyOptions the difficulty options.
+     */
     static displayDifficultyOptions(theDifficultyOptions) {
         try {
             const difficultyPromptArt = fs.readFileSync('console_based_game/view/ascii_art/difficulty_prompt_ascii_art.txt', 'utf8');
@@ -33,6 +56,10 @@ export default class GameDisplay {
         }
     }
 
+    /** 
+     * Displays the hero types and stats offered in the game.
+     * @param {object[]} theHeroOptions the hero options as an array of objects containing hero stats.
+     */
     static displayHeroOptions(theHeroOptions) {
         try {
             const heroPromptArt = fs.readFileSync('console_based_game/view/ascii_art/hero_prompt_ascii_art.txt', 'utf8');
@@ -45,6 +72,9 @@ export default class GameDisplay {
         }
     }
     
+    /**
+     * Displays a breaker that says "current move".
+     */
     static displayBreaker() {
         try {
             const heroPromptArt = fs.readFileSync('console_based_game/view/ascii_art/current_move_ascii_art.txt', 'utf8');
@@ -54,6 +84,10 @@ export default class GameDisplay {
         }
     }
 
+    /**
+     * Displays the adventurer's stats
+     * @param {object} theAdventurer an object representing the adventurer's stats.
+     */
     static displayAdventureStats(theAdventurer) {
         const adventure = theAdventurer.hero.dungeon_character;
         console.log();
@@ -64,6 +98,10 @@ export default class GameDisplay {
                                 ", Inheritance", items.pillars.inheritance, ", Polymorphism: ", items.pillars.polymorphism, ")]");
     }
 
+    /**
+     * Displays the state of the room.
+     * @param {object} theRoomInfo displays the rooms and its state (doors)
+     */
     static displayRoom(theRoomInfo) {
         console.log("Row:", theRoomInfo.coordinate.row, "Col:", theRoomInfo.coordinate.col);
         console.log("*", (theRoomInfo.north_door.status) ? " " : "-", "*");
@@ -71,6 +109,10 @@ export default class GameDisplay {
         console.log("*", (theRoomInfo.south_door.status) ? " " : "-", "*");
     }
 
+    /**
+     * Displays the valid moves that can be made (north/east/south/west).
+     * @param {object} theValidMoves the valid moves
+     */
     static displayValidMoves(theValidMoves) {
         console.log("North: ", theValidMoves.north);
         console.log("East: ", theValidMoves.east);
@@ -78,6 +120,10 @@ export default class GameDisplay {
         console.log("West: ", theValidMoves.west);
     }
 
+    /**
+     * Displays the state of the adjacent rooms (doors + content). 
+     * @param {object[][]} theAdjacentRooms the adjacent rooms to be displayed.
+     */
     static displayAdjacentRooms(theAdjacentRooms) {
         for (let row = 0; row < theAdjacentRooms.length; row++) {
             let str = theAdjacentRooms[row][0] === null ? "  " : "* ";
@@ -98,6 +144,11 @@ export default class GameDisplay {
         console.log(bottomStr);
     }
 
+    /**
+     * Displays the basic info of the adventurer and opponent.
+     * @param {object} theAdventurer the adventurer's info
+     * @param {object} theOpponent the opponent's info
+     */
     static displayFightProgress(theAdventurer, theOpponent) {
         const adventure = theAdventurer.hero.dungeon_character;
         console.log("YOU:", adventure.name);
@@ -107,6 +158,9 @@ export default class GameDisplay {
         console.log("HP: ", opponent.hp, "DP-min:", opponent.dp_min, "DP-max:", opponent.dp_max);
     }
 
+    /**
+     * Displays an ascii art of 'You Won'.
+     */
     static diplayWinMessage() {
         try {
             const wonArt = fs.readFileSync('console_based_game/view/ascii_art/won_ascii_art.txt', 'utf8');
@@ -115,7 +169,9 @@ export default class GameDisplay {
             console.log("You Won");
         }
     }
-
+    /**
+     * Displays an ascii art of 'You Lost'.
+     */
     static displayLoseMessage() {
         try {
             const lostArt = fs.readFileSync('console_based_game/view/ascii_art/lost_ascii_art.txt', 'utf8');
@@ -125,7 +181,9 @@ export default class GameDisplay {
         }
     }
 
-
+    /**
+     * Displays an ascii art of 'Exit Successful'.
+     */
     static displayExitScreen() {
         try {
             const exitArt = fs.readFileSync('console_based_game/view/ascii_art/exited_ascii_art.txt', 'utf8');
