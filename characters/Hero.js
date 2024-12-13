@@ -13,6 +13,10 @@ import Monster from "./Monster.js";
  * @version 1.0
  */
 export default class Hero extends DungeonCharacter {
+    /**
+     * Public static field representing default values 
+     * that represent fighting vs not-fighting. 
+     */
     static FIGHTING_STATUS = Object.freeze({
         fighting: true,
         notFighting: false
