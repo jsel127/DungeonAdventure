@@ -36,7 +36,7 @@ function HomePage() {
   }
 
   return (
-    <div>
+    <div style={{height: "100vh"}}>
       <header style={headerStyle}>
         <div style={navMenuStyle}>
           <Link
@@ -110,7 +110,8 @@ function HomePage() {
 
 // Navbar styling
 const headerStyle = {
-  padding: '10px 10px',
+  position: 'fixed',
+  padding: '20px 10px',
 };
 
 const navMenuStyle = {
