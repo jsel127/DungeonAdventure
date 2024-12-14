@@ -8,6 +8,11 @@ import sqlite3 from 'sqlite3';
 /**
  * Creates a database of character stats. The database consists of two
  * tables (Monsters and Heroes). 
+ * Sources
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties 
+ * https://www.freecodecamp.org/news/singleton-design-pattern-with-javascript/
+ * https://www.sqlitetutorial.net/sqlite-nodejs/query/
+ * https://www.codecademy.com/learn/learn-node-sqlite 
  * @author Jasmine Sellers
  * @version 1.0
  */

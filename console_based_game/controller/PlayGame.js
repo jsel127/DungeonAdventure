@@ -10,6 +10,9 @@ import readlineSync from 'readline-sync';
 import fs from 'fs';
 /**
  * Controller for console-based version of the game.
+ * 
+ * Sources:
+ * https://medium.com/@cameronsanders88/basics-of-node-js-with-npm-readline-sync-c46406a3295f 
  * @author Jasmine Sellers
  * @version 1.0
  */
